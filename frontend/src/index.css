@@ -98,11 +98,3 @@ img.medium {
   font-weight: bold;
 }
 
-/* rating */
-.rating span {
-  color: #f0c040;
-  margin: 1px;
-}
-.rating span:last-child{
-  color: #404040
-}

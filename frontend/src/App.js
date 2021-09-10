@@ -9,7 +9,7 @@ function App() {
                 <a className="brand" href="/">Mosganda</a>
             </div>
             <div>
-                <a href="/store">Store</a>
+                <a href="/store">Stores</a>
                 <a href="/cart">Cart</a>
                 <a href="/signup">Sign Up</a>
                 <a href="/signin">Sign In</a>
