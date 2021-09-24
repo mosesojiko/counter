@@ -1,7 +1,5 @@
-import React from 'react'
-import './Rating.css';
-
-function Rating({rating, numReviews}) {
+function Rating(props) {
+    const { rating, numReviews } = props
     return (
         <div className="rating">
             {/* render rating conditionally
@@ -16,5 +14,6 @@ function Rating({rating, numReviews}) {
         </div>
     )
 }
+
 
 export default Rating
