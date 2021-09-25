@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from "react-router-dom"
 import { getProductDetails } from '../actions/productActions';
@@ -10,12 +10,18 @@ import Rating from "../components/Rating"
 function ProductPage(props) {
     const dispatch = useDispatch();
     const productId = props.match.params.id;
+    const [ qty, setQty ] = useState(1);
     const productDetails = useSelector(state => state.productDetails);
     const { loading, error, product} = productDetails;
 
     useEffect(() => {
         dispatch(getProductDetails(productId));
-    },[dispatch, productId])
+    },[dispatch, productId]);
+
+    //function to handle add to basket button
+    const addToBasketHandler = () => {
+        props.history.push(`/basket/${productId}?qty=${qty}`)
+    }
 
     return (
         <div>
@@ -67,7 +73,22 @@ function ProductPage(props) {
                                </div>
                            </li>
                            <li>
-                               <button className="primary block"> Add to Cart</button>
+                               <div className = "row">
+                                   <div>Qty</div>
+                               </div>
+                               <div>
+                                   <select value = {qty} onChange = {(e) => setQty(e.target.value)}>
+                                      {
+                                          /* map through the value of countInStock and increament it by 1*/
+                                          [...Array(product.countInStock).keys()].map((x)=>(
+                                            <option key ={x + 1} value = {x + 1}>{x + 1}</option> 
+                                          ))
+                                      }
+                                   </select>
+                               </div>
+                           </li>
+                           <li>
+                               <button onClick={addToBasketHandler} className="primary block"> Add to shopping basket</button>
                            </li>
                        </ul>
                    </div>

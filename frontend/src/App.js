@@ -1,9 +1,16 @@
 
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Link, Route } from 'react-router-dom';
 import ProductPage from './pages/ProductPage';
 import HomePage from './pages/HomePage';
 import StoresPage from './pages/StoresPage';
+import BasketPage from './pages/BasketPage';
+import { useSelector } from 'react-redux';
+
+
 function App() {
+    //get access to basket items
+    const basket = useSelector(state => state.basket);
+    const { basketItems } = basket;
   return (
     <BrowserRouter>
     <div className="grid-container">
@@ -12,17 +19,23 @@ function App() {
             <a className="brand" href="/">Mosganda</a>
         </div>
         <div>
-            <a href="/stores">Stores</a>
-            <a href="/">Products</a>
-            <a href="/guide">Guide</a>
+            <Link to ="/stores">Stores</Link>
+            <Link to="/">Products</Link>
+            <Link to ="/guide">Guide</Link>
         </div>
         <div>
-            <a href="/basket">Basket</a>
-            <a href="/signup">Sign-Up</a>
-            <a href="/signin">Login</a>
+            <Link to ="/basket">Basket
+            {
+                basketItems.length > 0 &&
+                <span className="badge">{basketItems.length}</span>
+            }
+            </Link>
+            <Link to ="/signup">Sign-Up</Link>
+            <Link to ="/signin">Login</Link>
         </div>
     </header>
     <main>
+    <Route path = '/basket/:id' component = { BasketPage } ></Route>
     <Route path = '/stores' component = { StoresPage } ></Route>
     <Route path = '/product/:id' component = {ProductPage} ></Route>
       <Route path = '/' component = {HomePage} exact></Route>
