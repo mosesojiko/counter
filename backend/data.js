@@ -1,4 +1,22 @@
+// eslint-disable-next-line no-undef
+const bcrypt = require('bcryptjs');
 const data = {
+    users: [
+        {
+            name: 'Moses',
+            email: 'moses@gmail.com',
+            password: bcrypt.hashSync('1234', 8),
+            isAdmin: true,
+            isSeller: true,
+        },
+        {
+            name: 'Ojiko',
+            email: 'ojiko@gmail.com',
+            password: bcrypt.hashSync('1234', 8),
+            isAdmin: false,
+            isSeller: false,
+        }
+    ],
     products: [
         {
             _id: "1",

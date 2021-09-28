@@ -1,11 +1,25 @@
 /* eslint-disable no-undef */
 const express = require('express')
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 const data = require('./data.js');
+const userRouter  = require('./routers/userRouter.js');
 
 dotenv.config();
 const app = express();
+
+//Connect to mongoDb
+mongoose.connect(process.env.MONGODB_CONNECT,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+
+
+//express middlewares
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+app.use('/api/v1/user', userRouter)
 
 //api to get single product
 app.get('/api/v1/products/:id', (req, res) => {
@@ -24,6 +38,14 @@ app.get('/api/v1/products', (req, res) =>{
 
 app.get('/', (req, res)=>{
     res.send("Server is ready");
+})
+
+//to show errors
+app.use((err, req, res, next) =>{
+    res.status(500).json({
+        message: err.message
+    })
+    next()
 })
 const port = process.env.PORT || 5000
 app.listen(port, ()=>{
