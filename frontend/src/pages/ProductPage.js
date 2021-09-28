@@ -60,7 +60,7 @@ function ProductPage(props) {
                            <li>
                                <div className ="row">
                                    <div>Price</div>
-                                   <div className="price">${ product.price }</div>
+                                   <div className="price">#{ product.price }</div>
                                </div>
                            </li>
                            <li>
@@ -68,10 +68,13 @@ function ProductPage(props) {
                                    <div>Status</div>
                                    <div>
                                        { product.countInStock > 0? (<span className="success">In Stock</span>):
-                                       (<span className="error">Unavailable</span>)
+                                       (<span className="danger">Unavailable</span>)
                                        }</div>
                                </div>
                            </li>
+                           {
+                               product.countInStock > 0 && (
+                                   <>
                            <li>
                                <div className = "row">
                                    <div>Qty</div>
@@ -90,6 +93,9 @@ function ProductPage(props) {
                            <li>
                                <button onClick={addToBasketHandler} className="primary block"> Add to shopping basket</button>
                            </li>
+                           </>
+                            )
+                        }
                        </ul>
                    </div>
                </div>

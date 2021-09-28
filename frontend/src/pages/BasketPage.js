@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { addToBasket } from '../actions/basketActions';
+import { addToBasket, removeFromBasket } from '../actions/basketActions';
 import MessageBox from '../components/MessageBox';
 
 function BasketPage(props) {
@@ -9,7 +9,7 @@ function BasketPage(props) {
     //finding the qty
     const qty = props.location.search? Number(props.location.search.split('=')[1]) : 1
 
-    //get cart from redux store
+    //get basket from redux store
     const basket = useSelector(state => state.basket);
     const { basketItems } = basket;
     
@@ -20,11 +20,11 @@ function BasketPage(props) {
     },[dispatch, productId, qty])
 
     const removeFromBasketHandler = (id) => {
-
+        dispatch(removeFromBasket(id))
     }
 
     const handleCheckout = () => {
-
+        props.history.push('/signin?redirect=shipping')
     }
     return (
         <div className = "row top">
@@ -79,7 +79,7 @@ function BasketPage(props) {
                         <li>
                             <h2>
                                 Subtotal ({ basketItems.reduce((a, c)=> a + c.qty, 0)} items) :
-                                ${ basketItems.reduce((a,c) => a + c.price * c.qty, 0)}
+                                #{ basketItems.reduce((a,c) => a + c.price * c.qty, 0)}
                             </h2>
                         </li>
                         <li>
