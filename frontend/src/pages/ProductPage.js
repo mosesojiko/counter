@@ -11,6 +11,8 @@ function ProductPage(props) {
     const dispatch = useDispatch();
     const productId = props.match.params.id;
     const [ qty, setQty ] = useState(1);
+
+    //read product details from redux store
     const productDetails = useSelector(state => state.productDetails);
     const { loading, error, product} = productDetails;
 

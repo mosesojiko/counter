@@ -3,8 +3,8 @@ const express = require('express')
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
-const data = require('./data.js');
 const userRouter  = require('./routers/userRouter.js');
+const productRouter = require('./routers/productRouter.js')
 
 dotenv.config();
 const app = express();
@@ -19,22 +19,10 @@ mongoose.connect(process.env.MONGODB_CONNECT,{
 //express middlewares
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use('/api/v1/user', userRouter)
+app.use('/api/v1/user', userRouter);
+app.use('/api/v1/product', productRouter);
 
-//api to get single product
-app.get('/api/v1/products/:id', (req, res) => {
-    const product = data.products.find(x => x._id === req.params.id);
-    if(product) {
-        res.send(product)
-    }else{
-        res.status(404).send({ message: "Product not found" })
-    }
-})
 
-//get all products
-app.get('/api/v1/products', (req, res) =>{
-    res.send(data.products)
-})
 
 app.get('/', (req, res)=>{
     res.send("Server is ready");
