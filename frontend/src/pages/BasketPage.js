@@ -24,7 +24,7 @@ function BasketPage(props) {
     }
 
     const handleCheckout = () => {
-        props.history.push('/signin?redirect=shipping')
+        props.history.push('/login?redirect=shipping')
     }
     return (
         <div className = "row top">

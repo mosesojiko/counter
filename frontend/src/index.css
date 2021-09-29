@@ -56,7 +56,11 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: #ff8000;
+  background-color: #f4f4f4;
+  color: #023c3f;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 5px;
 }
 
 ul {
@@ -114,6 +118,10 @@ a.brand {
   color: #fff;
   font-size: 30px;
   font-weight: bold;
+}
+a.brand:hover {
+  background-color: #023c3f;
+  color: #fff;
 }
 
 .badge {
