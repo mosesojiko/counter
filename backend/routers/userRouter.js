@@ -44,5 +44,22 @@ userRouter.post('/login', expressAsyncHandler( async(req, res) => {
     res.status(401).json({message: "Invalid email or password."})
 }))
 
+// register router
+userRouter.post('/register', expressAsyncHandler( async(req, res) => {
+    const user = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 8)
+    });
+    const createdUser = await user.save();
+    res.status(201).json({
+        _id: createdUser._id,
+        name: createdUser.name,
+        email: createdUser.email,
+        isAdmin: createdUser.isAdmin,
+        isSeller: createdUser.isSeller,
+        token: generateToken(createdUser)
+    })
+}))
 
 module.exports =  userRouter;

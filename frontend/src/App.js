@@ -7,6 +7,7 @@ import BasketPage from './pages/BasketPage';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginPage from './pages/LoginPage';
 import { logout } from './actions/userActions';
+import RegisterPage from './pages/RegisterPage';
 
 
 
@@ -43,7 +44,7 @@ function App() {
                 <span className="badge">{basketItems.length}</span>
             }
             </Link>
-            <Link to ="/signup">Sign-Up</Link>
+            <Link to ="/register">Register</Link>
             {
                   /* Show name of user that logged in. Also implement logout */
                   userInfo? (
@@ -64,6 +65,7 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/register' component = { RegisterPage } ></Route>
     <Route path = '/login' component = { LoginPage } ></Route>
     <Route path = '/basket/:id' component = { BasketPage } ></Route>
     <Route path = '/stores' component = { StoresPage } ></Route>
