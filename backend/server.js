@@ -4,7 +4,8 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
 const userRouter  = require('./routers/userRouter.js');
-const productRouter = require('./routers/productRouter.js')
+const productRouter = require('./routers/productRouter.js');
+const { default: orderRouter } = require('./routers/orderRouter.js');
 
 dotenv.config();
 const app = express();
@@ -18,9 +19,11 @@ mongoose.connect(process.env.MONGODB_CONNECT,{
 
 //express middlewares
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({extended:true}));
+
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/product', productRouter);
+app.use('/api/v1/order', orderRouter)
 
 
 
