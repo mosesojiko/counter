@@ -1,2 +1,6 @@
 export const ADD_TO_BASKET = "ADD_TO_BASKET";
 export const REMOVE_FROM_BASKET = "REMOVE_FROM_BASKET";
+//shipping address
+export const BASKET_SAVE_SHIPPING_ADDRESS = "BASKET_SAVE_SHIPPING_ADDRESS";
+//payment method
+export const BASKET_SAVE_PAYMENT_METHOD = "BASKET_SAVE_PAYMENT_METHOD";

@@ -60,7 +60,7 @@ a:hover {
   color: #023c3f;
   font-weight: 600;
   border-radius: 10px;
-  padding: 5px;
+
 }
 
 ul {
@@ -281,8 +281,8 @@ img.medium {
   font-weight: bold;
 }
 .checkout-steps > div.active {
-  border-top-color: #f08000;
-  color: #f08000;
+  border-top-color: #90c041;
+  color: #90c041;
 }
 
 /* Table */

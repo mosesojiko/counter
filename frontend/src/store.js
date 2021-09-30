@@ -10,7 +10,9 @@ const initialState = {
         userInfo: localStorage.getItem('userInfo')? JSON.parse(localStorage.getItem('userInfo')) : null
     },
     basket: {
-        basketItems: localStorage.getItem('basketItems')? JSON.parse(localStorage.getItem('basketItems')) : []
+        basketItems: localStorage.getItem('basketItems')? JSON.parse(localStorage.getItem('basketItems')) : [],
+        shippingAddress: localStorage.getItem('shippingAddress')? JSON.parse(localStorage.getItem('shippingAddress')) : {},
+        paymentMethod: 'PayPal',
     },
 };
 

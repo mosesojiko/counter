@@ -10,7 +10,7 @@ function BasketPage(props) {
     const qty = props.location.search? Number(props.location.search.split('=')[1]) : 1
 
     //get basket from redux store
-    const basket = useSelector(state => state.basket);
+    const basket = useSelector((state) => state.basket);
     const { basketItems } = basket;
     
 

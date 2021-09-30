@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoginPage from './pages/LoginPage';
 import { logout } from './actions/userActions';
 import RegisterPage from './pages/RegisterPage';
+import ShippingAddressPage from './pages/ShippingAddressPage';
+import PaymentMethodPage from './pages/PaymentMethodPage';
+import PlaceOrderPage from './pages/PlaceOrderPage';
 
 
 
@@ -38,7 +41,7 @@ function App() {
             <Link to ="/guide">Guide</Link>
         </div>
         <div>
-            <Link to ="/basket">Basket
+            <Link to ="/basket/:id">Basket
             {
                 basketItems.length > 0 &&
                 <span className="badge">{basketItems.length}</span>
@@ -65,6 +68,9 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/placeorder' component = { PlaceOrderPage } ></Route>
+    <Route path = '/payment' component = { PaymentMethodPage } ></Route>
+    <Route path = '/shipping' component = { ShippingAddressPage } ></Route>
     <Route path = '/register' component = { RegisterPage } ></Route>
     <Route path = '/login' component = { LoginPage } ></Route>
     <Route path = '/basket/:id' component = { BasketPage } ></Route>

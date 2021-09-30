@@ -1,5 +1,9 @@
 import Axios from 'axios';
-import { ADD_TO_BASKET, REMOVE_FROM_BASKET } from '../constants/basketConstants';
+import { 
+    ADD_TO_BASKET, 
+    BASKET_SAVE_PAYMENT_METHOD, 
+    BASKET_SAVE_SHIPPING_ADDRESS, 
+    REMOVE_FROM_BASKET } from '../constants/basketConstants';
 
 
 export const addToBasket = (productId, qty) => async(dispatch, getState) => {
@@ -27,3 +31,20 @@ export const removeFromBasket = (productId) => (dispatch, getState) => {
     })
     localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems))
 }
+
+// function to saveShippingAddress
+export const saveShippingAddress = (data) => (dispatch) => {
+    dispatch({
+        type: BASKET_SAVE_SHIPPING_ADDRESS,
+        payload: data
+    });
+    localStorage.setItem('shippingAddress', JSON.stringify(data))
+}
+
+//Payment method
+export const savePaymentMethod = (data) => (dispatch) => {
+    dispatch({
+        type: BASKET_SAVE_PAYMENT_METHOD,
+        payload: data
+    })
+} 
