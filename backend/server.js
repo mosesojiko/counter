@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const userRouter  = require('./routers/userRouter.js');
 const productRouter = require('./routers/productRouter.js');
-const { default: orderRouter } = require('./routers/orderRouter.js');
+const orderRouter = require('./routers/orderRouter.js');
 
 dotenv.config();
 const app = express();

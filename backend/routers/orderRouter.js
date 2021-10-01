@@ -1,7 +1,8 @@
-import express from 'express';
-import expressAsyncHandler from 'express-async-handler';
-import Order from '../models/orderModel.js';
-import { isAuth } from '../utils/isAuth.js';
+/* eslint-disable no-undef */
+const express = require('express');
+const expressAsyncHandler = require('express-async-handler');
+const Order = require('../models/orderModel.js');
+const { isAuth } = require('../utils/isAuth.js');
 
 
 const orderRouter = express.Router();
@@ -30,4 +31,4 @@ orderRouter.post('/', isAuth, expressAsyncHandler( async(req, res) =>{
     }
 }))
 
-export default orderRouter;
+module.exports = orderRouter;

@@ -28,7 +28,9 @@ userRouter.post('/login', expressAsyncHandler( async(req, res) => {
     const user = await User.findOne({email: req.body.email});
 
     if(user) {
+        const token = generateToken(user);
         if(bcrypt.compareSync(req.body.password, user.password)){
+            
             res.status(201).json({
                 message: "Login successful",
                 _id: user._id,
@@ -36,7 +38,7 @@ userRouter.post('/login', expressAsyncHandler( async(req, res) => {
                 email: user.email,
                 isAdmin: user.isAdmin,
                 isSeller: user.isSeller,
-                token: generateToken(user)
+                token
             });
             return
         }

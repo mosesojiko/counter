@@ -1,13 +1,14 @@
-import mongooses from 'mongoose';
+/* eslint-disable no-undef */
+const mongoose = require('mongoose');
 
-const orderShema = new mongooses.Schema({
+const orderShema = new mongoose.Schema({
     orderItems: [{
         name: {type: String, required: true},
         qty: {type: Number, reqired: true},
         image: {type: String, required: true},
         price: {type: Number, required: true},
         product: {
-            type: mongooses.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Product', 
             required: true,
         },
@@ -25,7 +26,7 @@ const orderShema = new mongooses.Schema({
     taxPrice: {type: Number, required:true},
     totalPrice: {type: Number, required:true},
     user: {
-        type: mongooses.Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: "User",
         required: true,
     },
@@ -39,6 +40,6 @@ const orderShema = new mongooses.Schema({
 }
 );
 
-const Order = mongooses.model("Order", orderShema)
+const Order = mongoose.model("Order", orderShema)
 
-export default Order;
+module.exports = Order;

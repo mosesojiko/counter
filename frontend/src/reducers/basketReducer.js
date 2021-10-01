@@ -1,4 +1,9 @@
-import { ADD_TO_BASKET, BASKET_SAVE_PAYMENT_METHOD, BASKET_SAVE_SHIPPING_ADDRESS, REMOVE_FROM_BASKET } from "../constants/basketConstants";
+import { 
+    ADD_TO_BASKET, 
+    BASKET_EMPTY, 
+    BASKET_SAVE_PAYMENT_METHOD, 
+    BASKET_SAVE_SHIPPING_ADDRESS, 
+    REMOVE_FROM_BASKET } from "../constants/basketConstants";
 
 
 export const basketReducer = (state = {basketItems:[]}, action) => {
@@ -33,6 +38,11 @@ export const basketReducer = (state = {basketItems:[]}, action) => {
             return {
                 ...state,
                 paymentMethod: action.payload
+            }
+        case BASKET_EMPTY:
+            return {
+                ...state,
+                basketItems: []
             }
 
         default:
