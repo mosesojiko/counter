@@ -11,6 +11,11 @@ import RegisterPage from './pages/RegisterPage';
 import ShippingAddressPage from './pages/ShippingAddressPage';
 import PaymentMethodPage from './pages/PaymentMethodPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
+import OrderPage from './pages/OrderPage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
+import ProfilePage from './pages/ProfilePage';
+import CreateStore from './pages/CreateStorePage';
+import CreateProductPage from './pages/CreateProductPage';
 
 
 
@@ -22,6 +27,7 @@ function App() {
     //get access to userLogin from redux store
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
+
 
     //logout function
     const dispatch = useDispatch()
@@ -54,6 +60,12 @@ function App() {
                     <div className ="dropdown">
                     <Link to ="#">{ userInfo.name } <i className ="fa fa-caret-down"></i> </Link>
                     <ul className = "dropdown-content">
+                    <li>
+                        <Link to ="/profile">User Profile</Link>
+                    </li>
+                    <li>
+                        <Link to ="/orderhistory">Order History</Link>
+                    </li>
                    <Link to ="#logout" onClick= { logoutHandler }> Logout </Link>
                    </ul>
                </div>
@@ -68,12 +80,17 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/createproduct' component = { CreateProductPage } ></Route>
+    <Route path = '/createstore' component = { CreateStore } ></Route>
+    <Route path = '/profile' component = { ProfilePage } ></Route>
+    <Route path = '/orderhistory' component = { OrderHistoryPage } ></Route>
+    <Route path = '/order/:id' component = { OrderPage } ></Route>
     <Route path = '/placeorder' component = { PlaceOrderPage } ></Route>
     <Route path = '/payment' component = { PaymentMethodPage } ></Route>
     <Route path = '/shipping' component = { ShippingAddressPage } ></Route>
     <Route path = '/register' component = { RegisterPage } ></Route>
     <Route path = '/login' component = { LoginPage } ></Route>
-    <Route path = '/basket/:id' component = { BasketPage } ></Route>
+    <Route path = '/basket/:id?' component = { BasketPage } ></Route>
     <Route path = '/stores' component = { StoresPage } ></Route>
     <Route path = '/product/:id' component = {ProductPage} ></Route>
       <Route path = '/' component = {HomePage} exact></Route>

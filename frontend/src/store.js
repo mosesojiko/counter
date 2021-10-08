@@ -1,20 +1,22 @@
 import {compose, applyMiddleware, createStore, combineReducers } from 'redux'
 import thunk from 'redux-thunk';
 import { basketReducer } from './reducers/basketReducer';
-import { createOrderReducer } from './reducers/orderReducers';
-import { getAllProductReducer, getProductDetailsReducers } from './reducers/productReducers';
-import { userLoginReducer, userRegisterReducer } from './reducers/userReducer';
+import { createOrderReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from './reducers/orderReducers';
+import { createProductReducer, getAllProductReducer, getProductDetailsReducers } from './reducers/productReducers';
+import { createStoreReducer, getAllStoresReducer } from './reducers/storeReducers';
+import { userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducer';
 
 
 const initialState = {
     userLogin: {
-        userInfo: localStorage.getItem('userInfo')? JSON.parse(localStorage.getItem('userInfo')) : null
+        userInfo: localStorage.getItem('userInfo')? JSON.parse(localStorage.getItem('userInfo')) : null,
     },
     basket: {
         basketItems: localStorage.getItem('basketItems')? JSON.parse(localStorage.getItem('basketItems')) : [],
         shippingAddress: localStorage.getItem('shippingAddress')? JSON.parse(localStorage.getItem('shippingAddress')) : {},
-        paymentMethod: 'PayPal',
+        paymentMethod: "PayPal",
     },
+    
 };
 
 const reducer = combineReducers({
@@ -24,7 +26,16 @@ const reducer = combineReducers({
     basket: basketReducer,
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
-    orderCreate: createOrderReducer
+    orderCreate: createOrderReducer,
+    orderDetails: orderDetailsReducer,
+    orderPay: orderPayReducer,
+    orderMineList: orderMineListReducer,
+    userDetails: userDetailsReducer,
+    userUpdateProfile: userUpdateProfileReducer,
+    createdStore: createStoreReducer,
+    getAllStores: getAllStoresReducer,
+    productCreate: createProductReducer,
+
 })
 //to show store in the console
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

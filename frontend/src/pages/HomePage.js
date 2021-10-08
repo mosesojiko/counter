@@ -5,6 +5,7 @@ import MessageBox from '../components/MessageBox';
 import LoadingBox from '../components/LoadingBox';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../actions/productActions';
+import { Link } from 'react-router-dom';
 
 
 function HomePage() {
@@ -16,6 +17,7 @@ function HomePage() {
    }, [dispatch] )
     return (
         <div>
+          <Link to = "/createproduct">Create Product</Link>
           {
           loading? 
           <LoadingBox></LoadingBox>

@@ -1,3 +1,8 @@
+//create product constants
+export const CREATE_PRODUCT_REQUEST = "CREATE_PRODUCT_REQUEST";
+export const CREATE_PRODUCT_SUCCESS = "CREATE_PRODUCT_SUCCESS";
+export const CREATE_PRODUCT_FAIL = "CREATE_PRODUCT_FAIL";
+
 //declare three constants here
 export const LIST_OF_PRODUCTS_REQUEST = "LIST_OF_PRODUCTS_REQUEST";
 export const LIST_OF_PRODUCTS_SUCCESS = "LIST_OF_PRODUCTS_SUCCESS";

@@ -3,7 +3,6 @@ const express = require('express');
 const expressAsyncHandler = require('express-async-handler');
 const productRouter = express.Router();
 
-const data = require('../data.js');
 const Product = require('../models/productModel.js');
 
 //get all products
@@ -13,8 +12,26 @@ productRouter.get('/', expressAsyncHandler( async(req, res) => {
 }))
 
 //create a product
-productRouter.get('/create', expressAsyncHandler( async(req, res) => {
-    const createProduct = await Product.insertMany(data.products);
+productRouter.post('/create', expressAsyncHandler( async(req, res) => {
+    
+    const { name, price, category, image, countInStock, brand, rating, numReviews, description } =
+    req.body;
+
+    const product = new Product({
+        name, price, category, image, countInStock, brand, rating, numReviews, description 
+    });
+    const createProduct = await product.save();
+    res.json({
+        _id: createProduct._id,
+        name: createProduct.name,
+        category: createProduct.category,
+        image: createProduct.image,
+        description: createProduct.description,
+        countInStock: createProduct.countInStock,
+        brand: createProduct.brand,
+        rating: createProduct.rating,
+        numReviews: createProduct.numReviews
+    })
     res.json({createProduct});
 }))
 

@@ -1,24 +1,23 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
 import { createOrder } from '../actions/orderActions';
-import CheckoutSteps from '../components/CheckoutSteps';
-import LoadingBox from '../components/LoadingBox';
-import MessageBox from "../components/MessageBox";
+
+import CheckoutSteps from '../components/CheckoutSteps'
 import { CREATE_ORDER_RESET } from '../constants/orderConstants';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 
 function PlaceOrderPage(props) {
-    //get basket from redux store
+    //get cart from redux store
     const basket = useSelector((state) => state.basket)
-    //check if user entered a payment method, else redirect the user to payment method page
+    //check if user entered payment method, if not redirect the user to payment method
     if(!basket.paymentMethod) {
         props.history.push('/payment')
     }
-
     //get orderCreate from redux store
-    const orderCreate = useSelector((state) => state.orderCreate);
+    const orderCreate = useSelector(state => state.orderCreate);
     const { loading, success, error, order } = orderCreate
-
     //define a helper function for order summary
     const toPrice = (num) => Number(num.toFixed(2)); //e.g  5.123 => "5.12" => 5.12
     //using toPrice for cartItems
@@ -28,75 +27,79 @@ function PlaceOrderPage(props) {
     //using it for tax
     basket.taxPrice = toPrice(0.15 * basket.itemsPrice);
     //for total price
-    basket.totalPrice = basket.itemsPrice + basket.shippingPrice + basket.taxPrice;
+    basket.totalPrice = basket.itemsPrice + basket.shippingPrice + basket.taxPrice
 
-    //function to handle placed orders
+    //function for placeOrderHandler
     const dispatch = useDispatch();
-    const handleOrder = () =>{
-        //rename basket to orderItems bcos that's what we have in the backend
-        dispatch(createOrder({ ...basket, orderItems: basket.basketItems}))
+    const placeOrderHandler = () => {
+        //here, rename cart to orderItems bcos that is what we have in the backent
+        dispatch(createOrder({ ...basket, orderItems: basket.basketItems }))
     }
 
-    useEffect(() => {
-        //redirect the user to order details page
-        if(success){
+    useEffect(() =>{
+        if(success) {
+            //redirect the user to order details screen
             props.history.push(`/order/${order._id}`);
+            dispatch({
+                type: CREATE_ORDER_RESET
+            })
         }
-        
-        dispatch({
-            type: CREATE_ORDER_RESET
-        })
-    },[dispatch, order, props.history, success])
 
+    }, [dispatch, order, props.history, success])
     return (
         <div>
-            <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
-            <div className ="row top">
-                <div className ="col-2">
+            <CheckoutSteps step1 step2 step3 step4 ></CheckoutSteps>
+            <div className = "row top">
+                <div className = "col-2">
                     <ul>
                         <li>
                             <div className ="card card-body">
-                                <h2>Shipping Details</h2>
-                                <p><strong>Name:</strong>{basket.shippingAddress.fullName}</p><br />
-                                <p><strong>Address:</strong>{basket.shippingAddress.address},
-                                {basket.shippingAddress.city}, {basket.shippingAddress.postalCode},
-                                {basket.shippingAddress.country}
+                                <h2>Shipping</h2>
+                                <p> <strong>Name:</strong> { basket.shippingAddress.fullName } <br />
+                                <strong>Address:</strong> { basket.shippingAddress.address },
+                                { basket.shippingAddress.city }, { basket.shippingAddress.postalCode },
+                                { basket.shippingAddress.country }
                                 </p>
-
                             </div>
                         </li>
                         <li>
                             <div className ="card card-body">
                                 <h2>Payment</h2>
-                                <p><strong>Method:</strong>{basket.paymentMethod}</p>
+                                <p> <strong>Method:</strong> { basket.paymentMethod } 
+                                </p>
                             </div>
                         </li>
                         <li>
                             <div className ="card card-body">
                                 <h2>Order Items</h2>
                                 <ul>
-                                    {
-                                        basket.basketItems.map((item) => (
-                                            <li key={item.product}>
-                                                <div className="row">
-                                                    <img src ={item.image} alt={item.name} className="small" />
-                                                </div>
-                                                <div className ="min-30">
+                            {
+                                basket.basketItems.map((item) =>(
+                                    <li key = { item.product }>
+                                        <div className ="row">
+                                            <div>
+                                                <img src = { item.image } alt = { item.name } className="small"></img>
+                                            </div>
+                                            <div className ="min-30">
                                                 <Link to = {`/product/${item.product}`}>{item.name}</Link>
-                                                </div>
-                                                <div>
+                                            </div>
+                                            
+                                            <div>
 
                                                 {item.qty} x {item.price} = #{item.qty * item.price}
                                             </div>
-                                            </li>
-                                        ))
-                                    }
-                                </ul>
+                                            
+                                        </div>
+                                    </li>
+                                ))
+                            }
+                        </ul>
                             </div>
                         </li>
                     </ul>
+
                 </div>
-                <div className ="col-1">
+                <div className = "col-1">
                     <div className ="card card-body">
                         <ul>
                             <li>
@@ -127,7 +130,7 @@ function PlaceOrderPage(props) {
                                 </div>
                             </li>
                             <li>
-                                <button type ="button" onClick = {handleOrder}
+                                <button type ="button" onClick = {placeOrderHandler}
                                 className ="primary block"
                                 disabled = { basket.basketItems.length === 0 }
                                 >Place Order</button> 
@@ -136,7 +139,7 @@ function PlaceOrderPage(props) {
                                 loading && <LoadingBox></LoadingBox>
                             }
                             {
-                                error && <MessageBox variant="danger">{error}</MessageBox>
+                                error && <MessageBox variant ="danger">{error}</MessageBox>
                             }
                         </ul>
                     </div>

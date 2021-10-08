@@ -19,6 +19,7 @@ function PaymentMethodPage(props) {
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(savePaymentMethod(paymentMethod));
+        console.log(paymentMethod);
         //redirect the user to finally place the order
         props.history.push('/placeorder');
     }
@@ -31,28 +32,13 @@ function PaymentMethodPage(props) {
                 </div>
                 <div>
                     <div>
-                        <input type = "radio" id ="payu"
-                        value ="payU" name ="paymentMethod"
-                        required checked onChange ={(e) => setPaymentMethod(e.target.value)} />
-                        <label htmlFor ="payu">PayU</label>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <input type = "radio" id ="paystack"
-                        value ="Paystack" name ="paymentMethod"
-                        required checked onChange ={(e) => setPaymentMethod(e.target.value)} />
-                        <label htmlFor ="paystack">Paystack</label>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <input type = "radio" id ="paypal"
+                        <input type = "radio" id ="PayPal"
                         value ="PayPal" name ="paymentMethod"
                         required checked onChange ={(e) => setPaymentMethod(e.target.value)} />
-                        <label htmlFor ="paypal">PayPal</label>
+                        <label htmlFor ="PayPal">PayPal</label>
                     </div>
                 </div>
+                
                 <div>
                     <div>
                         <input type = "radio" id ="stripe" value = "Stripe" name ="paymentMethod"

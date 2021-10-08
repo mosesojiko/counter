@@ -2,10 +2,12 @@
 const express = require('express')
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const userRouter  = require('./routers/userRouter.js');
 const productRouter = require('./routers/productRouter.js');
 const orderRouter = require('./routers/orderRouter.js');
+const storeRouter = require('./routers/storeRouter.js');
 
 dotenv.config();
 const app = express();
@@ -18,14 +20,22 @@ mongoose.connect(process.env.MONGODB_CONNECT,{
 
 
 //express middlewares
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+//for file uploads
+app.use('/uploads', express.static('uploads'))
 
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/order', orderRouter)
+app.use('/api/v1/store', storeRouter)
 
-
+//api for paypay
+app.get('/api/v1/config/paypal', (req, res) =>{
+    // eslint-disable-next-line no-undef
+    res.send(process.env.PAYPAL_CLIENT_ID || 'sb') //sb stands for sandbox
+})
 
 app.get('/', (req, res)=>{
     res.send("Server is ready");

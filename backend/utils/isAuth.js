@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 
 exports.isAuth = (req, res, next) =>{
+    //Verify a user and get information about the user
     const authorization = req.headers.authorization;
     if(authorization) {
         const token = authorization.slice(7, authorization.length) //Bearer xxxxx => xxxxx i.e slcice start from x

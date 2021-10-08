@@ -1,7 +1,34 @@
 //product reducers
 
-import { LIST_OF_PRODUCTS_FAIL, LIST_OF_PRODUCTS_REQUEST, LIST_OF_PRODUCTS_SUCCESS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_SUCCESS } from "../constants/productConstants";
+import { 
+    CREATE_PRODUCT_FAIL, 
+    CREATE_PRODUCT_REQUEST, 
+    CREATE_PRODUCT_SUCCESS, 
+    LIST_OF_PRODUCTS_FAIL, 
+    LIST_OF_PRODUCTS_REQUEST, 
+    LIST_OF_PRODUCTS_SUCCESS, 
+    PRODUCT_DETAILS_FAIL, 
+    PRODUCT_DETAILS_REQUEST, 
+    PRODUCT_DETAILS_SUCCESS 
+} from "../constants/productConstants";
 
+
+//define create product reducers
+export const createProductReducer = (state = {}, action) =>{
+    switch(action.type){
+        case CREATE_PRODUCT_REQUEST:
+        return {loading: true}
+
+        case CREATE_PRODUCT_SUCCESS:
+        return {loading: false, stores: action.payload}
+
+        case CREATE_PRODUCT_FAIL:
+        return {loading: false, error: action.payload}
+
+        default:
+        return state
+    }
+}
 
 //define product list reducers
 export const getAllProductReducer = (state = {loading:true, products:[] }, action) =>{
