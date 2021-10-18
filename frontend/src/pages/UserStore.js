@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { getUserStore } from '../actions/storeActions';
+import { editPostedStore, getUserStore, unPostedStore } from '../actions/storeActions';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 
 
 function UserStore() {
@@ -13,12 +15,26 @@ function UserStore() {
 
     const userStoreDetails = useSelector((state) => state.userStoreDetails);
     const { userStore } = userStoreDetails
+    console.log(userStore)
    
     const dispatch = useDispatch();
     useEffect(() =>{
         dispatch(getUserStore())
     },[dispatch])
+    
+    //get editPost from redux store
+    const postedStore = useSelector(state => state.postedStore);
+    const {loading:loadingPost, error: errorPost, success: successPost } = postedStore
+    const handlePost = () =>{
+        dispatch(editPostedStore({id: userStore._id}))
+    }
+    //get unpost store from redux
+    const unpostStore = useSelector(state => state.unpostStore)
+    const {loading: loadingUnpost, error: errorUnpost, success: sucessUnpost } = unpostStore;
 
+    const handleUnpost = () => {
+        dispatch(unPostedStore({id: userStore._id}))
+    }
     return (
         <div>
                    <div className="row top bottom">
@@ -70,6 +86,28 @@ function UserStore() {
                                    {
                                    <Link to="/editstore"><button className="profile-button">Edit store</button></Link>
                                    }
+                               </div>
+                               <div>
+                               {
+                        loadingPost && <LoadingBox></LoadingBox>
+                    }
+                    {
+                        errorPost && <MessageBox variant ="danger">{errorPost}</MessageBox>
+                    }
+                    {
+                        successPost && <MessageBox variant ="success">Store posted to stores page successfully.</MessageBox>
+                    }
+                               <button className ="primary" type ="submit" onClick={handlePost}>Post store</button>
+                               {
+                        loadingUnpost && <LoadingBox></LoadingBox>
+                    }
+                    {
+                        errorUnpost && <MessageBox variant ="danger">{errorUnpost}</MessageBox>
+                    }
+                    {
+                        sucessUnpost && <MessageBox variant ="success">Store removed from stores page successfully.</MessageBox>
+                    }
+                               <button className ="primary" type ="submit" onClick={handleUnpost}>Unpost store</button>
                                </div>
                                    
                            </div>

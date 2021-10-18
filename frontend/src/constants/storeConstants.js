@@ -28,3 +28,8 @@ export const Edit_STORE_RESET = "EDIT_STORE_RESET";
 export const POST_STORE_REQUEST = "POST_STORE_REQUEST";
 export const POST_STORE_SUCCESS = "POST_STORE_SUCCESS";
 export const POST_STORE_FAIL = "POST_STORE_FAIL";
+
+//constants to update a store that is posted
+export const UNPOST_STORE_REQUEST = "UNPOST_STORE_REQUEST";
+export const UNPOST_STORE_SUCCESS = "UNPOST_STORE_SUCCESS";
+export const UNPOST_STORE_FAIL = "UNPOST_STORE_FAIL";

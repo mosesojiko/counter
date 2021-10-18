@@ -18,6 +18,9 @@ import {
     POST_STORE_FAIL,
     POST_STORE_REQUEST,
     POST_STORE_SUCCESS,
+    UNPOST_STORE_FAIL,
+    UNPOST_STORE_REQUEST,
+    UNPOST_STORE_SUCCESS,
 } from "../constants/storeConstants";
 
 
@@ -143,9 +146,31 @@ export const editPostedStoreReducer = (state = {}, action) =>{
             return {
                 loading: false,
                 success: true
-
             }
         case POST_STORE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state;
+    }
+}
+
+
+//reducer to unpost a store
+export const unPostedStoreReducer = (state = {}, action) =>{
+    switch(action.type) {
+        case UNPOST_STORE_REQUEST:
+            return {
+                loading: true
+            }
+        case UNPOST_STORE_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            }
+        case UNPOST_STORE_FAIL:
             return {
                 loading: false,
                 error: action.payload

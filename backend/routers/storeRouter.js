@@ -81,13 +81,27 @@ storeRouter.put('/editstore', isAuth, expressAsyncHandler( async(req, res) => {
 }))
 
 
-//update a user that created a store
+//update a store to be posted
 storeRouter.put('/userstore', isAuth, expressAsyncHandler( async(req,res) =>{
     const store = await Mosgandastore.findById(req.body.id);
     if(store){
         store.isPosted = true;
     }
-    const updatedStore = await save.save();
+    const updatedStore = await store.save();
         res.json(updatedStore)
 }))
+
+//update a store to be unposted
+//update a store to be posted
+storeRouter.put('/unpoststore', isAuth, expressAsyncHandler( async(req,res) =>{
+    const store = await Mosgandastore.findById(req.body.id);
+    if(store){
+        store.isPosted = false;
+    }
+    const updatedStore = await store.save();
+        res.json(updatedStore)
+}))
+
+
 module.exports = storeRouter;
+
