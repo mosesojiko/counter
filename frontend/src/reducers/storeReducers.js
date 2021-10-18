@@ -2,9 +2,15 @@ import {
     CREATE_STORE_FAIL, 
     CREATE_STORE_REQUEST, 
     CREATE_STORE_SUCCESS, 
+    GET_SINGLE_STORE_FAIL, 
+    GET_SINGLE_STORE_REQUEST, 
+    GET_SINGLE_STORE_SUCCESS, 
     GET_STORES_FAIL, 
     GET_STORES_REQUEST,
-    GET_STORES_SUCCESS
+    GET_STORES_SUCCESS,
+    GET_USERSTORE_FAIL,
+    GET_USERSTORE_REQUEST,
+    GET_USERSTORE_SUCCESS,
 } from "../constants/storeConstants";
 
 
@@ -45,5 +51,52 @@ export const getAllStoresReducer = (state ={ loading:true, stores:[] }, action) 
             }
         default:
             return state;
+    }
+}
+
+//get single store details reducers
+export const getSingleStoreReducers =  (state = {loading:true, store: {}}, action) => {
+    switch(action.type) {
+        case GET_SINGLE_STORE_REQUEST:
+            return {
+                loading: true,
+            }
+
+        case GET_SINGLE_STORE_SUCCESS:
+            return {
+                loading: false,
+                store: action.payload 
+            }
+
+        case GET_SINGLE_STORE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            } 
+               
+        default: 
+           return state;
+    }
+}
+
+//get user store reducer
+export const getUserStoreReducers = (state = { userStore:{} },action) =>{
+    switch(action.type) {
+        case GET_USERSTORE_REQUEST:
+            return {
+                loading: true
+            };
+        case GET_USERSTORE_SUCCESS:
+            return {
+                loading: false,
+                userStore: action.payload
+            };
+        case GET_USERSTORE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state
     }
 }

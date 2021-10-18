@@ -5,8 +5,20 @@ const storeSchema = new mongoose.Schema({
     name: {type: String},
     address: {type: String},
     city: {type: String},
+    state: {type: String},
+    country: {type: String},
     description: {type: String},
     image: {type: String},
+    isPosted: {type: Boolean, default: false},
+    storeCreatorId: {type: String},
+    storeCreatorName: {type: String},
+    storeCreatorPhone: {type: String},
+    storeCreatorEmail: {type: String},
+    storeCreatorImage: {type: String},
+    user: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "User",
+    },
 }, {
     timestamps: true
 });

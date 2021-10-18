@@ -1,5 +1,8 @@
 import Axios from 'axios';
 import { 
+    USER_CREATE_STORE_FAIL,
+    USER_CREATE_STORE_REQUEST,
+    USER_CREATE_STORE_SUCCESS,
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
@@ -65,7 +68,6 @@ export const logout = () => (dispatch) => {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('basketItems');
     localStorage.removeItem('shippingAddress');
-    
     dispatch({
         type: USER_LOGOUT
     });
@@ -100,7 +102,7 @@ export const detailsUser = (userId) => async (dispatch, getState) => {
 
 
 //action to update user profile
-export const updateUserProfile = (user) => async (dispatch, getState) =>{
+export const updateUserProfile = (user,) => async (dispatch, getState) =>{
     dispatch({
         type: USER_UPDATE_PROFILE_REQUEST,
         payload: user
@@ -127,6 +129,37 @@ export const updateUserProfile = (user) => async (dispatch, getState) =>{
         const message = error.response && error.response.data.message?
         error.response.data.message : error.message;
         dispatch({type: USER_UPDATE_PROFILE_FAIL, payload: message})
+    }
+}
+
+//update isSeller for a user that creates a store
+export const updateUserCreateStore = (user) => async (dispatch, getState) =>{
+    dispatch({
+        type: USER_CREATE_STORE_REQUEST,
+        payload: user
+    })
+    //get user info
+    const { userLogin: {userInfo} } = getState();
+    try {
+        const { data } = await Axios.put(`/api/v1/user/createstore`, user, {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            },
+        })
+        dispatch({
+            type: USER_CREATE_STORE_SUCCESS,
+            payload: data
+        })
+        //also update user login
+        dispatch({
+            type: USER_LOGIN_SUCCESS,
+            payload: data
+        })
+        localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+        const message = error.response && error.response.data.message?
+        error.response.data.message : error.message;
+        dispatch({type: USER_CREATE_STORE_FAIL, payload: message})
     }
 }
 

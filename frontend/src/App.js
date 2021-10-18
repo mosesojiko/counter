@@ -16,6 +16,9 @@ import OrderHistoryPage from './pages/OrderHistoryPage';
 import ProfilePage from './pages/ProfilePage';
 import CreateStore from './pages/CreateStorePage';
 import CreateProductPage from './pages/CreateProductPage';
+import StoreDetailsPage from './pages/StoreDetailsPage';
+import UserStore from './pages/UserStore';
+
 
 
 
@@ -27,13 +30,15 @@ function App() {
     //get access to userLogin from redux store
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
-
+    console.log(userInfo)
 
     //logout function
     const dispatch = useDispatch()
     const logoutHandler = () =>{
-        dispatch(logout())
+        dispatch(logout());
+        window.location ='/'
     }
+    
   return (
     <BrowserRouter>
     <div className="grid-container">
@@ -64,9 +69,14 @@ function App() {
                         <Link to ="/profile">User Profile</Link>
                     </li>
                     <li>
+                     <Link to ={userInfo.isSeller? '/userstore':'/createstore'}>{userInfo.isSeller? 'User Store':"Create Store"}</Link>
+                    </li>
+                    <li>
                         <Link to ="/orderhistory">Order History</Link>
                     </li>
-                   <Link to ="#logout" onClick= { logoutHandler }> Logout </Link>
+                    <li>
+                    <Link to ="#logout" onClick= { logoutHandler }> Logout </Link>
+                    </li>
                    </ul>
                </div>
 
@@ -80,6 +90,8 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/userstore' component = { UserStore } ></Route>
+    <Route path = '/store/:id' component = { StoreDetailsPage } ></Route>
     <Route path = '/createproduct' component = { CreateProductPage } ></Route>
     <Route path = '/createstore' component = { CreateStore } ></Route>
     <Route path = '/profile' component = { ProfilePage } ></Route>

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'; 
+import FileBase64 from 'react-file-base64';
+
 import { detailsUser, updateUserProfile } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -7,14 +9,15 @@ import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
 function ProfilePage() {
     const [name, setName ] = useState('')
-    const [email, setEmail ] = useState('')
-    const [password, setPassword ] = useState('')
-    const [confirmPassword, setConfirmPassword ] = useState('')
+    const [phone, setPhone ] = useState('')
+    const [businessEmail, setBusinessEmail ] = useState('')
+    const [image, setImage ] = useState('')
 
     const userLogin = useSelector(state =>state.userLogin);
     const { userInfo } = userLogin;
     const userDetails = useSelector(state => state.userDetails);
     const { loading, error, user } = userDetails;
+    console.log(user)
 
     const userUpdateProfile = useSelector(state => state.userUpdateProfile);
     const { success: successUpdate, error: errorUpdate, loading: loadingUpdate } = userUpdateProfile;
@@ -26,7 +29,9 @@ function ProfilePage() {
             dispatch(detailsUser(userInfo._id));
         }else{
             setName(user.name);
-            setEmail(user.email)
+            setPhone(user.phone)
+            setBusinessEmail(user.businessEmail)
+            setImage(user.image)
         }
 
     }, [dispatch, userInfo._id, user])
@@ -34,13 +39,16 @@ function ProfilePage() {
     const submitHandler = (e) =>{
         e.preventDefault();
         //dispatch update profile
-        if(password !== confirmPassword){
-            alert("Password and confirm password are not matched.")
-        }else{
-            dispatch(updateUserProfile({
-                userId: user._id, name, email, password
-            }))
-        }
+        // if(password !== confirmPassword){
+        //     alert("Password and confirm password are not matched.")
+        // }else{
+        //     dispatch(updateUserProfile({
+        //         userId: user._id, name, email, password
+        //     }))
+        // }
+        dispatch(updateUserProfile({
+                 userId: user._id, name, phone, businessEmail, image
+                 }))
     }
     return (
         <div>
@@ -66,24 +74,24 @@ function ProfilePage() {
                         </input>
                     </div>
                     <div>
-                        <lable htmlFor="email">Email</lable>
-                        <input type ="email" id ="email" placeholder="Enter email"
-                        value ={email} onChange = {(e) =>setEmail(e.target.value)}>
+                        <lable htmlFor="businessEmail">Business Email</lable>
+                        <input type ="email" id ="email" placeholder="Enter business email"
+                        value ={businessEmail} onChange = {(e) =>setBusinessEmail(e.target.value)}>
                         </input>
                     </div>
                     <div>
-                        <lable htmlFor="password">Password</lable>
-                        <input type ="password" id ="password" placeholder="Enter password"
-                        onChange = {(e) =>setPassword(e.target.value)}
+                        <lable htmlFor="phone">Phone</lable>
+                        <input type ="text" id ="phone" placeholder="Enter business number"
+                        value = {phone}
+                        onChange = {(e) =>setPhone(e.target.value)}
                         >
                         </input>
                     </div>
                     <div>
-                        <lable htmlFor="confirmPassword">Confirm Password</lable>
-                        <input type ="password" id ="confirmPassword" placeholder="Enter confirm password"
-                        onChange = {(e) =>setConfirmPassword(e.target.value)}
-                        >
-                        </input>
+                        <p>Add your photo</p>
+                        <FileBase64 type ="file" multiple={false}  
+                        onDone = {({base64}) => setImage(base64)}
+                        />
                     </div>
                     <div>
                         <label />

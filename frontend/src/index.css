@@ -12,6 +12,10 @@ body {
   font-family: Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #F7F8F8;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #ACBB78, #F7F8F8);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #ACBB78, #F7F8F8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
 
 #root {
@@ -156,6 +160,9 @@ a.brand:hover {
 .row.center{
   justify-content: center;
 }
+.row.around {
+  justify-content: space-around;
+}
 /* images */
 img {
   border-radius: 5px;
@@ -191,6 +198,52 @@ img.medium {
 }
 .price {
   font-size: 20px;
+}
+/* profile */
+.profile-card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-family: arial;
+  background-color: #fff;
+  border-radius: 20px;
+  margin: 5px;
+}
+.profile-card > img {
+  border-radius: 50%;
+}
+p.title {
+  color: grey;
+  font-size: 18px;
+}
+.profile-button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  background-color: #90c041;
+  color: #000;
+  font-weight: bolder;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+.fa {
+  margin: 0 16px;
+  color: #023c3f;
+}
+.profile-card > a {
+    text-decoration: none;
+    font-size: 22px;
+    color: black;
+}
+.profile-card > button:hover, a:hover {
+  opacity: 0.7;
+}
+.contact {
+  text-align: left;
+  border-bottom: 1px solid #90c041;
+  margin-bottom: 2px;
 }
 
 /* rating */
@@ -303,4 +356,28 @@ img.medium {
 
 .table button {
   margin: 0 2px;
+}
+
+/* store */
+/* border bottom */
+.bottom {
+  border-bottom: 2px dotted #023c3f;
+  padding-bottom: 20px;
+}
+.store-image {
+  background-color: #f4f4f4;
+  margin: 5px;
+}
+.store-name  {
+  background-color: #f4f4f4;
+  text-align: center;
+  border-radius: 10px;
+}
+.description {
+  max-width: 350px;
+  background-color: #f8f8f8;
+  padding:0 10px;
+}
+.description > h2 {
+  text-align: center;
 }

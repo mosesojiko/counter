@@ -14,6 +14,7 @@ function CreateProductPage(props) {
   const [name, setName ] = useState('')
   const [ price, setPrice ] = useState(0);
   const [ category, setCategory ] = useState('')
+  const [numberInStore, setNumberInStore] = useState(0)
   const [ image, setImage ] = useState('');
   const [ countInStock, setCountInStock ] = useState(1);
   const [ brand, setBrand ] = useState('');
@@ -43,7 +44,7 @@ function CreateProductPage(props) {
   const dispatch = useDispatch();
   const submitHandler = (e) =>{
     e.preventDefault();
-    dispatch(createProduct(name, price, category, image, countInStock, brand, rating, numReviews, description));
+    dispatch(createProduct(name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description));
   
   }
 
@@ -86,8 +87,14 @@ function CreateProductPage(props) {
                 </input>
            </div>
            <div>
+                <lable htmlFor="numberInStore">Number in store</lable>
+                <input type ="text" id ="numberInStore" placeholder="Unique code e.g 1234"
+                 onChange = {(e) =>setNumberInStore( e.target.value)} >   
+                </input>
+           </div>
+           <div>
                 <lable htmlFor="countInStock">Count in stock</lable>
-                <input type ="text" id ="countInStock" placeholder="12"
+                <input type ="text" id ="countInStock" placeholder="How many in store? e.g 12"
                  onChange = {(e) =>setCountInStock( e.target.value)} >   
                 </input>
            </div>

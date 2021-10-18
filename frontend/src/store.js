@@ -3,8 +3,8 @@ import thunk from 'redux-thunk';
 import { basketReducer } from './reducers/basketReducer';
 import { createOrderReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from './reducers/orderReducers';
 import { createProductReducer, getAllProductReducer, getProductDetailsReducers } from './reducers/productReducers';
-import { createStoreReducer, getAllStoresReducer } from './reducers/storeReducers';
-import { userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducer';
+import { createStoreReducer, getAllStoresReducer, getSingleStoreReducers, getUserStoreReducers } from './reducers/storeReducers';
+import { updateUserCreateStoreReducer, userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducer';
 
 
 const initialState = {
@@ -35,6 +35,9 @@ const reducer = combineReducers({
     createdStore: createStoreReducer,
     getAllStores: getAllStoresReducer,
     productCreate: createProductReducer,
+    storeDetails: getSingleStoreReducers,
+    userStoreDetails: getUserStoreReducers,
+    userCreateStore: updateUserCreateStoreReducer,
 
 })
 //to show store in the console

@@ -1,4 +1,8 @@
 import { 
+    USER_CREATE_STORE_FAIL,
+    USER_CREATE_STORE_REQUEST,
+    USER_CREATE_STORE_RESET,
+    USER_CREATE_STORE_SUCCESS,
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
@@ -91,6 +95,24 @@ export const userUpdateProfileReducer = (state = {}, action) =>{
         case USER_UPDATE_PROFILE_RESET:
             return {};    
             
+        default : 
+         return state;   
+    }
+}
+
+//reducer to update user that creates a store
+export const updateUserCreateStoreReducer = (state = {}, action) =>{
+    switch(action.type){
+        case USER_CREATE_STORE_REQUEST:
+            return { loading: true};
+
+        case USER_CREATE_STORE_SUCCESS:
+            return { loading: false, success: true };
+            
+        case USER_CREATE_STORE_FAIL: 
+            return { loading: false, error: action.payload };
+        case USER_CREATE_STORE_RESET:
+            return {};
         default : 
          return state;   
     }

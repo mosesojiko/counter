@@ -7,9 +7,27 @@ import FileBase64 from 'react-file-base64';
 import { createStore } from '../actions/storeActions';
  import LoadingBox from '../components/LoadingBox';
  import MessageBox from '../components/MessageBox';
+import { USER_CREATE_STORE_RESET } from '../constants/userConstants';
+import { detailsUser, updateUserCreateStore } from '../actions/userActions';
 
 
 function CreateStore(props) {
+ //Only login user should be able to create a store
+ const userLogin = useSelector((state) => state.userLogin);
+ const { userInfo } = userLogin;
+
+//get user details
+const userDetails = useSelector(state => state.userDetails);
+    const { user } = userDetails;
+
+// const userCreateStore = useSelector(state => state.userCreateStore);
+// const { success } = userCreateStore
+ 
+
+ if(!userInfo) {
+     props.history.push('/login')
+ }
+
   const [name, setName ] = useState('')
     const [address, setAddress ] = useState('')
     const [city, setCity ] = useState('')
@@ -17,11 +35,10 @@ function CreateStore(props) {
     const [imageUrl, setImageUrl] = useState('');
 
 
-
-    const redirect = props.location.search? props.location.search.split('=')[1] : '/stores';
+    const redirect = props.location.search? props.location.search.split('=')[1] : '/createstore';
     //get access to createStore from redux store
     const createdStore = useSelector((state) => state.createdStore)
-    const { userInfo, loading, error } = createdStore;
+    const { loading, error } = createdStore;
   
 //   const handleFile = (e) =>{
 //       //{shareImage && <img src={URL.createObjectURL(shareImage)} alt="" />}
@@ -31,13 +48,34 @@ function CreateStore(props) {
 //     }
 //     setImage(image)
 //   }
+const storeCreatorId = userInfo._id;
+const storeCreatorName = userInfo.name;
+const storeCreatorPhone = userInfo.phone;
+const storeCreatorEmail = userInfo.email;
+const storeCreatorImage = userInfo.image;
 
   // const storeInfo = useSelector((state) => state.storeInfo);
   // const { loading, error, stores } = storeInfo;
   const dispatch = useDispatch();
+
+  useEffect(() =>{
+    if(!user) {
+        dispatch({
+            type: USER_CREATE_STORE_RESET
+        })
+        dispatch(detailsUser(userInfo._id));
+    }
+},[dispatch, user, userInfo._id])
+
   const submitHandler = (e) =>{
     e.preventDefault();
-    dispatch(createStore(name, address, city, description, imageUrl));
+    dispatch(createStore(name, address, city, description, imageUrl, storeCreatorId, storeCreatorName, storeCreatorPhone, storeCreatorEmail, storeCreatorImage, {user:userInfo._id}));
+    //update isSeller
+    dispatch(updateUserCreateStore({
+        userId: user._id
+    }))
+    //redirect the user to his store page
+    props.history.push('/userstore')
   
   }
 
@@ -88,7 +126,7 @@ function CreateStore(props) {
                     </div>
                     
                     <div>
-                        
+                        <p>Image of your store</p>
                         <FileBase64 type ="file" multiple={false}  
                         onDone = {({base64}) => setImageUrl(base64)}
                         />

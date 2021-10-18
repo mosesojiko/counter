@@ -4,6 +4,7 @@ const expressAsyncHandler = require('express-async-handler');
 const productRouter = express.Router();
 
 const Product = require('../models/productModel.js');
+const { isAuth } = require('../utils/isAuth.js');
 
 //get all products
 productRouter.get('/', expressAsyncHandler( async(req, res) => {
@@ -12,19 +13,25 @@ productRouter.get('/', expressAsyncHandler( async(req, res) => {
 }))
 
 //create a product
-productRouter.post('/create', expressAsyncHandler( async(req, res) => {
+productRouter.post('/create', isAuth, expressAsyncHandler( async(req, res) => {
     
-    const { name, price, category, image, countInStock, brand, rating, numReviews, description } =
+    const { name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description } =
     req.body;
 
     const product = new Product({
-        name, price, category, image, countInStock, brand, rating, numReviews, description 
+        name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description 
     });
+    const uniqueNumber = await Product.findOne({numberInStore: req.body.numberInStore});
+    if(uniqueNumber){
+        res.status(400).json({message: "Number in store already exist. Two product cannot have the same number in store."})
+        return
+    }
     const createProduct = await product.save();
     res.json({
         _id: createProduct._id,
         name: createProduct.name,
         category: createProduct.category,
+        numberInStore: createProduct.numberInStore,
         image: createProduct.image,
         description: createProduct.description,
         countInStock: createProduct.countInStock,

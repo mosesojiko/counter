@@ -10,7 +10,6 @@ const orderShema = new mongoose.Schema({
         product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product', 
-            required: true,
         },
     },],
     shippingAddress: {
@@ -34,7 +33,6 @@ const orderShema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User",
-        required: true,
     },
     isPaid: {type: Boolean, default: false},
     paidAt: {type: Date},

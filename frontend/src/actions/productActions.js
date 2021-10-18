@@ -9,13 +9,19 @@ import { CREATE_PRODUCT_FAIL, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, LI
 
 
     //create a product 
-export const createProduct = (name, price, category, image, countInStock, brand, rating, numReviews, description) => async (dispatch) => {
+export const createProduct = (name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description) => async (dispatch, getState) => {
     dispatch({
         type: CREATE_PRODUCT_REQUEST,
-        payload: {name, price, category, image, countInStock, brand, rating, numReviews, description}
+        payload: {name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description}
     })
     try {
-        const { data } = await Axios.post('/api/v1/product/create', {name, price, category, image, countInStock, brand, rating, numReviews, description});
+        // get userInfo from redux store
+        const { userLogin: { userInfo }, } = getState(); 
+        const { data } = await Axios.post('/api/v1/product/create', {name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description}, {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        });
         dispatch({
             type: CREATE_PRODUCT_SUCCESS,
             payload: data

@@ -11,7 +11,6 @@ function ShippingAddressPage(props) {
     //get userInfo from basket
     const basket = useSelector((state) =>state.basket);
     const { shippingAddress } = basket;
-console.log(shippingAddress.fullName)
     if(!userInfo) {
         props.history.push('/login')
     }
