@@ -15,6 +15,9 @@ import {
     GET_USERSTORE_FAIL,
     GET_USERSTORE_REQUEST,
     GET_USERSTORE_SUCCESS,
+    POST_STORE_FAIL,
+    POST_STORE_REQUEST,
+    POST_STORE_SUCCESS,
 } from "../constants/storeConstants";
 
 
@@ -124,6 +127,29 @@ export const editStoreReducers = (state = {}, action) =>{
             }
         case Edit_STORE_RESET:
             return {};
+        default:
+            return state;
+    }
+}
+
+//post store reducers
+export const editPostedStoreReducer = (state = {}, action) =>{
+    switch(action.type) {
+        case POST_STORE_REQUEST:
+            return {
+                loading: true
+            }
+        case POST_STORE_SUCCESS:
+            return {
+                loading: false,
+                success: true
+
+            }
+        case POST_STORE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
         default:
             return state;
     }

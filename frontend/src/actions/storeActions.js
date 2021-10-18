@@ -14,7 +14,10 @@ import {
     GET_STORES_SUCCESS,
     GET_USERSTORE_FAIL,
     GET_USERSTORE_REQUEST,
-    GET_USERSTORE_SUCCESS, 
+    GET_USERSTORE_SUCCESS,
+    POST_STORE_REQUEST,
+    POST_STORE_SUCCESS,
+    POST_STORE_FAIL, 
 } from '../constants/storeConstants';
 
 //create a store 
@@ -138,5 +141,31 @@ export const editStore = (id) => async (dispatch, getState) => {
         const message = error.response && error.response.data.message?
         error.response.data.message : error.message;
         dispatch({type: Edit_STORE_FAIL, payload: message})
+    }
+}
+
+//edit a store that is posted
+export const editPostedStore = (id) => async(dispatch, getState) => {
+    dispatch({
+        type: POST_STORE_REQUEST,
+        payload: id
+    })
+    //get user info
+    const { userLogin: {userInfo} } = getState();
+    try {
+        const { data } = await Axios.put(`/api/v1/store/userstore`, id, {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            },
+        })
+        dispatch({
+            type: POST_STORE_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        const message = error.response && error.response.data.message?
+        error.response.data.message : error.message;
+        dispatch({type: POST_STORE_FAIL, payload: message})
     }
 }

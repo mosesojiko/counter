@@ -7,13 +7,17 @@ const Mosgandastore = require('../models/storeModel.js');
 const { isAuth } = require('../utils/isAuth.js');
 
 
-//get all stores
+//get all stores that are posted
 storeRouter.get('/', expressAsyncHandler( async(req, res) =>{
-    const stores = await Mosgandastore.find({});
+    const stores = await Mosgandastore.find({isPosted: true});
+    if(!stores) {
+        res.status(404).json({message:"No store has been posted here."})
+        return
+    }
     res.json(stores);
 }))
 
-
+//find store created by a user
 storeRouter.get('/userstore', isAuth, expressAsyncHandler(async(req, res)=>{
     const userStore = await Mosgandastore.findOne({user: req.user._id});
     if(userStore) {
@@ -76,4 +80,14 @@ storeRouter.put('/editstore', isAuth, expressAsyncHandler( async(req, res) => {
     res.json(editedStore)
 }))
 
+
+//update a user that created a store
+storeRouter.put('/userstore', isAuth, expressAsyncHandler( async(req,res) =>{
+    const store = await Mosgandastore.findById(req.body.id);
+    if(store){
+        store.isPosted = true;
+    }
+    const updatedStore = await save.save();
+        res.json(updatedStore)
+}))
 module.exports = storeRouter;
