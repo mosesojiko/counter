@@ -31,6 +31,8 @@ const userDetails = useSelector(state => state.userDetails);
   const [name, setName ] = useState('')
     const [address, setAddress ] = useState('')
     const [city, setCity ] = useState('')
+    const [state, setState ] = useState('')
+    const [country, setCountry ] = useState('')
     const [description, setDescription ] = useState('')
     const [imageUrl, setImageUrl] = useState('');
 
@@ -48,11 +50,7 @@ const userDetails = useSelector(state => state.userDetails);
 //     }
 //     setImage(image)
 //   }
-const storeCreatorId = userInfo._id;
-const storeCreatorName = userInfo.name;
-const storeCreatorPhone = userInfo.phone;
-const storeCreatorEmail = userInfo.email;
-const storeCreatorImage = userInfo.image;
+
 
   // const storeInfo = useSelector((state) => state.storeInfo);
   // const { loading, error, stores } = storeInfo;
@@ -69,7 +67,7 @@ const storeCreatorImage = userInfo.image;
 
   const submitHandler = (e) =>{
     e.preventDefault();
-    dispatch(createStore(name, address, city, description, imageUrl, storeCreatorId, storeCreatorName, storeCreatorPhone, storeCreatorEmail, storeCreatorImage, {user:userInfo._id}));
+    dispatch(createStore(name, address, city, state, country, description, imageUrl, {user:userInfo._id}));
     //update isSeller
     dispatch(updateUserCreateStore({
         userId: user._id
@@ -118,6 +116,20 @@ const storeCreatorImage = userInfo.image;
                         </input>
                     </div>
                     <div>
+                        <lable htmlFor="state">State</lable>
+                        <input type ="text" id ="state" placeholder="Delta State"
+                        onChange = {(e) =>setState( e.target.value)}
+                        >
+                        </input>
+                    </div>
+                    <div>
+                        <lable htmlFor="city">Country</lable>
+                        <input type ="text" id ="country" placeholder="Nigeria"
+                        onChange = {(e) =>setCountry( e.target.value)}
+                        >
+                        </input>
+                    </div>
+                    <div>
                         <lable htmlFor="description">Description</lable>
                         <input type ="text" id ="description" placeholder="Enter store description"
                         onChange = {(e) =>setDescription( e.target.value)}
@@ -126,7 +138,7 @@ const storeCreatorImage = userInfo.image;
                     </div>
                     
                     <div>
-                        <p>Image of your store</p>
+                        <p>Image of your store front</p>
                         <FileBase64 type ="file" multiple={false}  
                         onDone = {({base64}) => setImageUrl(base64)}
                         />

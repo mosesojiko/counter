@@ -10,11 +10,6 @@ const storeSchema = new mongoose.Schema({
     description: {type: String},
     image: {type: String},
     isPosted: {type: Boolean, default: false},
-    storeCreatorId: {type: String},
-    storeCreatorName: {type: String},
-    storeCreatorPhone: {type: String},
-    storeCreatorEmail: {type: String},
-    storeCreatorImage: {type: String},
     user: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User",

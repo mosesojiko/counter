@@ -83,11 +83,11 @@ userRouter.get('/:id', expressAsyncHandler( async(req, res)=>{
 userRouter.put('/profile', isAuth, expressAsyncHandler(async(req, res)=>{
     const user = await User.findById(req.user._id);
     if(user){
-        user.name = req.body.name || user.name,
+        user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
         user.phone = req.body.phone || user.phone;
         user.businessEmail = req.body.businessEmail || user.businessEmail;
-        user.image = req.body.image || user.image
+        user.image = req.body.image || user.image;
         if(req.body.password) {
             user.password = bcrypt.hashSync(req.body.password, 8)
         }

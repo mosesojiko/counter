@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { basketReducer } from './reducers/basketReducer';
 import { createOrderReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from './reducers/orderReducers';
 import { createProductReducer, getAllProductReducer, getProductDetailsReducers } from './reducers/productReducers';
-import { createStoreReducer, getAllStoresReducer, getSingleStoreReducers, getUserStoreReducers } from './reducers/storeReducers';
+import { createStoreReducer, editStoreReducers, getAllStoresReducer, getSingleStoreReducers, getUserStoreReducers } from './reducers/storeReducers';
 import { updateUserCreateStoreReducer, userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducer';
 
 
@@ -38,6 +38,7 @@ const reducer = combineReducers({
     storeDetails: getSingleStoreReducers,
     userStoreDetails: getUserStoreReducers,
     userCreateStore: updateUserCreateStoreReducer,
+    editUserStore: editStoreReducers,
 
 })
 //to show store in the console

@@ -102,7 +102,7 @@ export const detailsUser = (userId) => async (dispatch, getState) => {
 
 
 //action to update user profile
-export const updateUserProfile = (user,) => async (dispatch, getState) =>{
+export const updateUserProfile = (user) => async (dispatch, getState) =>{
     dispatch({
         type: USER_UPDATE_PROFILE_REQUEST,
         payload: user

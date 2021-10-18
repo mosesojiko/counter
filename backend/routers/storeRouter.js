@@ -25,15 +25,11 @@ storeRouter.get('/userstore', isAuth, expressAsyncHandler(async(req, res)=>{
 
 //create a store 
 storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>{
-    const { name, address, city, description, image, 
-        storeCreatorId, storeCreatorName, storeCreatorPhone, 
-        storeCreatorEmail, storeCreatorImage } =
+    const { name, address, city, state, country, description, image } =
     req.body;
 
     const store = new Mosgandastore({
-        name, address, city, description, image, storeCreatorId,
-        storeCreatorName, storeCreatorPhone, 
-        storeCreatorEmail, storeCreatorImage, user: req.user._id
+        name, address, city, state, country, description, image, user: req.user._id
     });
     const createdStore = await store.save();
     res.json({
@@ -41,13 +37,10 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
         name: createdStore.name,
         address: createdStore.address,
         city: createdStore.city,
+        state: createdStore.state,
+        country: createdStore.country,
         description: createdStore.description,
         image: createdStore.image,
-        storeCreatorId: createdStore.storeCreatorId,
-        storeCreatorName: createdStore.storeCreatorName,
-        storeCreatorPhone: createdStore.storeCreatorPhone,
-        storeCreatorEmail: createdStore.storeCreatorEmail,
-        storeCreatorImage: createdStore.storeCreatorImage,
         user: req.user._id,
         
     })
@@ -66,5 +59,21 @@ storeRouter.get('/:id', expressAsyncHandler( async(req, res)=>{
     }
 }));
 
+//update a store
+storeRouter.put('/editstore', isAuth, expressAsyncHandler( async(req, res) => {
+    const store = await Mosgandastore.findById(req.body.id);
+    if(store) {
+        store.name = req.body.name || store.name;
+        store.address = req.body.address || store.address;
+        store.city = req.body.city || store.city;
+        store.state = req.body.state || store.state;
+        store.country = req.body.country || store.country;
+        store.description = req.body.description || store.description;
+        store.image = req.body.image || store.image;
+        user = req.user._id
+    }
+    const editedStore = await store.save();
+    res.json(editedStore)
+}))
 
 module.exports = storeRouter;

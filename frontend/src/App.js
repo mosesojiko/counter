@@ -18,6 +18,7 @@ import CreateStore from './pages/CreateStorePage';
 import CreateProductPage from './pages/CreateProductPage';
 import StoreDetailsPage from './pages/StoreDetailsPage';
 import UserStore from './pages/UserStore';
+import EditStore from './pages/EditStore';
 
 
 
@@ -90,6 +91,7 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/editstore' component = { EditStore } ></Route>
     <Route path = '/userstore' component = { UserStore } ></Route>
     <Route path = '/store/:id' component = { StoreDetailsPage } ></Route>
     <Route path = '/createproduct' component = { CreateProductPage } ></Route>

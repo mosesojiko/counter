@@ -2,6 +2,10 @@ import {
     CREATE_STORE_FAIL, 
     CREATE_STORE_REQUEST, 
     CREATE_STORE_SUCCESS, 
+    Edit_STORE_FAIL, 
+    Edit_STORE_REQUEST, 
+    Edit_STORE_RESET, 
+    Edit_STORE_SUCCESS, 
     GET_SINGLE_STORE_FAIL, 
     GET_SINGLE_STORE_REQUEST, 
     GET_SINGLE_STORE_SUCCESS, 
@@ -98,5 +102,29 @@ export const getUserStoreReducers = (state = { userStore:{} },action) =>{
             }
         default:
             return state
+    }
+}
+
+
+//edit store reducers
+export const editStoreReducers = (state = {}, action) =>{
+    switch(action.type) {
+        case Edit_STORE_REQUEST:
+            return {
+                loading: true
+            };
+        case Edit_STORE_SUCCESS:
+            return {
+                loading: false, success: true
+            };
+        case Edit_STORE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case Edit_STORE_RESET:
+            return {};
+        default:
+            return state;
     }
 }

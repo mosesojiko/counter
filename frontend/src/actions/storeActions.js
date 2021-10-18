@@ -3,6 +3,9 @@ import {
     CREATE_STORE_FAIL, 
     CREATE_STORE_REQUEST, 
     CREATE_STORE_SUCCESS, 
+    Edit_STORE_FAIL, 
+    Edit_STORE_REQUEST, 
+    Edit_STORE_SUCCESS, 
     GET_SINGLE_STORE_FAIL, 
     GET_SINGLE_STORE_REQUEST, 
     GET_SINGLE_STORE_SUCCESS, 
@@ -15,17 +18,15 @@ import {
 } from '../constants/storeConstants';
 
 //create a store 
-export const createStore = (name, address, city, description, image, 
-    storeCreatorId, storeCreatorName, storeCreatorPhone, storeCreatorEmail, storeCreatorImage, user) => async (dispatch, getState) => {
+export const createStore = (name, address, city, state, country, description, image, user) => async (dispatch, getState) => {
     dispatch({
         type: CREATE_STORE_REQUEST,
-        payload: {name, address, city, description, image, 
-            storeCreatorId, storeCreatorName, storeCreatorPhone, storeCreatorEmail, storeCreatorImage, user}
+        payload: {name, address, city, state, country, description, image, user}
     })
     try {
         // get userInfo from redux store
         const { userLogin: { userInfo }, } = getState() //getState returns the whole redux store
-        const { data } = await Axios.post('/api/v1/store/createstore', ({name, address, city, description, image, storeCreatorId, storeCreatorName, storeCreatorPhone, storeCreatorEmail, storeCreatorImage, user}),{
+        const { data } = await Axios.post('/api/v1/store/createstore', ({name, address, city, state, country, description, image, user}),{
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }
@@ -111,5 +112,31 @@ export const getUserStore = () => async (dispatch, getState) => {
             payload: error.response && error.response.data.message?
             error.response.data.message: error.message,
         })
+    }
+}
+
+//edit user store actions
+export const editStore = (id) => async (dispatch, getState) => {
+    dispatch({
+        type: Edit_STORE_REQUEST,
+        payload: id
+    });
+    try {
+        //get user info
+    const { userLogin: {userInfo} } = getState();
+    const { data } = await Axios.put(`/api/v1/store/editstore`, id, {
+        headers: {
+            Authorization: `Bearer ${userInfo.token}`
+        },
+    });
+    dispatch({
+        type: Edit_STORE_SUCCESS,
+        payload: data
+    })
+        
+    } catch (error) {
+        const message = error.response && error.response.data.message?
+        error.response.data.message : error.message;
+        dispatch({type: Edit_STORE_FAIL, payload: message})
     }
 }

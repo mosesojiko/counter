@@ -7,7 +7,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
-function ProfilePage() {
+function ProfilePage(props) {
     const [name, setName ] = useState('')
     const [phone, setPhone ] = useState('')
     const [businessEmail, setBusinessEmail ] = useState('')
@@ -28,6 +28,7 @@ function ProfilePage() {
             dispatch({type: USER_UPDATE_PROFILE_RESET})
             dispatch(detailsUser(userInfo._id));
         }else{
+            //fill the input fields with user details
             setName(user.name);
             setPhone(user.phone)
             setBusinessEmail(user.businessEmail)
@@ -49,7 +50,9 @@ function ProfilePage() {
         dispatch(updateUserProfile({
                  userId: user._id, name, phone, businessEmail, image
                  }))
-    }
+                 //redirect the user to his store page
+                 props.history.push('/userstore')
+             }
     return (
         <div>
             <form className ="form" onSubmit = { submitHandler }>
