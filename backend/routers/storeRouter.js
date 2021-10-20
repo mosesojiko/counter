@@ -29,11 +29,11 @@ storeRouter.get('/userstore', isAuth, expressAsyncHandler(async(req, res)=>{
 
 //create a store 
 storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>{
-    const { name, address, city, state, country, description, image } =
+    const { name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage } =
     req.body;
 
     const store = new Mosgandastore({
-        name, address, city, state, country, description, image, user: req.user._id
+        name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage, user: req.user._id
     });
     const createdStore = await store.save();
     res.json({
@@ -45,6 +45,11 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
         country: createdStore.country,
         description: createdStore.description,
         image: createdStore.image,
+        creatorId: createdStore.creatorId,
+        creatorName: createdStore.creatorName,
+        creatorEmail: createdStore.creatorEmail,
+        creatorPhone: createdStore.creatorPhone,
+        creatorImage: createdStore.creatorImage,
         user: req.user._id,
         
     })
@@ -74,6 +79,11 @@ storeRouter.put('/editstore', isAuth, expressAsyncHandler( async(req, res) => {
         store.country = req.body.country || store.country;
         store.description = req.body.description || store.description;
         store.image = req.body.image || store.image;
+        store.creatorId = req.body.creatorId || store.creatorId,
+        store.creatorName = req.body.creatorName || store.creatorName,
+        store.creatorEmail = req.body.creatorEmail || store.creatorEmail,
+        store.creatorPhone = req.body.creatorPhone || store.creatorPhone,
+        store.creatorImage = req.body.creatorImage || store.creatorImage
         user = req.user._id
     }
     const editedStore = await store.save();
@@ -82,7 +92,7 @@ storeRouter.put('/editstore', isAuth, expressAsyncHandler( async(req, res) => {
 
 
 //update a store to be posted
-storeRouter.put('/userstore', isAuth, expressAsyncHandler( async(req,res) =>{
+storeRouter.put('/poststore', isAuth, expressAsyncHandler( async(req,res) =>{
     const store = await Mosgandastore.findById(req.body.id);
     if(store){
         store.isPosted = true;

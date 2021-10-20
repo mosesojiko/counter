@@ -24,15 +24,15 @@ import {
 } from '../constants/storeConstants';
 
 //create a store 
-export const createStore = (name, address, city, state, country, description, image, user) => async (dispatch, getState) => {
+export const createStore = (name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage, user) => async (dispatch, getState) => {
     dispatch({
         type: CREATE_STORE_REQUEST,
-        payload: {name, address, city, state, country, description, image, user}
+        payload: {name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone,creatorImage, user}
     })
     try {
         // get userInfo from redux store
         const { userLogin: { userInfo }, } = getState() //getState returns the whole redux store
-        const { data } = await Axios.post('/api/v1/store/createstore', ({name, address, city, state, country, description, image, user}),{
+        const { data } = await Axios.post('/api/v1/store/createstore', ({name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage, user}),{
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }
@@ -156,7 +156,7 @@ export const editPostedStore = (id) => async(dispatch, getState) => {
     //get user info
     const { userLogin: {userInfo} } = getState();
     try {
-        const { data } = await Axios.put(`/api/v1/store/userstore`, id, {
+        const { data } = await Axios.put(`/api/v1/store/poststore`, id, {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             },

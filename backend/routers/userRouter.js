@@ -79,6 +79,7 @@ userRouter.get('/:id', expressAsyncHandler( async(req, res)=>{
     }
 }))
 
+
 //route to update a user
 userRouter.put('/profile', isAuth, expressAsyncHandler(async(req, res)=>{
     const user = await User.findById(req.user._id);
@@ -106,9 +107,10 @@ userRouter.put('/profile', isAuth, expressAsyncHandler(async(req, res)=>{
     }
 }))
 
+
 //update a user that created a store
 userRouter.put('/createstore', isAuth, expressAsyncHandler( async(req,res) =>{
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.body.user);
     if(user){
         user.isSeller = true;
     }

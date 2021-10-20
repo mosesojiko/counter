@@ -6,8 +6,9 @@ import { detailsUser, updateUserProfile } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
+import { editStore } from '../actions/storeActions';
 
-function ProfilePage(props) {
+function ProfilePage() {
     const [name, setName ] = useState('')
     const [phone, setPhone ] = useState('')
     const [businessEmail, setBusinessEmail ] = useState('')
@@ -21,6 +22,14 @@ function ProfilePage(props) {
 
     const userUpdateProfile = useSelector(state => state.userUpdateProfile);
     const { success: successUpdate, error: errorUpdate, loading: loadingUpdate } = userUpdateProfile;
+
+    //import user store from redux
+    //want to update the userstore when user is updated
+    const userStoreDetails = useSelector(state => state.userStoreDetails);
+    const { userStore } = userStoreDetails
+    console.log(userStore)
+
+
    const dispatch = useDispatch()
     useEffect(()=>{
         if(!user){
@@ -50,8 +59,12 @@ function ProfilePage(props) {
         dispatch(updateUserProfile({
                  userId: user._id, name, phone, businessEmail, image
                  }))
+        //also update store with the new user details
+        dispatch(editStore({
+            id: userStore._id, creatorName: name, creatorPhone: phone, creatorEmail:businessEmail, creatorImage:image
+        }));
                  //redirect the user to his store page
-                 props.history.push('/userstore')
+                //  props.history.push('/userstore')
              }
     return (
         <div>

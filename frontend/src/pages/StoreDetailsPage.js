@@ -33,19 +33,20 @@ function StoreDetailsPage(props) {
                    error? (<MessageBox variant="danger">{error}</MessageBox>):
                    <>
                    <div className="row top bottom">
-                       <div className="col-1">
+                   <div className="col-1">
                            <div className ="profile-card">
                                <div className="row around">
+                                   
                                    <div>
                                        <h3>Store owner</h3>
-                                   <img className="img medium" src ="/images/user1.png" alt="profile" />
+                                   <img className="img medium" src ={store.creatorImage} alt="profile" />
                                    </div>
                                    <div>
                                        <div>
-                                           <h2>{store.storeCreatorName}</h2>
+                                           <h2>Name: {store.creatorName} </h2>
                                            <div className="contact">
-                                               <p><span><i class="fa fa-phone-square" aria-hidden="true"></i></span> 08133456578</p>
-                                               <p><span><i class="fa fa-envelope" aria-hidden="true"></i></span> {store.storeCreatorEmail}</p>
+                                               <p><span><i class="fa fa-phone-square" aria-hidden="true"></i></span> {store.creatorPhone}</p>
+                                               <p><span><i class="fa fa-envelope" aria-hidden="true"></i></span>{store.creatorEmail}</p>
                                            </div>
                                        </div>
                                     <div className="profile-links">
@@ -56,12 +57,7 @@ function StoreDetailsPage(props) {
                                     </div>
                                    </div>
                                </div>
-                               <div>
-                                   {
-                                       userInfo &&
-                                   <Link to="/profile"><button className="profile-button">Edit profile</button></Link>
-                                   }
-                               </div>
+                               
                            </div>
                        </div>
                        <div className="col-2">
@@ -77,12 +73,7 @@ function StoreDetailsPage(props) {
                                    <p>State: <strong>{store.state}</strong></p>
                                    <p>Country: <strong>{store.country}</strong></p>
                                    <p>Description: <strong>{store.description}</strong></p>
-                                   <div>
-                                       {
-                                           userInfo &&
-                                   <Link to="/createstore"><button className="profile-button">Edit store</button></Link>
-                                       }
-                                   </div>
+                                   
                            </div>
                        </div>
                        </div>

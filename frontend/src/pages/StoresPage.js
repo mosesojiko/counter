@@ -31,7 +31,7 @@ function StoresPage() {
           <div className="row center">
           {
             stores.map(store =>(
-              <Store key = {store._id} store = {store}></Store>
+                <Store key={store._id} store={store}></Store>
             ))
           }
       </div>

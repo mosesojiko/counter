@@ -32,7 +32,7 @@ export const createStoreReducer = (state = {}, action) =>{
         return {loading: true}
 
         case CREATE_STORE_SUCCESS:
-        return {loading: false, stores: action.payload}
+        return {loading: false, success:true, stores: action.payload}
 
         case CREATE_STORE_FAIL:
         return {loading: false, error: action.payload}

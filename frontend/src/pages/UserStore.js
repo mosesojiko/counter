@@ -8,18 +8,21 @@ import MessageBox from '../components/MessageBox';
 
 
 function UserStore() {
-    //get user details from store
+
+    //get login user details from store
     const userLogin = useSelector(state =>state.userLogin);
     const { userInfo } = userLogin;
     console.log(userInfo)
 
+    //get userstore
     const userStoreDetails = useSelector((state) => state.userStoreDetails);
     const { userStore } = userStoreDetails
-    console.log(userStore)
-   
+    
+
     const dispatch = useDispatch();
     useEffect(() =>{
         dispatch(getUserStore())
+        
     },[dispatch])
     
     //get editPost from redux store
@@ -44,14 +47,14 @@ function UserStore() {
                                    
                                    <div>
                                        <h3>Store owner</h3>
-                                   <img className="img medium" src ={userInfo.image} alt="profile" />
+                                   <img className="img medium" src ={userStore && userStore.creatorImage} alt="profile" />
                                    </div>
                                    <div>
                                        <div>
-                                           <h2>Name: {userInfo.name} </h2>
+                                           <h2>Name: {userStore && userStore.creatorName} </h2>
                                            <div className="contact">
-                                               <p><span><i class="fa fa-phone-square" aria-hidden="true"></i></span> {userInfo.phone}</p>
-                                               <p><span><i class="fa fa-envelope" aria-hidden="true"></i></span>{userInfo.businessEmail}</p>
+                                               <p><span><i class="fa fa-phone-square" aria-hidden="true"></i></span> {userStore && userStore.creatorPhone}</p>
+                                               <p><span><i class="fa fa-envelope" aria-hidden="true"></i></span>{userStore && userStore.creatorEmail}</p>
                                            </div>
                                        </div>
                                     <div className="profile-links">
