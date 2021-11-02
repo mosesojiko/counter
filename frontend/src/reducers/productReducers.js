@@ -9,7 +9,10 @@ import {
     LIST_OF_PRODUCTS_SUCCESS, 
     PRODUCT_DETAILS_FAIL, 
     PRODUCT_DETAILS_REQUEST, 
-    PRODUCT_DETAILS_SUCCESS 
+    PRODUCT_DETAILS_SUCCESS,
+    USER_PRODUCTS_FAIL,
+    USER_PRODUCTS_REQUEST,
+    USER_PRODUCTS_SUCCESS, 
 } from "../constants/productConstants";
 
 
@@ -20,7 +23,7 @@ export const createProductReducer = (state = {}, action) =>{
         return {loading: true}
 
         case CREATE_PRODUCT_SUCCESS:
-        return {loading: false, stores: action.payload}
+        return {loading: false,success: true, product: action.payload}
 
         case CREATE_PRODUCT_FAIL:
         return {loading: false, error: action.payload}
@@ -71,3 +74,26 @@ export const getProductDetailsReducers =  (state = {loading:true, product: {}}, 
            return state;
     }
 }
+
+//get user products reducers
+export const getUserProductsReducer = (state = {loading:true, userProducts:[]}, action) =>{
+    switch(action.type) {
+        case USER_PRODUCTS_REQUEST:
+            return {
+                loading: true
+            };
+        case USER_PRODUCTS_SUCCESS:
+            return {
+                loading: false,
+                userProducts: action.payload
+            }
+        case USER_PRODUCTS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state
+    }
+}
+

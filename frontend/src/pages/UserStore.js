@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
+import { getUserProducts } from '../actions/productActions';
 import { editPostedStore, getUserStore, unPostedStore } from '../actions/storeActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-
+import Product from '../components/Product';
 
 function UserStore() {
 
@@ -14,16 +15,21 @@ function UserStore() {
     const { userInfo } = userLogin;
     console.log(userInfo)
 
-    //get userstore
+    //get userstore from redux store
     const userStoreDetails = useSelector((state) => state.userStoreDetails);
     const { userStore } = userStoreDetails
-    
 
+    //get user products from redux store
+    const userproducts = useSelector(state => state.userproducts);
+    const { userProducts } = userproducts
+    console.log(userProducts)
+    
     const dispatch = useDispatch();
     useEffect(() =>{
         dispatch(getUserStore())
+        dispatch(getUserProducts())
         
-    },[dispatch])
+    },[dispatch, userInfo])
     
     //get editPost from redux store
     const postedStore = useSelector(state => state.postedStore);
@@ -38,6 +44,8 @@ function UserStore() {
     const handleUnpost = () => {
         dispatch(unPostedStore({id: userStore._id}))
     }
+
+    
     return (
         <div>
                    <div className="row top bottom">
@@ -125,8 +133,19 @@ function UserStore() {
                <div>
                    <h2 className="store-name">Checkout list of my items below for your shopping pleasure.</h2>
                </div>
+               <div>
+               {
+                    <Link to="/createproduct"><button className="profile-button">Add items to your store</button></Link>
+                }
+               </div>
          
-              
+               <div className="row center">
+          {
+            userProducts && userProducts.map(product =>(
+              <Product key = {product._id} product = {product}></Product>
+            ))
+          }
+      </div>
         </div>
     )
 }

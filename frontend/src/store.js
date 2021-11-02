@@ -2,7 +2,7 @@ import {compose, applyMiddleware, createStore, combineReducers } from 'redux'
 import thunk from 'redux-thunk';
 import { basketReducer } from './reducers/basketReducer';
 import { createOrderReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from './reducers/orderReducers';
-import { createProductReducer, getAllProductReducer, getProductDetailsReducers } from './reducers/productReducers';
+import { createProductReducer, getAllProductReducer, getProductDetailsReducers, getUserProductsReducer } from './reducers/productReducers';
 import { createStoreReducer, editPostedStoreReducer, editStoreReducers, getAllStoresReducer, getSingleStoreReducers, getUserStoreReducers, unPostedStoreReducer } from './reducers/storeReducers';
 import { updateUserCreateStoreReducer, userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducer';
 
@@ -41,6 +41,8 @@ const reducer = combineReducers({
     editUserStore: editStoreReducers,
     postedStore: editPostedStoreReducer,
     unpostStore: unPostedStoreReducer,
+    userproducts: getUserProductsReducer,
+
 
 })
 //to show store in the console

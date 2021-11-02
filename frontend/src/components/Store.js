@@ -9,7 +9,7 @@ function Store(props) {
             <Link to={`/store/${store._id}`}>
                         <h2>{ store.name }</h2>
                     </Link>
-                <Link to ={`/stoe/${store._id}`}>
+                <Link to ={`/store/${store._id}`}>
                      {/* image size should be 680px by 830px */}
                 <img className="medium" src = {store.image} alt ={store.name} />
 

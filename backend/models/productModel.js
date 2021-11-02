@@ -10,12 +10,20 @@ const productSchema = new mongoose.Schema({
     description: {type: String, required: true},
     price: {type: Number, required: true},
     countInStock: {type: Number, required: true},
-    rating: {type: Number, required: true},
-    numReviews: {type: Number, required: true},
     isPosted: {type: Boolean, default: false},
+    sellerName: {type: String},
+    sellerEmail: {type: String},
+    sellerId: {type: String},
+    sellerPhone: {type: String},
+    productStore: {type: String},
     user: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User",
+    },
+    storeDetails: {
+        store: {type: mongoose.Schema.Types.ObjectId, 
+        ref: "Mosgandastore",
+        },
     },
 }, {
     timestamps: true

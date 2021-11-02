@@ -4,6 +4,7 @@ const expressAsyncHandler = require('express-async-handler');
 const storeRouter = express.Router();
 
 const Mosgandastore = require('../models/storeModel.js');
+const Product = require('../models/productModel.js');
 const { isAuth } = require('../utils/isAuth.js');
 
 
@@ -11,8 +12,7 @@ const { isAuth } = require('../utils/isAuth.js');
 storeRouter.get('/', expressAsyncHandler( async(req, res) =>{
     const stores = await Mosgandastore.find({isPosted: true});
     if(!stores) {
-        res.status(404).json({message:"No store has been posted here."})
-        return
+       return res.status(404).json({message:"No store has been posted here."})
     }
     res.json(stores);
 }))
@@ -21,7 +21,7 @@ storeRouter.get('/', expressAsyncHandler( async(req, res) =>{
 storeRouter.get('/userstore', isAuth, expressAsyncHandler(async(req, res)=>{
     const userStore = await Mosgandastore.findOne({user: req.user._id});
     if(userStore) {
-        res.json(userStore)
+        return res.json(userStore)
        }else{
            res.send("Owner store not found.")
        }
@@ -59,8 +59,13 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
 //get store details, single store
 storeRouter.get('/:id', expressAsyncHandler( async(req, res)=>{
     const singleStore = await Mosgandastore.findById(req.params.id);
+    const products = await Product.find({productStore:req.params.id})
+    
     if(singleStore){
-        res.json(singleStore);
+        return res.json({
+            singleStore,
+            products
+        });
     }else{
         res.status(404).json({
             message: `Store with id: ${req.params.id} not found.`
@@ -102,7 +107,6 @@ storeRouter.put('/poststore', isAuth, expressAsyncHandler( async(req,res) =>{
 }))
 
 //update a store to be unposted
-//update a store to be posted
 storeRouter.put('/unpoststore', isAuth, expressAsyncHandler( async(req,res) =>{
     const store = await Mosgandastore.findById(req.body.id);
     if(store){

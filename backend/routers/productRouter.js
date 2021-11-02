@@ -6,26 +6,20 @@ const productRouter = express.Router();
 const Product = require('../models/productModel.js');
 const { isAuth } = require('../utils/isAuth.js');
 
-//get all products
-productRouter.get('/', expressAsyncHandler( async(req, res) => {
-    const products = await Product.find({});
-    res.json(products);
-}))
-
 //create a product
 productRouter.post('/create', isAuth, expressAsyncHandler( async(req, res) => {
     
-    const { name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description } =
+    const { name, price, category, numberInStore, image, countInStock, brand, description, sellerName, sellerEmail, sellerId, sellerPhone, productStore } =
     req.body;
 
     const product = new Product({
-        name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description 
+        name, price, category, numberInStore, image, countInStock, brand, description, sellerName, sellerEmail, sellerId, sellerPhone, productStore, user: req.user._id
     });
-    const uniqueNumber = await Product.findOne({numberInStore: req.body.numberInStore});
-    if(uniqueNumber){
-        res.status(400).json({message: "Number in store already exist. Two product cannot have the same number in store."})
-        return
-    }
+    // const uniqueNumber = await Product.findOne({numberInStore: req.body.numberInStore});
+    // if(uniqueNumber){
+    //    return res.status(400).json({message: "Number in store already exist. Two product cannot have the same number in store."})
+    
+    // }
     const createProduct = await product.save();
     res.json({
         _id: createProduct._id,
@@ -36,23 +30,39 @@ productRouter.post('/create', isAuth, expressAsyncHandler( async(req, res) => {
         description: createProduct.description,
         countInStock: createProduct.countInStock,
         brand: createProduct.brand,
-        rating: createProduct.rating,
-        numReviews: createProduct.numReviews
+        sellerName: createProduct.sellerName,
+        sellerEmail: createProduct.sellerEmail,
+        sellerId: createProduct.sellerId,
+        sellerPhone: createProduct.sellerPhone,
+        productStore: createProduct.productStore,
+        user: req.user._id,
     })
-    res.json({createProduct});
+}))
+
+//get all user products
+productRouter.get('/user', isAuth, expressAsyncHandler( async(req, res) => {
+    const userProducts = await Product.find({user: req.user._id});
+    res.json(userProducts);
+}))
+
+//get all products
+productRouter.get('/', expressAsyncHandler( async(req, res) => {
+    const products = await Product.find({});
+    res.json(products);
 }))
 
 //get single product or product details
 productRouter.get('/:id', expressAsyncHandler( async(req, res)=>{
     const singleProduct = await Product.findById(req.params.id);
     if(singleProduct){
-        res.json(singleProduct);
+       return res.json(singleProduct);
     }else{
-        res.status(404).json({
+       return res.status(404).json({
             message: `Product with id: ${req.params.id} not found.`
         })
     }
 }))
+
 
 
 module.exports = productRouter;

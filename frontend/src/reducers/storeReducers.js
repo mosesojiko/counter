@@ -43,7 +43,7 @@ export const createStoreReducer = (state = {}, action) =>{
 }
 
 //reducer to get all stores
-export const getAllStoresReducer = (state ={ loading:true, stores:[] }, action) => {
+export const getAllStoresReducer = (state ={ loading:true, stores:[], proudcts:[] }, action) => {
     switch(action.type) {
         case GET_STORES_REQUEST:
             return {

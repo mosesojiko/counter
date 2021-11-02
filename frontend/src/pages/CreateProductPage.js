@@ -7,6 +7,7 @@ import FileBase64 from 'react-file-base64';
  import LoadingBox from '../components/LoadingBox';
  import MessageBox from '../components/MessageBox';
 import { createProduct } from '../actions/productActions';
+import { getUserStore } from '../actions/storeActions';
 
 
 function CreateProductPage(props) {
@@ -18,18 +19,31 @@ function CreateProductPage(props) {
   const [ image, setImage ] = useState('');
   const [ countInStock, setCountInStock ] = useState(1);
   const [ brand, setBrand ] = useState('');
-  const [ rating, setRating ] = useState(1);
-  const [ numReviews, setNumReviews ] = useState(0)
   const [description, setDescription ] = useState('')
+  const [sellerName, setSellerName ] = useState('');
+  const [sellerEmail, setSellerEmail ] = useState('');
+  const [sellerId, setSellerId ] = useState('');
+  const [sellerPhone, setSellerPhone ] = useState('');
+  const [ productStore, setProductStore ] = useState('')
  
 
+    //const redirect = props.location.search? props.location.search.split('=')[1] : '/stores';
 
+    //get access to userInfo
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
+     console.log(userInfo)
 
-    const redirect = props.location.search? props.location.search.split('=')[1] : '/stores';
+     const userStoreDetails = useSelector(state => state.userStoreDetails);
+    const { userStore } = userStoreDetails
+    console.log(userStore)
+
     //get access to createStore from redux store
     const productCreate = useSelector((state) => state.productCreate)
-    const { userInfo, loading, error } = productCreate;
+    const { success, loading, error } = productCreate;
   
+  
+
 //   const handleFile = (e) =>{
 //       //{shareImage && <img src={URL.createObjectURL(shareImage)} alt="" />}
 //     const image = e.target.files[0];
@@ -38,23 +52,34 @@ function CreateProductPage(props) {
 //     }
 //     setImage(image)
 //   }
+const dispatch = useDispatch();
+useEffect(() =>{
+  if(!userStore) {
+    dispatch(getUserStore())
+  }
+  if(userStore){
+    setProductStore(userStore && userStore._id)
+  }
+},[dispatch, userStore])
 
-  // const storeInfo = useSelector((state) => state.storeInfo);
-  // const { loading, error, stores } = storeInfo;
-  const dispatch = useDispatch();
+//add user info to product
+
+useEffect(() => {
+  if(userInfo){
+      setSellerName(userInfo.name);
+      setSellerEmail(userInfo.email);
+      setSellerId(userInfo._id);
+      setSellerPhone(userInfo.phone)
+  }
+  },[dispatch, userInfo])
+console.log(productStore)
+ 
   const submitHandler = (e) =>{
     e.preventDefault();
-    dispatch(createProduct(name, price, category, numberInStore, image, countInStock, brand, rating, numReviews, description));
+    dispatch(createProduct(name, price, category, numberInStore, image, countInStock, brand, description, sellerName, sellerEmail, sellerId, sellerPhone, productStore,{ ...userStore}));
   
   }
 
-
-  //keep track of changes to storeInfo
-  useEffect(()=>{
-      if(userInfo) {
-          props.history.push(redirect)
-      }
-  },[props.history, redirect, userInfo])
     return (
         <div>
           <Link to ="/stores">Stores Page</Link>
@@ -68,6 +93,7 @@ function CreateProductPage(props) {
            </div>
            {loading && <LoadingBox></LoadingBox>}
            { error && <MessageBox variant="danger">{error}</MessageBox> }
+           { success && <MessageBox variant="success">Product created successfully.</MessageBox> }
             <div>
                 <lable htmlFor="name">Product Name</lable>
                 <input type ="text" id ="name" placeholder="Iphone 3"
@@ -104,19 +130,6 @@ function CreateProductPage(props) {
                  onChange = {(e) =>setBrand( e.target.value)} >   
                 </input>
            </div>
-           <div>
-                <lable htmlFor="rating">Rate Product</lable>
-                <input type ="text" id ="rating" placeholder="3.5"
-                 onChange = {(e) =>setRating( e.target.value)} >   
-                </input>
-           </div>
-           <div>
-                <lable htmlFor="numReviews">Number of reviews</lable>
-                <input type ="text" id ="numReviews" placeholder="40"
-                 onChange = {(e) =>setNumReviews( e.target.value)} >   
-                </input>
-           </div>
-                    
                     <div>
                         <lable htmlFor="description">Description</lable>
                         <input type ="text" id ="description" placeholder="Enter store description"
@@ -131,11 +144,10 @@ function CreateProductPage(props) {
                         onDone = {({base64}) => setImage(base64)}
                         />
                     </div>
-                
                     
             <div>
                         <label />
-                        <button className ="primary" type ="submit">Create</button>
+                        <button className ="primary" type ="submit">Create Product</button>
                     </div>
             </form>
       </div>  
