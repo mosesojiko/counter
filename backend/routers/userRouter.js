@@ -70,7 +70,7 @@ userRouter.post('/login', expressAsyncHandler( async(req, res) => {
 
 
 //route for user details
-userRouter.get('/:id', expressAsyncHandler( async(req, res)=>{
+userRouter.get('/:id', isAuth, expressAsyncHandler( async(req, res)=>{
     const user = await User.findById(req.params.id);
     if(user){
         res.json(user)
@@ -102,7 +102,7 @@ userRouter.put('/profile', isAuth, expressAsyncHandler(async(req, res)=>{
             phone: updatedUser.phone,
             businessEmail: updatedUser.businessEmail,
             image: updatedUser.image,
-            token: generateToken(updatedUser),
+            
         })
     }
 }))

@@ -56,7 +56,7 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
   
 }))
 
-//get store details, single store
+//get store details, single store and its product for non logged in user
 storeRouter.get('/:id', expressAsyncHandler( async(req, res)=>{
     const singleStore = await Mosgandastore.findById(req.params.id);
     const products = await Product.find({productStore:req.params.id})

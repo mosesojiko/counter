@@ -19,6 +19,9 @@ import CreateProductPage from './pages/CreateProductPage';
 import StoreDetailsPage from './pages/StoreDetailsPage';
 import UserStore from './pages/UserStore';
 import EditStore from './pages/EditStore';
+import UpdateProduct from './pages/UpdateProduct';
+import DeleteProduct from './pages/DeleteProduct';
+
 
 
 
@@ -91,6 +94,8 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/delete/:id' component = { DeleteProduct } ></Route>
+    <Route path = '/update/:id' component = { UpdateProduct } ></Route>
     <Route path = '/editstore' component = { EditStore } ></Route>
     <Route path = '/userstore' component = { UserStore } ></Route>
     <Route path = '/store/:id' component = { StoreDetailsPage } ></Route>

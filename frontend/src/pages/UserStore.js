@@ -6,7 +6,8 @@ import { getUserProducts } from '../actions/productActions';
 import { editPostedStore, getUserStore, unPostedStore } from '../actions/storeActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import Product from '../components/Product';
+import Rating from '../components/Rating';
+
 
 function UserStore() {
 
@@ -138,15 +139,42 @@ function UserStore() {
                     <Link to="/createproduct"><button className="profile-button">Add items to your store</button></Link>
                 }
                </div>
-         
+
                <div className="row center">
-          {
-            userProducts && userProducts.map(product =>(
-              <Product key = {product._id} product = {product}></Product>
-            ))
-          }
-      </div>
-        </div>
+                   {
+                      userProducts && userProducts.map((product) =>(
+                        <div key={product._id} className="card">
+                        <Link to={`/product/${product._id}`}>
+                          {/* image size should be 680px by 830px */}
+                          <img className="medium" src={product.image} alt={product.name} />
+                        </Link>
+                        <div className="card-body">
+                          <Link to={`/product/${product._id}`}>
+                            <h2>{product.name}</h2>
+                          </Link>
+                          <Rating rating={product.rating} numReviews={product.numReviews} />
+                          <div className="price">${product.price}</div>
+                          <div>
+                            {
+                             <Link to={`/update/${product._id}`}>
+                              <button className="profile-button">Edit</button>
+                            </Link>
+                            }
+                            {
+                             <Link to={`/delete/${product._id}`}>
+                              <button className="profile-button">Delete</button>
+                            </Link>
+                            }
+                            
+                          </div>
+                        </div>
+                      </div>
+                       ))
+                   }
+               </div>
+         
+      
+    </div>
     )
 }
 

@@ -13,10 +13,17 @@ dotenv.config();
 const app = express();
 
 //Connect to mongoDb
-mongoose.connect(process.env.MONGODB_CONNECT,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+// mongoose.connect(process.env.MONGODB_CONNECT,{
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// }, ()=>{
+//     console.log("Connected to local db")
+// })
+//connect to db
+mongoose.connect(process.env.CONNECT_TO_DB,{ useNewUrlParser: true, useUnifiedTopology: true },()=>{
+    console.log('connected to db')
 })
+
 
 
 //express middlewares

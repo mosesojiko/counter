@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 
-function Product(props) {
+function Uproduct(props) {
   const { product } = props;
+  
   return (
     <div key={product._id} className="card">
       <Link to={`/product/${product._id}`}>
@@ -16,9 +17,21 @@ function Product(props) {
         </Link>
         <Rating rating={product.rating} numReviews={product.numReviews} />
         <div className="price">${product.price}</div>
+        <div>
+          {
+           <Link to={`/update/${product._id}`}>
+            <button className="profile-button">Edit</button>
+          </Link>
+          }
+          {
+            <Link to={`/delete/${product._id}`}>
+            <button className="profile-button">Delete</button>
+          </Link>
+          }
+        </div>
       </div>
     </div>
   );
 }
 
-export default Product;
+export default Uproduct;

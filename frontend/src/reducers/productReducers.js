@@ -4,12 +4,20 @@ import {
     CREATE_PRODUCT_FAIL, 
     CREATE_PRODUCT_REQUEST, 
     CREATE_PRODUCT_SUCCESS, 
+    GET_PRODUCT_FOR_UPDATE_FAIL, 
+    GET_PRODUCT_FOR_UPDATE_REQUEST, 
+    GET_PRODUCT_FOR_UPDATE_RESET, 
+    GET_PRODUCT_FOR_UPDATE_SUCCESS, 
     LIST_OF_PRODUCTS_FAIL, 
     LIST_OF_PRODUCTS_REQUEST, 
     LIST_OF_PRODUCTS_SUCCESS, 
     PRODUCT_DETAILS_FAIL, 
     PRODUCT_DETAILS_REQUEST, 
     PRODUCT_DETAILS_SUCCESS,
+    UPDATE_PRODUCT_FAIL,
+    UPDATE_PRODUCT_REQUEST,
+    UPDATE_PRODUCT_RESET,
+    UPDATE_PRODUCT_SUCCESS,
     USER_PRODUCTS_FAIL,
     USER_PRODUCTS_REQUEST,
     USER_PRODUCTS_SUCCESS, 
@@ -94,6 +102,56 @@ export const getUserProductsReducer = (state = {loading:true, userProducts:[]}, 
             }
         default:
             return state
+    }
+}
+
+
+//get user product for update
+export const findProductForUpdateReducer =  (state = {loading:true, product: {}}, action) => {
+    switch(action.type) {
+        case GET_PRODUCT_FOR_UPDATE_REQUEST:
+            return {
+                loading: true,
+            }
+
+        case GET_PRODUCT_FOR_UPDATE_SUCCESS:
+            return {
+                loading: false,
+                product: action.payload 
+            }
+
+        case GET_PRODUCT_FOR_UPDATE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            } 
+        case GET_PRODUCT_FOR_UPDATE_RESET:
+            return {}
+               
+        default: 
+           return state;
+    }
+}
+
+
+
+//reducer to update user profile
+export const updateUserProductReducer = (state = {}, action) =>{
+    switch(action.type){
+        case UPDATE_PRODUCT_REQUEST:
+            return { loading: true};
+
+        case UPDATE_PRODUCT_SUCCESS:
+            return { loading: false, success: true };
+            
+        case UPDATE_PRODUCT_FAIL: 
+            return { loading: false, error: action.payload };
+
+        case UPDATE_PRODUCT_RESET:
+            return {};    
+            
+        default : 
+         return state;   
     }
 }
 
