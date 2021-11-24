@@ -38,10 +38,16 @@ app.use('/api/v1/product', productRouter);
 app.use('/api/v1/order', orderRouter)
 app.use('/api/v1/store', storeRouter)
 
-//api for paypay
-app.get('/api/v1/config/paypal', (req, res) =>{
+// //api for paypay
+// app.get('/api/v1/config/paypal', (req, res) =>{
+//     // eslint-disable-next-line no-undef
+//     res.send(process.env.PAYPAL_CLIENT_ID || 'sb') //sb stands for sandbox
+// })
+
+//api for paystack key
+app.get('/api/v1/config/paystack', (req, res) =>{
     // eslint-disable-next-line no-undef
-    res.send(process.env.PAYPAL_CLIENT_ID || 'sb') //sb stands for sandbox
+    res.json(process.env.PAYSTACK_PUBLIC_KEY) //sb stands for sandbox
 })
 
 app.get('/', (req, res)=>{

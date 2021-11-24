@@ -19,6 +19,12 @@ import {
   GET_PRODUCT_FOR_UPDATE_REQUEST,
   GET_PRODUCT_FOR_UPDATE_FAIL,
   GET_PRODUCT_FOR_UPDATE_SUCCESS,
+  POST_PRODUCT_REQUEST,
+  POST_PRODUCT_SUCCESS,
+  POST_PRODUCT_FAIL,
+  UNPOST_PRODUCT_REQUEST,
+  UNPOST_PRODUCT_SUCCESS,
+  UNPOST_PRODUCT_FAIL,
 } from "../constants/productConstants";
 
 //create a product
@@ -36,7 +42,11 @@ export const createProduct =
     sellerEmail,
     sellerId,
     sellerPhone,
-    productStore,
+    productStoreId,
+    storeName,
+    storeAddress,
+    storeCity,
+    storeCountry,
     user
   ) =>
   async (dispatch, getState) => {
@@ -55,7 +65,11 @@ export const createProduct =
         sellerEmail,
         sellerPhone,
         sellerId,
-        productStore,
+        productStoreId,
+        storeName,
+        storeAddress,
+        storeCity,
+        storeCountry,
         user,
       },
     });
@@ -79,7 +93,11 @@ export const createProduct =
           sellerEmail,
           sellerId,
           sellerPhone,
-          productStore,
+          productStoreId,
+          storeName,
+          storeAddress,
+          storeCity,
+          storeCountry,
           user,
         },
         {
@@ -232,3 +250,54 @@ export const updateUserProduct = (id) => async (dispatch, getState) =>{
 }
 
 
+//edit a product to be posted to product page
+export const editPostedProduct = (id) => async(dispatch, getState) => {
+  dispatch({
+      type: POST_PRODUCT_REQUEST,
+      payload: id
+  })
+  //get user info
+  const { userLogin: {userInfo} } = getState();
+  try {
+      const { data } = await Axios.put(`/api/v1/product/postproduct`, id, {
+          headers: {
+              Authorization: `Bearer ${userInfo.token}`
+          },
+      })
+      dispatch({
+          type: POST_PRODUCT_SUCCESS,
+          payload: data
+      })
+      
+  } catch (error) {
+      const message = error.response && error.response.data.message?
+      error.response.data.message : error.message;
+      dispatch({type: POST_PRODUCT_FAIL, payload: message})
+  }
+}
+
+//edit a product to be unposted or removed from product page
+export const unPostedProduct = (id) => async(dispatch, getState) => {
+  dispatch({
+      type: UNPOST_PRODUCT_REQUEST,
+      payload: id
+  })
+  //get user info
+  const { userLogin: {userInfo} } = getState();
+  try {
+      const { data } = await Axios.put(`/api/v1/product/unpostproduct`, id, {
+          headers: {
+              Authorization: `Bearer ${userInfo.token}`
+          },
+      })
+      dispatch({
+          type: UNPOST_PRODUCT_SUCCESS,
+          payload: data
+      })
+      
+  } catch (error) {
+      const message = error.response && error.response.data.message?
+      error.response.data.message : error.message;
+      dispatch({type: UNPOST_PRODUCT_FAIL, payload: message})
+  }
+}

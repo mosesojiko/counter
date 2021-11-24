@@ -15,6 +15,7 @@ function ProductPage(props) {
     //read product details from redux store
     const productDetails = useSelector(state => state.productDetails);
     const { loading, error, product} = productDetails;
+    console.log(product)
 
     useEffect(() => {
         dispatch(getProductDetails(productId));
@@ -48,11 +49,17 @@ function ProductPage(props) {
                            ></Rating>
                        </li>
                        <li>
-                           Price: ${product.price}
+                           Price: #{product.price}
                        </li>
                        <li>
                            Description:
                            <p>{ product.description }</p>
+                       </li>
+                       <li>
+                           Store: {product.storeName}
+                       </li>
+                       <li>
+                           Address: {product.storeAddress}, {product.storeCity}
                        </li>
                    </ul>
                </div>

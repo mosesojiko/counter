@@ -31,3 +31,12 @@ export const UPDATE_PRODUCT_SUCCESS = "UPDATE_PRODUCT_SUCCESS";
 export const UPDATE_PRODUCT_FAIL = "UPDATE_PRODUCT_FAIL";
 export const UPDATE_PRODUCT_RESET = "UPDATE_PRODUCT_RESET";
 
+//constants to update a product that is posted
+export const POST_PRODUCT_REQUEST = "POST_PRODUCT_REQUEST";
+export const POST_PRODUCT_SUCCESS = "POST_PRODUCT_SUCCESS";
+export const POST_PRODUCT_FAIL = "POST_PRODUCT_FAIL";
+
+//constants to update a store that is posted
+export const UNPOST_PRODUCT_REQUEST = "UNPOST_PRODUCT_REQUEST";
+export const UNPOST_PRODUCT_SUCCESS = "UNPOST_PRODUCT_SUCCESS";
+export const UNPOST_PRODUCT_FAIL = "UNPOST_PRODUCT_FAIL";

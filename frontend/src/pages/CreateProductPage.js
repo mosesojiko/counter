@@ -24,7 +24,11 @@ function CreateProductPage(props) {
   const [sellerEmail, setSellerEmail ] = useState('');
   const [sellerId, setSellerId ] = useState('');
   const [sellerPhone, setSellerPhone ] = useState('');
-  const [ productStore, setProductStore ] = useState('')
+  const [ productStoreId, setProductStoreId ] = useState('')
+  const [ storeName, setStoreName ] = useState('')
+  const [ storeAddress, setStoreAddress ] = useState('')
+  const [ storeCity, setStoreCity ] = useState('')
+  const [ storeCountry, setStoreCountry ] = useState('')
  
 
     //const redirect = props.location.search? props.location.search.split('=')[1] : '/stores';
@@ -58,7 +62,11 @@ useEffect(() =>{
     dispatch(getUserStore())
   }
   if(userStore){
-    setProductStore(userStore && userStore._id)
+    setProductStoreId(userStore && userStore._id);
+    setStoreName(userStore && userStore.name);
+    setStoreAddress(userStore && userStore.address);
+    setStoreCity(userStore && userStore.city);
+    setStoreCountry(userStore && userStore.country);
   }
 },[dispatch, userStore])
 
@@ -72,11 +80,11 @@ useEffect(() => {
       setSellerPhone(userInfo.phone)
   }
   },[dispatch, userInfo])
-console.log(productStore)
+console.log(productStoreId)
  
   const submitHandler = (e) =>{
     e.preventDefault();
-    dispatch(createProduct(name, price, category, numberInStore, image, countInStock, brand, description, sellerName, sellerEmail, sellerId, sellerPhone, productStore,{ ...userStore}));
+    dispatch(createProduct(name, price, category, numberInStore, image, countInStock, brand, description, sellerName, sellerEmail, sellerId, sellerPhone, productStoreId, storeName, storeAddress, storeCity, storeCountry,{ ...userStore}));
   
   }
 

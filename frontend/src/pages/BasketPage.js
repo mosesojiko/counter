@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addToBasket, removeFromBasket } from '../actions/basketActions';
@@ -9,9 +9,11 @@ function BasketPage(props) {
     //finding the qty
     const qty = props.location.search? Number(props.location.search.split('=')[1]) : 1
 
+    const [proceed, setProceed ] = useState(true)
     //get basket from redux store
     const basket = useSelector((state) => state.basket);
     const { basketItems } = basket;
+    console.log(basketItems)
     
 
     const dispatch = useDispatch();
@@ -22,14 +24,29 @@ function BasketPage(props) {
     const removeFromBasketHandler = (id) => {
         dispatch(removeFromBasket(id))
     }
+    //check if every element in the basket is has the same storeId
+    const findStoreId = basket.basketItems.map((id) =>{
+        return id.storeId
+    })
+    const storeId = findStoreId[0];
+    const check = (val) => val === storeId
 
     const handleCheckout = () => {
-        props.history.push('/login?redirect=shipping')
+        if(findStoreId.every(check)){
+            setProceed(true)
+            props.history.push('/login?redirect=shipping')
+        }else{
+            setProceed(false)
+            
+        }
+       
     }
     return (
         <div className = "row top">
+            
             <div className ="col-2">
                 <h1>Shopping Basket</h1>
+                {!proceed && <p className="danger">Cannot buy from two different stores at a time</p>}
                 {
                     basketItems.length === 0? 
                     <MessageBox>Basket is empty. <Link to="/">Go Shopping</Link> </MessageBox>:
@@ -44,6 +61,8 @@ function BasketPage(props) {
                                             </div>
                                             <div className ="min-30">
                                                 <Link to = {`/product/${item.product}`}>{item.name}</Link>
+                                                <p>Store name: {item.storeName}</p>
+                                                <p>Location: {item.storeCity}, {item.storeCountry}</p>
                                             </div>
                                             <div>
                                                 <select value = { item.qty } onChange = {e =>
@@ -91,8 +110,11 @@ function BasketPage(props) {
                     </ul>
                 </div>
             </div>
+            
+
         </div>
     )
 }
+
 
 export default BasketPage

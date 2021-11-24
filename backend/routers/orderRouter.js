@@ -13,6 +13,15 @@ orderRouter.get('/mine', isAuth, expressAsyncHandler(async(req, res)=>{
     res.send(orders)
 }))
 
+//get ordered items for seller
+orderRouter.get('/ordereditems', isAuth, expressAsyncHandler( async(req, res) => {
+    const order = await Order.find({});
+    if(order) {
+                return res.json(order)
+    }else {
+        res.status(404).json({message: "Order items not found."})
+    }
+}))
 
 // Create an order
 orderRouter.post('/', isAuth, expressAsyncHandler( async(req, res) =>{
@@ -27,8 +36,15 @@ orderRouter.post('/', isAuth, expressAsyncHandler( async(req, res) =>{
             paymentMethod: req.body.paymentMethod,
             itemsPrice: req.body.itemsPrice,
             shippingPrice: req.body.shippingPrice,
-            taxPrice: req.body.taxPrice,
             totalPrice: req.body.totalPrice,
+            storeId: req.body.storeId,
+            storeName: req.body.storeName,
+            storeAddress: req.body.storeAddress,
+            storeCity: req.body.storeCity,
+            storeCountry: req.body.storeCountry,
+            sellerName: req.body.sellerName,
+            sellerEmail: req.body.sellerEmail,
+            sellerPhone: req.body.sellerPhone,
             user: req.user._id,
         });
         const createdOrder = await order.save();
@@ -43,7 +59,7 @@ orderRouter.post('/', isAuth, expressAsyncHandler( async(req, res) =>{
 orderRouter.get('/:id', isAuth, expressAsyncHandler( async(req, res) => {
     const order = await Order.findById(req.params.id);
     if(order) {
-        res.json(order);
+        return res.json(order);
     }else {
         res.status(404).send({message: "Order not found."})
     }
@@ -54,20 +70,26 @@ orderRouter.put('/:id/pay', isAuth, expressAsyncHandler( async(req, res) =>{
     const order = await Order.findById(req.params.id);
     if(order) {
         order.isPaid = true,
-        order.paidAT = Date.now();
+        order.paidAt = Date.now();
         order.paymentResult = {
             id: req.body.id,
-            status: req.body.status,
-            update_time: req.body.update_time,
-            email_address: req.body.email_address
+            update_time: Date.now(),
+            email: req.body.email,
+            phone: req.body.phone,
+            name: req.body.name,
+            amount: req.body.amount
         };
+       
+
         const updatedOrder = await order.save();
-        res.status(201).json({
+        return res.status(201).json({
             message: "Order paid",
             order: updatedOrder
-        });
+        })
     }else{
         res.status(404).json({message: "Order Not Found."})
     }
 }))
+
+
 module.exports = orderRouter;

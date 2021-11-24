@@ -25,14 +25,15 @@ function PlaceOrderPage(props) {
     //using toPrice for shippingAddress
     basket.shippingPrice = basket.itemsPrice > 100? toPrice(0): toPrice(10)
     //using it for tax
-    basket.taxPrice = toPrice(0.15 * basket.itemsPrice);
+    //basket.taxPrice = toPrice(0.15 * basket.itemsPrice);
     //for total price
-    basket.totalPrice = basket.itemsPrice + basket.shippingPrice + basket.taxPrice
-
+    basket.totalPrice = basket.itemsPrice + basket.shippingPrice  // + basket.taxPrice
+console.log(basket)
+console.log(basket.basketItems)
     //function for placeOrderHandler
     const dispatch = useDispatch();
     const placeOrderHandler = () => {
-        //here, rename cart to orderItems bcos that is what we have in the backent
+        //here, rename basket to orderItems bcos that is what we have in the backend
         dispatch(createOrder({ ...basket, orderItems: basket.basketItems }))
     }
 
@@ -54,7 +55,7 @@ function PlaceOrderPage(props) {
                     <ul>
                         <li>
                             <div className ="card card-body">
-                                <h2>Shipping</h2>
+                                <h2>Shipping/Buyer Information</h2>
                                 <p> <strong>Name:</strong> { basket.shippingAddress.fullName } <br />
                                 <strong>Address:</strong> { basket.shippingAddress.address },
                                 { basket.shippingAddress.city }, { basket.shippingAddress.postalCode },
@@ -76,12 +77,17 @@ function PlaceOrderPage(props) {
                             {
                                 basket.basketItems.map((item) =>(
                                     <li key = { item.product }>
-                                        <div className ="row">
+                                        <div className ="row bottom">
                                             <div>
                                                 <img src = { item.image } alt = { item.name } className="small"></img>
                                             </div>
                                             <div className ="min-30">
                                                 <Link to = {`/product/${item.product}`}>{item.name}</Link>
+                                                <h4>Store Information</h4>
+                                                <p>Name: {item.storeName}, {item.storeId}</p>
+                                                <p>Address: {item.storeAddress}, {item.storeCity}, {item.storeCountry}.</p>
+                                                <h4>Store Owner</h4>
+                                                <p>Name: {item.sellerName} Email: {item.sellerEmail} Phone: {item.sellerPhone}</p>
                                             </div>
                                             
                                             <div>
@@ -117,12 +123,16 @@ function PlaceOrderPage(props) {
                                     <div>#{basket.shippingPrice.toFixed(2)}</div>
                                 </div>
                             </li>
-                            <li>
+                            {
+                                /*
+                                <li>
                                 <div className = "row">
                                     <div>Tax</div>
                                     <div>#{basket.taxPrice.toFixed(2)}</div>
                                 </div>
                             </li>
+                                 */
+                            }
                             <li>
                                 <div className = "row">
                                     <div> <strong>Order Total</strong> </div>

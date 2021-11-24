@@ -1,6 +1,6 @@
 import Axios from 'axios';
-import { PayPalButton } from 'react-paypal-button-v2';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { PaystackButton } from 'react-paystack'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { detailsOrder, payOrder } from '../actions/orderActions';
@@ -9,10 +9,24 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
+
+
 function OrderPage(props) {
     const orderId = props.match.params.id;
-    //hook for getting the status of paypal sdk
-    const [ sdkReady, setSdkReady ] = useState(false)
+    //const publicKey = "pk_test_863b631d2a66390b101d9b0be373f958bad8ac59"
+    //const amount = 1000000 // Remember, set in kobo!
+    const [publicKey, setPublicKey]=useState("")
+    const [email, setEmail ] = useState("")
+    const [name, setName ] = useState("")
+    const [phone, setPhone ] = useState("")
+    const [ amount, setAmount ] = useState(0)
+    
+
+    //get login user details from store
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  console.log(userInfo);
+
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
 
@@ -22,46 +36,59 @@ function OrderPage(props) {
     const { loading: loadingPay, error: errorPay, success: successPay } = orderPay
 
     const dispatch = useDispatch();
-   
-    useEffect(() =>{
-        //add paypal script function to this useEffect
-        const addPayPalScript = async () =>{
-            const { data } = await Axios.get('/api/v1/config/paypal');
-            //now define a script and set the source to this paypal sdk
-            const script = document.createElement('script');
-            script.type="text/javascript";
-            script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
-            script.async = true;
-            script.onload = () =>{
-                setSdkReady(true)
-            };
-           document.body.appendChild(script)
-        }
-    
-        if(!order || successPay || (order && order._id !== orderId)){
-            dispatch({type: ORDER_PAY_RESET})
-            dispatch(detailsOrder(orderId)); //load the order
-        }else{
-            //order is ready
-            if(!order.isPaid){
-                //if the order is not paid, check if you have already loaded the paypal
-                if(!window.paypal){
-                    //then load the paypal
-                    addPayPalScript()
-                }else{
-                    //we have an unpaid order, and paypal already loaded
-                    setSdkReady(true)
-                }
-            }
-        }
-      
-        
-    }, [dispatch, order, orderId, sdkReady, successPay]);
 
-    //payment success handler function
-    const successPaymentHandler = (paymentResult) =>{
-        dispatch(payOrder(order, paymentResult))
-    }
+    useEffect(() =>{
+        const getPaystackKey = async () => {
+            const { data } = await Axios.get('/api/v1/config/paystack');
+            setPublicKey(data)
+            
+        }
+        
+        getPaystackKey()
+        
+    },[])
+   
+
+    useEffect(()=>{
+        if(!order || successPay || (order && order._id !== orderId)) {
+            dispatch({
+                type: ORDER_PAY_RESET
+            })
+            dispatch(detailsOrder(orderId)); //load the order
+        }
+        
+    },[dispatch, order, orderId, successPay])
+
+    useEffect(() =>{
+        if(order) {
+            setAmount((order.totalPrice * 100).toFixed(2))
+            setEmail(email)
+            setPhone(phone)
+            setName(name)
+        }
+    },[email, name, order, phone])
+    
+    
+
+    const componentProps = {
+        email,
+        amount,
+        metadata: {
+          name,
+          phone,
+        },
+        publicKey,
+        text: "Pay Now (Paystack)",
+        onSuccess: () =>
+        alert("Thanks for doing business with us. Payment receipt has been sent to your email."),
+        onClose: () => alert("Wait! You've not completed your payment."),
+      }
+
+      const paymentResult = {id: orderId, name: name, email: email, phone: phone, amount:amount/100}
+      const successHandler = () => {
+          dispatch(payOrder(order, paymentResult))
+      }
+
     return loading? (<LoadingBox></LoadingBox>):
     error? (<MessageBox variant="danger">{error}</MessageBox>):
     (
@@ -72,12 +99,20 @@ function OrderPage(props) {
                     <ul>
                         <li>
                             <div className ="card card-body">
-                                <h2>Shipping</h2>
+                                <h2>Shipping/Buyer Information</h2>
                                 <p> <strong>Name:</strong> { order.shippingAddress.fullName } <br />
                                 <strong>Address:</strong> { order.shippingAddress.address },
                                 { order.shippingAddress.city }, { order.shippingAddress.postalCode },
                                 { order.shippingAddress.country }
                                 </p>
+
+                                {
+                                    order.isPaid && 
+                                    <>
+                                    <p>Paid By: <strong>{order.paymentResult.name}</strong>, Email: <strong>{order.paymentResult.email}</strong>, Phone: <strong>{order.paymentResult.phone}</strong></p>
+                                    </>
+
+                                }
 
                                 { order.isDelivered?
                                  (<MessageBox variant ="success">Delivered at {order.deliveredAt}</MessageBox>):
@@ -104,12 +139,17 @@ function OrderPage(props) {
                             {
                                 order.orderItems.map((item) =>(
                                     <li key = { item.product }>
-                                        <div className ="row">
+                                        <div className ="row bottom">
                                             <div>
                                                 <img src = { item.image } alt = { item.name } className="small"></img>
                                             </div>
                                             <div className ="min-30">
                                                 <Link to = {`/product/${item.product}`}>{item.name}</Link>
+                                                <h4>Store Information</h4>
+                                                <p>Name: <strong>{item.storeName}</strong>, {item.storeId}</p>
+                                                <p>Address: <strong>{item.storeAddress}, {item.storeCity}, {item.storeCountry}.</strong></p>
+                                                <h4>Store Owner</h4>
+                                                <p>Name: <strong>{item.sellerName}</strong> Email: <strong>{item.sellerEmail}</strong> Phone: <strong>{item.sellerPhone}</strong></p>
                                             </div>
                                             
                                             <div>
@@ -145,12 +185,7 @@ function OrderPage(props) {
                                     <div>#{order.shippingPrice.toFixed(2)}</div>
                                 </div>
                             </li>
-                            <li>
-                                <div className = "row">
-                                    <div>Tax</div>
-                                    <div>#{order.taxPrice.toFixed(2)}</div>
-                                </div>
-                            </li>
+                            
                             <li>
                                 <div className = "row">
                                     <div> <strong>Order Total</strong> </div>
@@ -158,27 +193,53 @@ function OrderPage(props) {
                                 </div>
                             </li>
                             {
-                                /* Paypal button. check if oreder is not paid, check if the paypal button is not loaded */
-                                !order.isPaid && (
-                                    <li>
-                                        {
-                                        !sdkReady? (<LoadingBox></LoadingBox>):
-                                        (
-                                            <>
-                                            {
-                                                errorPay && (<MessageBox variant="danger">{errorPay}</MessageBox>)
-                                            }
-                                            {loadingPay && <LoadingBox></LoadingBox>}
-                                            <PayPalButton amount = { order.totalPrice }
-                                            onSuccess = { successPaymentHandler }
-                                            ></PayPalButton>
-                                            </>
-                                        )
-                                        }
-                                    </li>
-                                )
-                            }
-                           
+                                !order.isPaid &&
+                            (<li>
+                                <div className="form">
+                                    <div>
+                                        <h4>Receipt Form</h4>
+                                    </div>
+                                    
+                                <div>
+                                  <label htmlFor="name">Name</label>
+                                  <input
+                              type="text"
+                              id="name" required
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                                </div>
+                                
+                                <div>
+                                  <label htmlFor="email">Email</label>
+                                  <input
+                              type="text"
+                              id="email" required
+                              onChange={(e) => setEmail(e.target.value)}
+                            />
+                                </div>
+                                <div>
+                                  <label htmlFor="phone">Phone</label>
+                                  <input
+                              type="text"
+                              id="phone" required
+                              onChange={(e) => setPhone(e.target.value)}
+                            />
+                                </div>
+                                <>
+                                {
+                                    errorPay && (<MessageBox variant="danger">{errorPay}</MessageBox>)
+                                }
+                                {
+                                    loadingPay && <LoadingBox></LoadingBox>
+                                }
+                                {
+                                    successPay && (<MessageBox variant="success">Order Paid Successfully.</MessageBox>)
+                                }
+                                <PaystackButton className="primary" {...componentProps} onSuccess={successHandler} />
+                                </>
+                           </div>
+                           </li>)
+                             }
                         </ul>
                     </div>
                 </div>

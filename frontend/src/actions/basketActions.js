@@ -18,6 +18,14 @@ export const addToBasket = (productId, qty) => async(dispatch, getState) => {
             countInStock: data.countInStock,
             product: data._id,
             qty,
+            sellerName: data.sellerName,
+            sellerEmail: data.sellerEmail,
+            sellerPhone: data.sellerPhone,
+            storeId: data.productStoreId,
+            storeName: data.storeName,
+            storeAddress: data.storeAddress,
+            storeCity: data.storeCity,
+            storeCountry: data.storeCountry
         },
     });
     localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems));

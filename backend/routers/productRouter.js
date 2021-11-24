@@ -24,7 +24,11 @@ productRouter.post(
       sellerEmail,
       sellerId,
       sellerPhone,
-      productStore,
+      productStoreId,
+      storeName,
+      storeAddress,
+      storeCity,
+      storeCountry,
     } = req.body;
 
     const product = new Product({
@@ -40,7 +44,11 @@ productRouter.post(
       sellerEmail,
       sellerId,
       sellerPhone,
-      productStore,
+      productStoreId,
+      storeName,
+      storeAddress,
+      storeCity,
+      storeCountry,
       user: req.user._id,
     });
     // const uniqueNumber = await Product.findOne({numberInStore: req.body.numberInStore});
@@ -62,7 +70,11 @@ productRouter.post(
       sellerEmail: createProduct.sellerEmail,
       sellerId: createProduct.sellerId,
       sellerPhone: createProduct.sellerPhone,
-      productStore: createProduct.productStore,
+      productStoreId: createProduct.productStoreId,
+      storeName,
+      storeAddress,
+      storeCity,
+      storeCountry,
       user: req.user._id,
     });
   })
@@ -115,7 +127,7 @@ productRouter.get(
 productRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const products = await Product.find({});
+    const products = await Product.find({isPosted: true});
     res.json(products);
   })
 );
@@ -155,7 +167,11 @@ productRouter.put(
         (product.sellerEmail = req.body.sellerEmail || product.sellerEmail),
         (product.sellerId = req.body.sellerId || product.sellerId),
         (product.sellerPhone = req.body.sellerPhone || product.sellerPhone),
-        (product.productStore = req.body.productStore || product.productStore),
+        (product.productStoreId = req.body.productStoreId || product.productStoreId),
+        (product.storeName = req.body.storeName || product.storeName),
+        (product.storeAddress = req.body.storeAddress || product.storeAddress),
+        (product.storeCity = req.body.storeCity || product.storeCity),
+        (product.storeCountry = req.body.storeCountry || product.storeCountry),
         (user = req.user._id);
     }
 
@@ -180,22 +196,26 @@ productRouter.delete('/delete/:id', isAuth, (req, res) =>{
   })
 })
 
-//delete a user with specified id
-// exports.delete = (req, res) =>{
-//   const id = req.params.id;
-//   UserDb.findByIdAndDelete(id)
-//   .then(data =>{
-//       if(!data){
-//           res.status(404).json({message: `Cannot delete user with id: ${id}, maybe id is wrong.`})
-//       }else{
-//           res.send("User was deleted successfully.")
-//       }
-//   })
-//   .catch(err =>{
-//       res.status(500).json({
-//           message: err.message || `Could not delete user with id ${id}.`
-//       })
-//   })
-  
-// }
+
+//update a product to be posted
+productRouter.put('/postproduct', isAuth, expressAsyncHandler( async(req,res) =>{
+  const product = await Product.findById(req.body.id);
+  if(product){
+      product.isPosted = true;
+  }
+  const postedProduct = await product.save();
+      res.json(postedProduct)
+}))
+
+//update a product to be unposted
+productRouter.put('/unpostproduct', isAuth, expressAsyncHandler( async(req,res) =>{
+  const product = await Product.findById(req.body.id);
+  if(product){
+      product.isPosted = false;
+  }
+  const unPostedProduct = await product.save();
+      res.json(unPostedProduct)
+}))
+
+
 module.exports = productRouter;

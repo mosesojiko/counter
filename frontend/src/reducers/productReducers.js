@@ -11,9 +11,15 @@ import {
     LIST_OF_PRODUCTS_FAIL, 
     LIST_OF_PRODUCTS_REQUEST, 
     LIST_OF_PRODUCTS_SUCCESS, 
+    POST_PRODUCT_FAIL, 
+    POST_PRODUCT_REQUEST, 
+    POST_PRODUCT_SUCCESS, 
     PRODUCT_DETAILS_FAIL, 
     PRODUCT_DETAILS_REQUEST, 
     PRODUCT_DETAILS_SUCCESS,
+    UNPOST_PRODUCT_FAIL,
+    UNPOST_PRODUCT_REQUEST,
+    UNPOST_PRODUCT_SUCCESS,
     UPDATE_PRODUCT_FAIL,
     UPDATE_PRODUCT_REQUEST,
     UPDATE_PRODUCT_RESET,
@@ -155,3 +161,47 @@ export const updateUserProductReducer = (state = {}, action) =>{
     }
 }
 
+//post product reducers
+export const editPostedProductReducer = (state = {}, action) =>{
+    switch(action.type) {
+        case POST_PRODUCT_REQUEST:
+            return {
+                loading: true
+            }
+        case POST_PRODUCT_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            }
+        case POST_PRODUCT_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state;
+    }
+}
+
+
+//reducer to unpost a store
+export const unPostedProductReducer = (state = {}, action) =>{
+    switch(action.type) {
+        case UNPOST_PRODUCT_REQUEST:
+            return {
+                loading: true
+            }
+        case UNPOST_PRODUCT_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            }
+        case UNPOST_PRODUCT_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state;
+    }
+}

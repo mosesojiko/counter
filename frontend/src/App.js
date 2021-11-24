@@ -21,6 +21,8 @@ import UserStore from './pages/UserStore';
 import EditStore from './pages/EditStore';
 import UpdateProduct from './pages/UpdateProduct';
 import DeleteProduct from './pages/DeleteProduct';
+import paystack from './pages/PayStack';
+
 
 
 
@@ -94,6 +96,7 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/paystack' component = { paystack } ></Route>
     <Route path = '/delete/:id' component = { DeleteProduct } ></Route>
     <Route path = '/update/:id' component = { UpdateProduct } ></Route>
     <Route path = '/editstore' component = { EditStore } ></Route>

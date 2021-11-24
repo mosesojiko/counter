@@ -12,7 +12,7 @@ function PaymentMethodPage(props) {
         props.history.push('/shipping');
     }
 
-    const [paymentMethod, setPaymentMethod ] = useState('PayPal');
+    const [paymentMethod, setPaymentMethod ] = useState('Paystack');
     const dispatch = useDispatch();
 
     //submitHandler function
@@ -32,19 +32,27 @@ function PaymentMethodPage(props) {
                 </div>
                 <div>
                     <div>
-                        <input type = "radio" id ="PayPal"
-                        value ="PayPal" name ="paymentMethod"
+                        <input type = "radio" id ="Paystack"
+                        value ="Paystack" name ="paymentMethod"
                         required checked onChange ={(e) => setPaymentMethod(e.target.value)} />
-                        <label htmlFor ="PayPal">PayPal</label>
+                        <label htmlFor ="Paystack">Paystack</label>
                     </div>
                 </div>
                 
                 <div>
                     <div>
-                        <input type = "radio" id ="stripe" value = "Stripe" name ="paymentMethod"
+                        <input type = "radio" id ="payU" value = "payU" name ="paymentMethod"
                         required onChange = { (e) => setPaymentMethod(e.target.value) }>
                         </input>
-                        <label htmlFor ="stripe">Stripe</label>
+                        <label htmlFor ="payU">payU</label>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <input type = "radio" id ="eNaira" value = "eNaira" name ="paymentMethod"
+                        required onChange = { (e) => setPaymentMethod(e.target.value) }>
+                        </input>
+                        <label htmlFor ="eNaira">eNaira</label>
                     </div>
                 </div>
                 <div>
