@@ -23,6 +23,7 @@ import UpdateProduct from './pages/UpdateProduct';
 import DeleteProduct from './pages/DeleteProduct';
 import paystack from './pages/PayStack';
 import CustomerOrders from './pages/CustomerOrders';
+import SoldProducts from './pages/SoldProducts';
 
 
 
@@ -88,6 +89,11 @@ function App() {
                         }
                     </li>
                     <li>
+                        {
+                            userInfo.isSeller && <Link to ="/soldproducts">Sold Items</Link>
+                        }
+                    </li>
+                    <li>
                     <Link to ="#logout" onClick= { logoutHandler }> Logout </Link>
                     </li>
                    </ul>
@@ -103,6 +109,7 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/soldproducts' component = { SoldProducts } ></Route>
     <Route path = '/orderedproducts' component = { CustomerOrders } ></Route>
     <Route path = '/paystack' component = { paystack } ></Route>
     <Route path = '/delete/:id' component = { DeleteProduct } ></Route>

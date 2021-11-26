@@ -67,6 +67,7 @@ useEffect(() =>{
     const placeOrderHandler = () => {
         //here rename basket to orderItems bcos that is what we have in backend
         dispatch(createOrder({...basket, orderItems: basket.basketItems}));
+        //update ordered product
         basket.basketItems.map((x) => {
             console.log(x)
             return dispatch(orderedProduct({id: x.product,buyerName,buyerPhone,buyerAddress }))

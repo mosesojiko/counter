@@ -4,6 +4,7 @@ import { PaystackButton } from 'react-paystack'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { detailsOrder, payOrder } from '../actions/orderActions';
+import { paidProduct } from '../actions/productActions';
 
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -27,6 +28,7 @@ function OrderPage(props) {
 //   const { userInfo } = userLogin;
 //   console.log(userInfo);
 
+     //get order details from redux store
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
 
@@ -34,6 +36,10 @@ function OrderPage(props) {
     const orderPay = useSelector(state => state.orderPay);
     //in other to use error, and success in orderPay, we rename it
     const { loading: loadingPay, error: errorPay, success: successPay } = orderPay
+
+    //get productPaid from redux store
+    const productPaid = useSelector((state) => state.productPaid);
+    const {loading: loadingPaid, error: errorPaid } = productPaid
 
     const dispatch = useDispatch();
 
@@ -93,7 +99,12 @@ function OrderPage(props) {
 
       const paymentResult = {id: orderId, name: name, email: email, phone: phone, amount:amount/100}
       const successHandler = () => {
-          dispatch(payOrder(order, paymentResult))
+          dispatch(payOrder(order, paymentResult));
+
+          //update paid products
+        order.orderItems.map((x) => {
+            return dispatch(paidProduct({id: x.product }))
+        });
       }
 
     return loading? (<LoadingBox></LoadingBox>):
@@ -243,6 +254,12 @@ function OrderPage(props) {
                                 <PaystackButton className="primary" {...componentProps} onSuccess={successHandler} />
                                 </>
                            </div>
+                               {
+                                    errorPaid && (<MessageBox variant="danger">{errorPaid}</MessageBox>)
+                                }
+                                {
+                                    loadingPaid && <LoadingBox></LoadingBox>
+                                }
                            </li>)
                              }
                         </ul>

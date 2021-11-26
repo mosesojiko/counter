@@ -2,11 +2,11 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getOrderedProducts } from '../actions/productActions';
+import { getSoldProducts } from '../actions/productActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 
-function CustomerOrders() {
+function SoldProducts() {
 
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
@@ -14,25 +14,25 @@ function CustomerOrders() {
   console.log(userInfo);
 
   //get ordered products from redux store
-  const customerOrders = useSelector((state) => state.customerOrders);
-  const { loading, error, orderedProducts } = customerOrders
-  console.log(orderedProducts);
+  const productSold = useSelector((state) => state.productSold);
+  const { loading, error, soldProducts } = productSold
+  console.log(soldProducts);
 const dispatch = useDispatch();
 
 useEffect(() =>{
-    dispatch(getOrderedProducts())
+    dispatch(getSoldProducts())
 },[dispatch])
 
                 
     return (
         <div>
-            <h1>Customer orders</h1>
+            <h1>Sold Items</h1>
             {
                 loading? <LoadingBox></LoadingBox>:
                 error? <MessageBox variant ="danger"></MessageBox>:
                 <div className ="row center">
                     {
-                        orderedProducts.map((product) => (
+                        soldProducts.map((product) => (
                             product.buyerName && <div key ={product._id} className="card">
                                 <Link to={`/product/${product._id}`}>
                                 {/* image size should be 680px by 830px */}
@@ -65,4 +65,4 @@ useEffect(() =>{
     )
 }
 
-export default CustomerOrders
+export default SoldProducts

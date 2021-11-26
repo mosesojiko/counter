@@ -31,6 +31,12 @@ import {
   ORDERED_PRODUCTS_REQUEST,
   ORDERED_PRODUCTS_SUCCESS,
   ORDERED_PRODUCTS_FAIL,
+  UPDATE_PAID_PRODUCTS_REQUEST,
+  UPDATE_PAID_PRODUCTS_SUCCESS,
+  UPDATE_PAID_PRODUCTS_FAIL,
+  SOLD_PRODUCTS_REQUEST,
+  SOLD_PRODUCTS_SUCCESS,
+  SOLD_PRODUCTS_FAIL,
 } from "../constants/productConstants";
 
 //create a product
@@ -331,7 +337,7 @@ export const orderedProduct = (id) => async(dispatch) => {
 }
 
 
-//get user products
+//get ordered products
 export const getOrderedProducts = () => async (dispatch, getState) => {
   dispatch({
     type: ORDERED_PRODUCTS_REQUEST,
@@ -353,6 +359,60 @@ export const getOrderedProducts = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ORDERED_PRODUCTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+}
+
+
+//update paid products
+export const paidProduct = (id) => async(dispatch) => {
+  dispatch({
+      type: UPDATE_PAID_PRODUCTS_REQUEST,
+      payload: id
+  })
+  
+  try {
+      const { data } = await Axios.put(`/api/v1/product/paidproducts`, id)
+      dispatch({
+          type: UPDATE_PAID_PRODUCTS_SUCCESS,
+          payload: data
+      })
+      
+  } catch (error) {
+      const message = error.response && error.response.data.message?
+      error.response.data.message : error.message;
+      dispatch({type: UPDATE_PAID_PRODUCTS_FAIL, payload: message})
+  }
+}
+
+
+
+//get ordered products
+export const getSoldProducts = () => async (dispatch, getState) => {
+  dispatch({
+    type: SOLD_PRODUCTS_REQUEST,
+  });
+  //get userInfo
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.get("/api/v1/product/soldproducts", {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    });
+    dispatch({
+      type: SOLD_PRODUCTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SOLD_PRODUCTS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

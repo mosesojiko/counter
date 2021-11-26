@@ -20,6 +20,9 @@ import {
     PRODUCT_DETAILS_FAIL, 
     PRODUCT_DETAILS_REQUEST, 
     PRODUCT_DETAILS_SUCCESS,
+    SOLD_PRODUCTS_FAIL,
+    SOLD_PRODUCTS_REQUEST,
+    SOLD_PRODUCTS_SUCCESS,
     UNPOST_PRODUCT_FAIL,
     UNPOST_PRODUCT_REQUEST,
     UNPOST_PRODUCT_SUCCESS,
@@ -27,6 +30,10 @@ import {
     UPDATE_ORDERED_PRODUCT_REQUEST,
     UPDATE_ORDERED_PRODUCT_RESET,
     UPDATE_ORDERED_PRODUCT_SUCCESS,
+    UPDATE_PAID_PRODUCTS_FAIL,
+    UPDATE_PAID_PRODUCTS_REQUEST,
+    UPDATE_PAID_PRODUCTS_RESET,
+    UPDATE_PAID_PRODUCTS_SUCCESS,
     UPDATE_PRODUCT_FAIL,
     UPDATE_PRODUCT_REQUEST,
     UPDATE_PRODUCT_RESET,
@@ -257,3 +264,46 @@ export const getOrderedProductsReducer = (state = {loading:true, orderedProducts
     }
 }
 
+
+//reducer to update paid products
+export const paidProductReducer = (state = {}, action) =>{
+    switch(action.type){
+        case UPDATE_PAID_PRODUCTS_REQUEST:
+            return { loading: true};
+
+        case UPDATE_PAID_PRODUCTS_SUCCESS:
+            return { loading: false, success: true };
+            
+        case UPDATE_PAID_PRODUCTS_FAIL: 
+            return { loading: false, error: action.payload };
+
+        case UPDATE_PAID_PRODUCTS_RESET:
+            return {};    
+            
+        default : 
+         return state;   
+    }
+}
+
+
+//get ordered products reducers
+export const getSoldProductsReducer = (state = {loading:true, soldProducts:[]}, action) =>{
+    switch(action.type) {
+        case SOLD_PRODUCTS_REQUEST:
+            return {
+                loading: true
+            };
+        case SOLD_PRODUCTS_SUCCESS:
+            return {
+                loading: false,
+                soldProducts: action.payload
+            }
+        case SOLD_PRODUCTS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state
+    }
+}

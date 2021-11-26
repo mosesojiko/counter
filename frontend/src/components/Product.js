@@ -16,7 +16,7 @@ function Product(props) {
         </Link>
         <h2>{product.storeCity}</h2>
         <Rating rating={product.rating} numReviews={product.numReviews} />
-        <div className="price">${product.price}</div>
+        <div className="price">#{product.price}</div>
       </div>
     </div>
   );

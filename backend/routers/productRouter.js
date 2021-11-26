@@ -112,12 +112,30 @@ productRouter.get(
   })
 );
 
+
+//find paid/sold items
+productRouter.get('/soldproducts', isAuth, expressAsyncHandler(async(req, res) => {
+  const soldItems = await Product.find({user: req.user._id});
+  if(soldItems){
+      const displaySold = soldItems.map((item) =>{
+        if(item.isSold===true && item.isPaid === true){
+          return item
+        }
+      })
+      return res.json(displaySold)
+    
+  }else{
+    return res.status(404).json({message: "There are no sold products at the moment"})
+  }
+}))
+
+
 //find ordered items
 productRouter.get('/orderedproducts', isAuth, expressAsyncHandler(async(req, res) => {
   const orderedItems = await Product.find({user: req.user._id});
   if(orderedItems){
       const displayOrders = orderedItems.map((item) =>{
-        if(item.isOrdered===true){
+        if(item.isOrdered===true && item.isPaid === false){
           return item
         }else {
           return ''
@@ -248,6 +266,16 @@ productRouter.put('/placeorder', expressAsyncHandler( async(req, res) => {
   res.json(orderedProduct);
 }))
 
-
+//update a product when it is paid for
+productRouter.put('/paidproducts', expressAsyncHandler( async(req, res) => {
+  const product = await Product.findById(req.body.id);
+  if(product) {
+    product.isPaid = true;
+    product.isSold = true
+    product.isPaidAt = Date.now()
+  }
+  const paidProduct = await product.save();
+  res.json(paidProduct);
+}))
 
 module.exports = productRouter;
