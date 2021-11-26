@@ -13,15 +13,16 @@ orderRouter.get('/mine', isAuth, expressAsyncHandler(async(req, res)=>{
     res.send(orders)
 }))
 
-//get ordered items for seller
-orderRouter.get('/ordereditems', isAuth, expressAsyncHandler( async(req, res) => {
-    const order = await Order.find({});
-    if(order) {
-                return res.json(order)
-    }else {
-        res.status(404).json({message: "Order items not found."})
-    }
-}))
+
+//get customer orders
+// orderRouter.get('/customerorders', isAuth, expressAsyncHandler( async(req, res) =>{
+//     const customerorders = await Order.find({email: req.body.userEmail});
+//     if(customerorders) {
+//       res.json(customerorders);
+//     }else{
+//         res.json({message: "Order not found."})
+//     }
+// }))
 
 // Create an order
 orderRouter.post('/', isAuth, expressAsyncHandler( async(req, res) =>{
@@ -37,14 +38,7 @@ orderRouter.post('/', isAuth, expressAsyncHandler( async(req, res) =>{
             itemsPrice: req.body.itemsPrice,
             shippingPrice: req.body.shippingPrice,
             totalPrice: req.body.totalPrice,
-            storeId: req.body.storeId,
-            storeName: req.body.storeName,
-            storeAddress: req.body.storeAddress,
-            storeCity: req.body.storeCity,
-            storeCountry: req.body.storeCountry,
-            sellerName: req.body.sellerName,
-            sellerEmail: req.body.sellerEmail,
-            sellerPhone: req.body.sellerPhone,
+            email: req.body.sellerEmail,
             user: req.user._id,
         });
         const createdOrder = await order.save();
@@ -71,6 +65,7 @@ orderRouter.put('/:id/pay', isAuth, expressAsyncHandler( async(req, res) =>{
     if(order) {
         order.isPaid = true,
         order.paidAt = Date.now();
+        order.sellerEmail = req.body.sellerEmail;
         order.paymentResult = {
             id: req.body.id,
             update_time: Date.now(),

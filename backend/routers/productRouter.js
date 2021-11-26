@@ -112,6 +112,23 @@ productRouter.get(
   })
 );
 
+//find ordered items
+productRouter.get('/orderedproducts', isAuth, expressAsyncHandler(async(req, res) => {
+  const orderedItems = await Product.find({user: req.user._id});
+  if(orderedItems){
+      const displayOrders = orderedItems.map((item) =>{
+        if(item.isOrdered===true){
+          return item
+        }else {
+          return ''
+        }
+      })
+      return res.json(displayOrders)
+    
+  }else{
+    return res.status(404).json({message: "There are no ordered products at the moment"})
+  }
+}))
 
 //get all user products
 productRouter.get(
@@ -216,6 +233,21 @@ productRouter.put('/unpostproduct', isAuth, expressAsyncHandler( async(req,res) 
   const unPostedProduct = await product.save();
       res.json(unPostedProduct)
 }))
+
+//update a product when it is ordered
+productRouter.put('/placeorder', expressAsyncHandler( async(req, res) => {
+  const product = await Product.findById(req.body.id);
+  if(product) {
+    product.isOrdered = true;
+    product.buyerName = req.body.buyerName;
+    product.buyerPhone = req.body.buyerPhone;
+    product.buyerAddress = req.body.buyerAddress;
+    product.buyerId = req.body.buyerId;
+  }
+  const orderedProduct = await product.save();
+  res.json(orderedProduct);
+}))
+
 
 
 module.exports = productRouter;

@@ -36,6 +36,7 @@ function ProductPage(props) {
            <div className = "row top">
                <div className = "col-2">
                    <img className = "large" src ={product.image} alt = {product.name} />
+                   <Link to ={`/store/${product.productStoreId}`}><p>View store</p></Link>
                </div>
                <div className = "col-1">
                    <ul>

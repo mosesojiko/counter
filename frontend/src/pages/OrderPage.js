@@ -23,9 +23,9 @@ function OrderPage(props) {
     
 
     //get login user details from store
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-  console.log(userInfo);
+//   const userLogin = useSelector((state) => state.userLogin);
+//   const { userInfo } = userLogin;
+//   console.log(userInfo);
 
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
@@ -66,6 +66,7 @@ function OrderPage(props) {
             setPhone(phone)
             setName(name)
         }
+       
     },[email, name, order, phone])
     
     
@@ -83,6 +84,12 @@ function OrderPage(props) {
         alert("Thanks for doing business with us. Payment receipt has been sent to your email."),
         onClose: () => alert("Wait! You've not completed your payment."),
       }
+      
+      //get sellerEmail id
+    //  const sellerEmail = order && order.orderItems.map((x) => {
+    //       return x.sellerEmail
+    //   })[0]
+     
 
       const paymentResult = {id: orderId, name: name, email: email, phone: phone, amount:amount/100}
       const successHandler = () => {
@@ -100,10 +107,10 @@ function OrderPage(props) {
                         <li>
                             <div className ="card card-body">
                                 <h2>Shipping/Buyer Information</h2>
-                                <p> <strong>Name:</strong> { order.shippingAddress.fullName } <br />
+                                <p> <strong>Name:</strong> { order.shippingAddress.fullName }, <strong>Phone:</strong> { order.shippingAddress.phone } <br />
                                 <strong>Address:</strong> { order.shippingAddress.address },
-                                { order.shippingAddress.city }, { order.shippingAddress.postalCode },
-                                { order.shippingAddress.country }
+                                { order.shippingAddress.city }, { order.shippingAddress.LGA }, 
+                                 { order.shippingAddress.state }, { order.shippingAddress.country }
                                 </p>
 
                                 {
@@ -154,7 +161,7 @@ function OrderPage(props) {
                                             
                                             <div>
 
-                                                {item.qty} x {item.price} = ${item.qty * item.price}
+                                                {item.qty} x {item.price} = #{item.qty * item.price}
                                             </div>
                                             
                                         </div>
@@ -181,7 +188,7 @@ function OrderPage(props) {
                             </li>
                             <li>
                                 <div className = "row">
-                                    <div>Shipping</div>
+                                    <div>Shipping fee</div>
                                     <div>#{order.shippingPrice.toFixed(2)}</div>
                                 </div>
                             </li>
@@ -195,12 +202,10 @@ function OrderPage(props) {
                             {
                                 !order.isPaid &&
                             (<li>
-                                <div className="form">
-                                    <div>
-                                        <h4>Receipt Form</h4>
-                                    </div>
+                                <div className="form"> 
                                     
                                 <div>
+                                <h4>Receipt Form</h4>
                                   <label htmlFor="name">Name</label>
                                   <input
                               type="text"

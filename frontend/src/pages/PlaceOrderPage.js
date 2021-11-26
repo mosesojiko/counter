@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { createOrder } from '../actions/orderActions';
@@ -7,8 +7,16 @@ import CheckoutSteps from '../components/CheckoutSteps'
 import { CREATE_ORDER_RESET } from '../constants/orderConstants';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import { orderedProduct } from '../actions/productActions';
+import { UPDATE_ORDERED_PRODUCT_RESET } from '../constants/productConstants';
 
 function PlaceOrderPage(props) {
+    const dispatch = useDispatch();
+    const [buyerName, setBuyerName ] = useState('')
+    const [buyerAddress, setBuyerAddress ] = useState('')
+    const [buyerPhone, setBuyerPhone ] = useState('')
+   
+
     //get cart from redux store
     const basket = useSelector((state) => state.basket)
     //check if user entered payment method, if not redirect the user to payment method
@@ -18,6 +26,9 @@ function PlaceOrderPage(props) {
     //get orderCreate from redux store
     const orderCreate = useSelector(state => state.orderCreate);
     const { loading, success, error, order } = orderCreate
+
+    const productOrdered = useSelector(state => state.productOrdered)
+    const {loading: loadingProduct, error: errorProduct, success: successProduct} = productOrdered
     //define a helper function for order summary
     const toPrice = (num) => Number(num.toFixed(2)); //e.g  5.123 => "5.12" => 5.12
     //using toPrice for cartItems
@@ -30,23 +41,52 @@ function PlaceOrderPage(props) {
     basket.totalPrice = basket.itemsPrice + basket.shippingPrice  // + basket.taxPrice
 console.log(basket)
 console.log(basket.basketItems)
+console.log(buyerName)
+useEffect(() =>{
+    if(basket) {
+        setBuyerName(basket.shippingAddress.fullName);
+        setBuyerPhone(basket.shippingAddress.phone);
+        setBuyerAddress(`${basket.shippingAddress.address},${basket.shippingAddress.city},${basket.shippingAddress.LGA},${basket.shippingAddress.state},${basket.shippingAddress.country}.`)
+    }
+},[basket])
+
+
+
+//get sellerEmail id
+// const sellerEmail = basket.basketItems.map((x) => {
+//     return x.sellerEmail
+// })[0]
+// console.log(sellerEmail)
+
+    //edit product 
+    
+   
+    
     //function for placeOrderHandler
-    const dispatch = useDispatch();
+
     const placeOrderHandler = () => {
-        //here, rename basket to orderItems bcos that is what we have in the backend
-        dispatch(createOrder({ ...basket, orderItems: basket.basketItems }))
+        //here rename basket to orderItems bcos that is what we have in backend
+        dispatch(createOrder({...basket, orderItems: basket.basketItems}));
+        basket.basketItems.map((x) => {
+            console.log(x)
+            return dispatch(orderedProduct({id: x.product,buyerName,buyerPhone,buyerAddress }))
+        });
     }
 
     useEffect(() =>{
-        if(success) {
+        if(success && successProduct) {
             //redirect the user to order details screen
             props.history.push(`/order/${order._id}`);
             dispatch({
                 type: CREATE_ORDER_RESET
             })
+            dispatch({
+                type: UPDATE_ORDERED_PRODUCT_RESET
+            })
         }
-
-    }, [dispatch, order, props.history, success])
+    
+    }, [dispatch, order, props.history, success, successProduct])
+    
     return (
         <div>
             <CheckoutSteps step1 step2 step3 step4 ></CheckoutSteps>
@@ -56,10 +96,10 @@ console.log(basket.basketItems)
                         <li>
                             <div className ="card card-body">
                                 <h2>Shipping/Buyer Information</h2>
-                                <p> <strong>Name:</strong> { basket.shippingAddress.fullName } <br />
+                                <p> <strong>Name:</strong> { basket.shippingAddress.fullName }, <strong>Phone:</strong> { basket.shippingAddress.phone } <br />
                                 <strong>Address:</strong> { basket.shippingAddress.address },
-                                { basket.shippingAddress.city }, { basket.shippingAddress.postalCode },
-                                { basket.shippingAddress.country }
+                                { basket.shippingAddress.city }, { basket.shippingAddress.LGA }, 
+                                 { basket.shippingAddress.state }, { basket.shippingAddress.country }
                                 </p>
                             </div>
                         </li>
@@ -96,6 +136,8 @@ console.log(basket.basketItems)
                                             </div>
                                             
                                         </div>
+                                        
+                                        
                                     </li>
                                 ))
                             }
@@ -150,6 +192,12 @@ console.log(basket.basketItems)
                             }
                             {
                                 error && <MessageBox variant ="danger">{error}</MessageBox>
+                            }
+                            {
+                                loadingProduct && <LoadingBox></LoadingBox>
+                            }
+                            {
+                                errorProduct && <MessageBox variant ="danger">{errorProduct}</MessageBox>
                             }
                         </ul>
                     </div>

@@ -24,8 +24,10 @@ const orderShema = new mongoose.Schema({
         fullName: {type: String, required: true},
         address: {type: String, required: true},
         city: {type: String, required: true},
-        postalCode: {type: String, required: true},
+        LGA: {type: String, required: true},
+        state: {type: String, required: true},
         country: {type: String, required: true},
+        phone: {type: String, required: true},
     },
     paymentMethod: {type: String, required: true},
     paymentResult: {
@@ -39,6 +41,7 @@ const orderShema = new mongoose.Schema({
     itemsPrice: {type: Number, required:true},
     shippingPrice: {type: Number, required:true},
     totalPrice: {type: Number, required:true},
+    email: {type: String},
     user: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User",

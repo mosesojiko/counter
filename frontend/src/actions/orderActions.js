@@ -15,10 +15,10 @@ import {
     ORDER_PAY_SUCCESS} from '../constants/orderConstants';
 
 
-export const createOrder = (order) => async (dispatch, getState) => {
+export const createOrder = (order, sellerEmail) => async (dispatch, getState) => {
     dispatch({
         type: CREATE_ORDER_REQUEST,
-        payload: order
+        payload: {order, sellerEmail}
     });
 
     try {
@@ -73,15 +73,15 @@ export const detailsOrder = (orderId) => async (dispatch, getState) => {
 }
 
 //PAY ORDER ACTIONS
-export const payOrder = (order, paymentResult ) => async (dispatch, getState) =>{
+export const payOrder = (order, paymentResult, sellerEmail ) => async (dispatch, getState) =>{
     dispatch({
         type: ORDER_PAY_REQUEST,
-        payload: {order, paymentResult}
+        payload: {order, paymentResult, sellerEmail}
     });
     //get user info
     const { userLogin: { userInfo },} = getState();
     try {
-        const { data } = await Axios.put(`/api/v1/order/${order._id}/pay`, paymentResult, {
+        const { data } = await Axios.put(`/api/v1/order/${order._id}/pay`, {paymentResult, sellerEmail}, {
             headers: { Authorization: `Bearer ${userInfo.token}`},
         });
         dispatch({
@@ -123,3 +123,5 @@ export const listOrderMine = () =>async(dispatch, getState) =>{
         dispatch({type: ORDER_MINE_LIST_FAIL, payload: message})
     }
 }
+
+

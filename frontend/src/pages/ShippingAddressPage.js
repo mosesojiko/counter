@@ -19,14 +19,16 @@ function ShippingAddressPage(props) {
     const [ fullName, setFullName ] = useState(shippingAddress.fullName);
     const [ address, setAddress ] = useState(shippingAddress.address);
     const [ city, setCity ] = useState(shippingAddress.city);
-    const [ postalCode, setPostalCode ] = useState(shippingAddress.postalCode);
+    const [ LGA, setLGA ] = useState(shippingAddress.LGA);
+    const [ state, setState ] = useState(shippingAddress.state);
     const [ country, setCountry ] = useState(shippingAddress.country);
+    const [ phone, setPhone ] = useState(shippingAddress.phone);
 
     const dispatch = useDispatch();
     //function to handle submit
     const handleSummit = (e) => {
         e.preventDefault();
-        dispatch(saveShippingAddress({fullName, address, city, postalCode, country}));
+        dispatch(saveShippingAddress({fullName, address, city, LGA, state, country, phone}));
 
         //redirect the user to payment
         props.history.push('/payment');
@@ -54,14 +56,24 @@ function ShippingAddressPage(props) {
                     value = {city} onChange = { (e) =>setCity(e.target.value)} required></input>
                 </div>
                 <div>
-                    <label htmlFor = "postalCode">Postal Code</label>
-                    <input type="text" id="postalCode" placeholder="Enter postal code" 
-                    value = {postalCode} onChange = { (e) =>setPostalCode(e.target.value)} required></input>
+                    <label htmlFor = "LGA">Local Govt. Area</label>
+                    <input type="text" id="LGA" placeholder="Local govt of residence." 
+                    value = {LGA} onChange = { (e) =>setLGA(e.target.value)} required></input>
+                </div>
+                <div>
+                    <label htmlFor = "state">State</label>
+                    <input type="text" id="state" placeholder="State of residence" 
+                    value = {state} onChange = { (e) =>setState(e.target.value)} required></input>
                 </div>
                 <div>
                     <label htmlFor = "country">Country</label>
                     <input type="text" id="country" placeholder="Enter country" 
                     value = {country} onChange = { (e) =>setCountry(e.target.value)} required></input>
+                </div>
+                <div>
+                    <label htmlFor = "phone">Phone</label>
+                    <input type="text" id="phone" placeholder="Enter contact number" 
+                    value = {phone} onChange = { (e) =>setPhone(e.target.value)} required></input>
                 </div>
                
             <div>

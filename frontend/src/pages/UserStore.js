@@ -71,6 +71,8 @@ function UserStore() {
     error: errorUnpostProduct,
     success: sucessUnpostProduct,
   } = unpostProduct;
+
+
   return (
     <div>
       <div className="row top bottom">
@@ -234,7 +236,7 @@ function UserStore() {
 
       <div className="row center">
         {userProducts &&
-          userProducts.map((product, postId) => (
+          userProducts.map((product) => (
             <div key={product._id} className="card">
               <Link to={`/product/${product._id}`}>
                 {/* image size should be 680px by 830px */}
@@ -252,7 +254,7 @@ function UserStore() {
                   rating={product.rating}
                   numReviews={product.numReviews}
                 />
-                <div className="price">${product.price}</div>
+                <div className="price">#{product.price}</div>
 
                 <div>
                 

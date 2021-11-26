@@ -46,7 +46,7 @@ function BasketPage(props) {
             
             <div className ="col-2">
                 <h1>Shopping Basket</h1>
-                {!proceed && <p className="danger">Cannot buy from two different stores at a time</p>}
+                {!proceed && <p className="danger">Sorry, we discourage buying from more than one store/seller at a time. You can buy all your items from one store or order them seperately. Thanks.</p>}
                 {
                     basketItems.length === 0? 
                     <MessageBox>Basket is empty. <Link to="/">Go Shopping</Link> </MessageBox>:
@@ -58,6 +58,7 @@ function BasketPage(props) {
                                         <div className ="row">
                                             <div>
                                                 <img src = { item.image } alt = { item.name } className="small"></img>
+                                                <Link to ={`/store/${item.storeId}`}><p>View store</p></Link>
                                             </div>
                                             <div className ="min-30">
                                                 <Link to = {`/product/${item.product}`}>{item.name}</Link>

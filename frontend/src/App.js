@@ -22,6 +22,8 @@ import EditStore from './pages/EditStore';
 import UpdateProduct from './pages/UpdateProduct';
 import DeleteProduct from './pages/DeleteProduct';
 import paystack from './pages/PayStack';
+import CustomerOrders from './pages/CustomerOrders';
+
 
 
 
@@ -78,7 +80,12 @@ function App() {
                      <Link to ={userInfo.isSeller? '/userstore':'/createstore'}>{userInfo.isSeller? 'User Store':"Create Store"}</Link>
                     </li>
                     <li>
-                        <Link to ="/orderhistory">Order History</Link>
+                        <Link to ="/orderhistory">My Orders</Link>
+                    </li>
+                    <li>
+                        {
+                            userInfo.isSeller && <Link to ="/orderedproducts">Customer Orders</Link>
+                        }
                     </li>
                     <li>
                     <Link to ="#logout" onClick= { logoutHandler }> Logout </Link>
@@ -96,6 +103,7 @@ function App() {
         </div>
     </header>
     <main>
+    <Route path = '/orderedproducts' component = { CustomerOrders } ></Route>
     <Route path = '/paystack' component = { paystack } ></Route>
     <Route path = '/delete/:id' component = { DeleteProduct } ></Route>
     <Route path = '/update/:id' component = { UpdateProduct } ></Route>

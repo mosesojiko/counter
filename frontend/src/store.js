@@ -2,7 +2,7 @@ import {compose, applyMiddleware, createStore, combineReducers } from 'redux'
 import thunk from 'redux-thunk';
 import { basketReducer } from './reducers/basketReducer';
 import { createOrderReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from './reducers/orderReducers';
-import { createProductReducer, editPostedProductReducer, findProductForUpdateReducer, getAllProductReducer, getProductDetailsReducers, getUserProductsReducer, unPostedProductReducer, updateUserProductReducer } from './reducers/productReducers';
+import { createProductReducer, editPostedProductReducer, findProductForUpdateReducer, getAllProductReducer, getOrderedProductsReducer, getProductDetailsReducers, getUserProductsReducer, orderedProductReducer, unPostedProductReducer, updateUserProductReducer } from './reducers/productReducers';
 import { createStoreReducer, editPostedStoreReducer, editStoreReducers, getAllStoresReducer, getSingleStoreReducers, getUserStoreReducers, unPostedStoreReducer } from './reducers/storeReducers';
 import { updateUserCreateStoreReducer, userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducer';
 
@@ -46,6 +46,8 @@ const reducer = combineReducers({
     updateProduct: updateUserProductReducer,
     postedProduct: editPostedProductReducer,
     unpostProduct: unPostedProductReducer,
+    productOrdered: orderedProductReducer,
+    customerOrders: getOrderedProductsReducer,
 })
 //to show store in the console
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

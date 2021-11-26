@@ -25,6 +25,12 @@ import {
   UNPOST_PRODUCT_REQUEST,
   UNPOST_PRODUCT_SUCCESS,
   UNPOST_PRODUCT_FAIL,
+  UPDATE_ORDERED_PRODUCT_REQUEST,
+  UPDATE_ORDERED_PRODUCT_SUCCESS,
+  UPDATE_ORDERED_PRODUCT_FAIL,
+  ORDERED_PRODUCTS_REQUEST,
+  ORDERED_PRODUCTS_SUCCESS,
+  ORDERED_PRODUCTS_FAIL,
 } from "../constants/productConstants";
 
 //create a product
@@ -299,5 +305,58 @@ export const unPostedProduct = (id) => async(dispatch, getState) => {
       const message = error.response && error.response.data.message?
       error.response.data.message : error.message;
       dispatch({type: UNPOST_PRODUCT_FAIL, payload: message})
+  }
+}
+
+
+//update ordered products
+export const orderedProduct = (id) => async(dispatch) => {
+  dispatch({
+      type: UPDATE_ORDERED_PRODUCT_REQUEST,
+      payload: id
+  })
+  
+  try {
+      const { data } = await Axios.put(`/api/v1/product/placeorder`, id)
+      dispatch({
+          type: UPDATE_ORDERED_PRODUCT_SUCCESS,
+          payload: data
+      })
+      
+  } catch (error) {
+      const message = error.response && error.response.data.message?
+      error.response.data.message : error.message;
+      dispatch({type: UPDATE_ORDERED_PRODUCT_FAIL, payload: message})
+  }
+}
+
+
+//get user products
+export const getOrderedProducts = () => async (dispatch, getState) => {
+  dispatch({
+    type: ORDERED_PRODUCTS_REQUEST,
+  });
+  //get userInfo
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.get("/api/v1/product/orderedproducts", {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    });
+    dispatch({
+      type: ORDERED_PRODUCTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDERED_PRODUCTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
   }
 }

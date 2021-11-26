@@ -11,6 +11,9 @@ import {
     LIST_OF_PRODUCTS_FAIL, 
     LIST_OF_PRODUCTS_REQUEST, 
     LIST_OF_PRODUCTS_SUCCESS, 
+    ORDERED_PRODUCTS_FAIL, 
+    ORDERED_PRODUCTS_REQUEST, 
+    ORDERED_PRODUCTS_SUCCESS, 
     POST_PRODUCT_FAIL, 
     POST_PRODUCT_REQUEST, 
     POST_PRODUCT_SUCCESS, 
@@ -20,6 +23,10 @@ import {
     UNPOST_PRODUCT_FAIL,
     UNPOST_PRODUCT_REQUEST,
     UNPOST_PRODUCT_SUCCESS,
+    UPDATE_ORDERED_PRODUCT_FAIL,
+    UPDATE_ORDERED_PRODUCT_REQUEST,
+    UPDATE_ORDERED_PRODUCT_RESET,
+    UPDATE_ORDERED_PRODUCT_SUCCESS,
     UPDATE_PRODUCT_FAIL,
     UPDATE_PRODUCT_REQUEST,
     UPDATE_PRODUCT_RESET,
@@ -141,7 +148,7 @@ export const findProductForUpdateReducer =  (state = {loading:true, product: {}}
 
 
 
-//reducer to update user profile
+//reducer to update user products
 export const updateUserProductReducer = (state = {}, action) =>{
     switch(action.type){
         case UPDATE_PRODUCT_REQUEST:
@@ -205,3 +212,48 @@ export const unPostedProductReducer = (state = {}, action) =>{
             return state;
     }
 }
+
+
+//reducer to update ordered products
+export const orderedProductReducer = (state = {}, action) =>{
+    switch(action.type){
+        case UPDATE_ORDERED_PRODUCT_REQUEST:
+            return { loading: true};
+
+        case UPDATE_ORDERED_PRODUCT_SUCCESS:
+            return { loading: false, success: true };
+            
+        case UPDATE_ORDERED_PRODUCT_FAIL: 
+            return { loading: false, error: action.payload };
+
+        case UPDATE_ORDERED_PRODUCT_RESET:
+            return {};    
+            
+        default : 
+         return state;   
+    }
+}
+
+
+//get ordered products reducers
+export const getOrderedProductsReducer = (state = {loading:true, orderedProducts:[]}, action) =>{
+    switch(action.type) {
+        case ORDERED_PRODUCTS_REQUEST:
+            return {
+                loading: true
+            };
+        case ORDERED_PRODUCTS_SUCCESS:
+            return {
+                loading: false,
+                orderedProducts: action.payload
+            }
+        case ORDERED_PRODUCTS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state
+    }
+}
+
