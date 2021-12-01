@@ -5,6 +5,7 @@ import { createOrderReducer, orderDetailsReducer, orderMineListReducer, orderPay
 import { createProductReducer, editPostedProductReducer, findProductForUpdateReducer, getAllProductReducer, getOrderedProductsReducer, getProductDetailsReducers, getSoldProductsReducer, getUserProductsReducer, orderedProductReducer, paidProductReducer, unPostedProductReducer, updateUserProductReducer } from './reducers/productReducers';
 import { createStoreReducer, editPostedStoreReducer, editStoreReducers, getAllStoresReducer, getSingleStoreReducers, getUserStoreReducers, unPostedStoreReducer } from './reducers/storeReducers';
 import { updateUserCreateStoreReducer, userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducer';
+import { createWidthdrawReducer, getWidthdrwalsReducer } from './reducers/widthdrawReducer';
 
 
 const initialState = {
@@ -50,6 +51,8 @@ const reducer = combineReducers({
     customerOrders: getOrderedProductsReducer,
     productPaid: paidProductReducer,
     productSold: getSoldProductsReducer,
+    widthdrawal: createWidthdrawReducer,
+    myWidthdraws: getWidthdrwalsReducer
 })
 //to show store in the console
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

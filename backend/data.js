@@ -172,7 +172,8 @@ const data = {
             image: "/stores/store6.jpg",
             description: "We produce bread"
         }
-    ]
+    ],
+    
 }
 
 // eslint-disable-next-line no-undef

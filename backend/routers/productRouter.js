@@ -273,6 +273,7 @@ productRouter.put('/paidproducts', expressAsyncHandler( async(req, res) => {
     product.isPaid = true;
     product.isSold = true
     product.isPaidAt = Date.now()
+    product.buyerEmail = req.body.buyerEmail
   }
   const paidProduct = await product.save();
   res.json(paidProduct);

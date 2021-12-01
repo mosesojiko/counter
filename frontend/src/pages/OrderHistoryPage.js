@@ -6,6 +6,11 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 
 function OrderHistoryPage(props) {
+
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
+    console.log(userInfo);
+    
     const orderMineList = useSelector(state => state.orderMineList);
     const { loading, error, orders } = orderMineList
 

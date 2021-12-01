@@ -20,11 +20,11 @@ function UserStore() {
 
   //get userstore from redux store
   const userStoreDetails = useSelector((state) => state.userStoreDetails);
-  const { userStore } = userStoreDetails;
+  const { loading, error, userStore } = userStoreDetails;
 
   //get user products from redux store
   const userproducts = useSelector((state) => state.userproducts);
-  const { userProducts } = userproducts;
+  const {loading: loadingProduct, error: errorProduct, userProducts } = userproducts;
   console.log(userProducts);
 
   const dispatch = useDispatch();
@@ -75,6 +75,10 @@ function UserStore() {
 
   return (
     <div>
+      {loading && <LoadingBox></LoadingBox>}
+                {error && (
+                  <MessageBox variant="danger">{error}</MessageBox>
+                )}
       <div className="row top bottom">
         <div className="col-1">
           <div className="profile-card">
@@ -106,10 +110,12 @@ function UserStore() {
                   </div>
                 </div>
                 <div className="profile-links">
-                  <Link to="#">
-                    <i class="fa fa-instagram"></i>
+                  
+                  <Link to="/chat">
+                    <img className="chat-image" src ="/stores/chat1.png" alt="chat-me" />Chat me
                   </Link>
-                  <Link to="#">
+                 
+                  {/* <Link to="#">
                     <i class="fa fa-twitter"></i>
                   </Link>
                   <Link to="#">
@@ -117,7 +123,7 @@ function UserStore() {
                   </Link>
                   <Link to="#">
                     <i class="fa fa-facebook"></i>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </div>
@@ -178,9 +184,21 @@ function UserStore() {
                     Store posted to stores page successfully.
                   </MessageBox>
                 )}
-                <button className="primary" type="submit" onClick={handlePost}>
-                  Post store
-                </button>
+                {
+                 userStore && userStore.isPosted? 
+                 (<button
+                  className="primary"
+                  type="submit"
+                  onClick={handleUnpost}
+                >
+                  Unpost store
+                </button>):
+                (<button className="primary" type="submit" onClick={handlePost}>
+                Post store
+              </button>)
+
+                }
+                
                 {loadingUnpost && <LoadingBox></LoadingBox>}
                 {errorUnpost && (
                   <MessageBox variant="danger">{errorUnpost}</MessageBox>
@@ -190,13 +208,6 @@ function UserStore() {
                     Store removed from stores page successfully.
                   </MessageBox>
                 )}
-                <button
-                  className="primary"
-                  type="submit"
-                  onClick={handleUnpost}
-                >
-                  Unpost store
-                </button>
               </div>
             </div>
           </div>
@@ -207,6 +218,10 @@ function UserStore() {
         <h2 className="store-name">
           Checkout list of my items below for your shopping pleasure.
         </h2>
+        {loadingProduct && <LoadingBox></LoadingBox>}
+                {errorProduct && (
+                  <MessageBox variant="danger">{errorProduct}</MessageBox>
+                )}
       </div>
       <div>
         {
@@ -249,6 +264,7 @@ function UserStore() {
               <div className="card-body">
                 <Link to={`/product/${product._id}`}>
                   <h2>{product.name}</h2>
+                  {product.isSold && <h3 className="sold">Item Sold</h3>}
                 </Link>
                 <Rating
                   rating={product.rating}
@@ -257,15 +273,20 @@ function UserStore() {
                 <div className="price">#{product.price}</div>
 
                 <div>
-                
-                  <button className="primary" type="submit"
+                {
+                  product.isPosted? 
+                  (<button className="primary" type="submit"
+                  onClick ={() =>  dispatch(unPostedProduct({ id: product._id }))}>
+                    unPost
+                  </button>):
+                  (
+                    <button className="primary" type="submit"
                   onClick={() =>dispatch(editPostedProduct({ id: product._id }))}>
                     Post
                   </button>
-                  <button className="primary" type="submit"
-                  onClick ={() =>  dispatch(unPostedProduct({ id: product._id }))}>
-                    unPost
-                  </button>
+                  )
+                }
+                  
                   <Link to={`/update/${product._id}`}>
                     <button className="primary">Edit</button>
                   </Link>

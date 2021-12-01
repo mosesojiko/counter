@@ -19,13 +19,13 @@ import {
 
 
 // user register function
-export const register = (name, email, password) => async (dispatch) => {
+export const register = (name, email, password, image) => async (dispatch) => {
     dispatch({
         type: USER_REGISTER_REQUEST,
-        payload: {name, email, password}
+        payload: {name, email, password, image}
     });
     try {
-        const { data } = await Axios.post('/api/v1/user/register', {name, email, password});
+        const { data } = await Axios.post('/api/v1/user/register', {name, email, password, image});
         dispatch({
             type: USER_REGISTER_SUCCESS,
             payload: data

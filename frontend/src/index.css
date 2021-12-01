@@ -361,7 +361,7 @@ p.title {
 /* store */
 /* border bottom */
 .bottom {
-  border-bottom: 2px dotted #023c3f;
+  border-bottom: 2px dotted #203040;
   padding-bottom: 20px;
 }
 .store-image {
@@ -380,4 +380,18 @@ p.title {
 }
 .description > h2 {
   text-align: center;
+}
+
+.sold {
+  color: #203040;
+  border: 2px solid red;
+  outline: 1px solid #203040;
+  text-align: center;
+  width: 50%
+}
+.chat-image {
+  width: 40px;
+  height: 40px;
+  margin: 10px 0px;
+  color: #023c3f;
 }

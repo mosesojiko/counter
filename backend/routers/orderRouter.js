@@ -10,7 +10,7 @@ const orderRouter = express.Router();
 //router to get history of orders
 orderRouter.get('/mine', isAuth, expressAsyncHandler(async(req, res)=>{
     const orders = await Order.find({user: req.user._id});
-    res.send(orders)
+    res.json(orders)
 }))
 
 

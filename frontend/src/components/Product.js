@@ -13,6 +13,7 @@ function Product(props) {
       <div className="card-body">
         <Link to={`/product/${product._id}`}>
           <h2>{product.name}</h2>
+          {product.isSold && <h3 className="sold">Item Sold</h3>}
         </Link>
         <h2>{product.storeCity}</h2>
         <Rating rating={product.rating} numReviews={product.numReviews} />

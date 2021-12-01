@@ -15,7 +15,8 @@ userRouter.post('/register', expressAsyncHandler( async(req, res) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        image: req.body.image 
     });
     const existingUser = await User.findOne({email: req.body.email});
     if(existingUser){
@@ -30,6 +31,7 @@ userRouter.post('/register', expressAsyncHandler( async(req, res) => {
         email: createdUser.email,
         isAdmin: createdUser.isAdmin,
         isSeller: createdUser.isSeller,
+        image: createdUser.image,
         token: generateToken(createdUser)
     })
 }))

@@ -98,7 +98,6 @@ export const payOrder = (order, paymentResult, sellerEmail ) => async (dispatch,
     }
 }
 
-//ACTION FOR ORDER HISTORY
 //return my orders
 export const listOrderMine = () =>async(dispatch, getState) =>{
     dispatch({

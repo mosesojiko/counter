@@ -103,7 +103,7 @@ function OrderPage(props) {
 
           //update paid products
         order.orderItems.map((x) => {
-            return dispatch(paidProduct({id: x.product }))
+            return dispatch(paidProduct({id: x.product, buyerEmail:email }))
         });
       }
 

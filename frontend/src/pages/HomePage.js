@@ -12,6 +12,7 @@ function HomePage() {
  const dispatch = useDispatch();
   const getProducts = useSelector(state => state.getProducts)
   const { loading, error, products } = getProducts;
+  console.log(products)
    useEffect(()=>{
       dispatch(getAllProducts())
    }, [dispatch] )
