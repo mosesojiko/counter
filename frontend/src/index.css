@@ -389,9 +389,52 @@ p.title {
   text-align: center;
   width: 50%
 }
+/* Chat */
 .chat-image {
   width: 40px;
   height: 40px;
   margin: 10px 0px;
   color: #023c3f;
+}
+
+.chat-search-result {
+  display: flex;
+  align-items: center;
+  margin-top:10px;
+  padding: 5px;
+  border-bottom: 1px dotted gray;
+  height: 60px;
+  background-color: #f8f8f8;
+  color:black;
+}
+.chat-search-result > div {
+  margin: 5px;
+}
+.small-chat-img {
+  width: 50px;
+  border-radius: 10px;
+}
+.mychats {
+  display: flex;
+  width: 100%;
+  padding: 5px;
+  background-color: #f8f8f8;
+  color: black;
+  height: 90vh;
+
+}
+.mychats-1 {
+  flex: 0.3;
+  border-right: 2px solid gray;
+  padding: 5px;
+}
+.mychats-box {
+  flex: 0.7;
+  padding-left: 5px;
+}
+.show {
+  display: block
+}
+.hide {
+  display: none
 }

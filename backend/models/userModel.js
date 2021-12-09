@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
     phone: { type: String },
     businessEmail: { type: String },
     image: {
-        type: String,
+      type: String,
       default:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYmlp9JDeNMaFZzw9S3G1dVztGqF_2vq9nA&usqp=CAU",
     },

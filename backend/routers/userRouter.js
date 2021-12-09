@@ -10,13 +10,14 @@ const { isAuth } = require('../utils/isAuth.js');
 
 
 
+
 // register router
 userRouter.post('/register', expressAsyncHandler( async(req, res) => {
     const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8),
-        image: req.body.image 
+      name: req.body.name,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+      image: req.body.image 
     });
     const existingUser = await User.findOne({email: req.body.email});
     if(existingUser){
@@ -36,12 +37,21 @@ userRouter.post('/register', expressAsyncHandler( async(req, res) => {
     })
 }))
 
+
+
 //get users
 userRouter.get('/find', expressAsyncHandler( async(req, res)=> {
     const findUsers = await User.find({});
     res.json(findUsers);
 
 }));
+
+//find chat users
+userRouter.get('/chat', isAuth, expressAsyncHandler(async (req, res) => {
+    const users = await User.find({name: { $regex: req.query.search, $options: "i" }});
+    res.json(users)
+   
+}))
 
 //Login router
 

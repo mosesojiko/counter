@@ -1,6 +1,7 @@
 import {compose, applyMiddleware, createStore, combineReducers } from 'redux'
 import thunk from 'redux-thunk';
 import { basketReducer } from './reducers/basketReducer';
+import { createChatReducer, getChatsReducer } from './reducers/chatReducer';
 import { createOrderReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from './reducers/orderReducers';
 import { createProductReducer, editPostedProductReducer, findProductForUpdateReducer, getAllProductReducer, getOrderedProductsReducer, getProductDetailsReducers, getSoldProductsReducer, getUserProductsReducer, orderedProductReducer, paidProductReducer, unPostedProductReducer, updateUserProductReducer } from './reducers/productReducers';
 import { createStoreReducer, editPostedStoreReducer, editStoreReducers, getAllStoresReducer, getSingleStoreReducers, getUserStoreReducers, unPostedStoreReducer } from './reducers/storeReducers';
@@ -52,7 +53,9 @@ const reducer = combineReducers({
     productPaid: paidProductReducer,
     productSold: getSoldProductsReducer,
     widthdrawal: createWidthdrawReducer,
-    myWidthdraws: getWidthdrwalsReducer
+    myWidthdraws: getWidthdrwalsReducer,
+    chatCreate: createChatReducer,
+    getMyChats: getChatsReducer,
 })
 //to show store in the console
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

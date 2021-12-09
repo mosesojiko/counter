@@ -63,6 +63,9 @@ function App() {
             <Link to="/stores">Stores</Link>
             <Link to="/">Products</Link>
             <Link to="/guide">Guide</Link>
+            {
+              userInfo && <Link to="/chatpage">Chat</Link>
+            }
           </div>
           <div>
             <Link to="/basket/:id">
