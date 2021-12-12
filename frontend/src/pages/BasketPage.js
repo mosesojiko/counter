@@ -78,7 +78,7 @@ function BasketPage(props) {
                                                 </select>
                                             </div>
                                             <div>
-                                                {item.price}
+                                                #{item.price}
                                             </div>
                                             <div>
                                                 <button type="button" onClick = {() => removeFromBasketHandler(item.product)}>

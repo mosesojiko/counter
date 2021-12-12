@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { createChat, getChats } from '../actions/chatActions';
+import { createMessage, getMessages } from '../actions/messageActions';
+import ScrollableChat from '../components/ScrollableChat';
+import './ChatPage.css'
+//import styled from "styled-components";
 
 
 function ChatPage() {
@@ -13,23 +17,46 @@ function ChatPage() {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const [selectedChat, setSelectedChat] = useState('')
-  const [disp, setDisp ] = useState('')
+  const [selectedChat, setSelectedChat] = useState("");
+  const [show, setShow] = useState("");
+  const [chatNow, setChatNow] = useState();
+  const [newMessage, setNewMessage] = useState();
+ 
+  //npm install react-scrollable-feed, used for the Scrollable component
   
-  const dispatch = useDispatch()
+
+  const dispatch = useDispatch();
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   //get create chat from redux store
-  const chatCreate = useSelector(state => state.chatCreate);
-  const {loading: loadingCreate, error: errorCreate, success: successCreate} = chatCreate
-
+  const chatCreate = useSelector((state) => state.chatCreate);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+  } = chatCreate;
 
   //get user/my chats from redux store
-  const getMyChats = useSelector(state => state.getMyChats);
-  const { loading: loadingChats, error: errorChat, myChats } = getMyChats
-  console.log(myChats)
+  const getMyChats = useSelector((state) => state.getMyChats);
+  const { loading: loadingChats, error: errorChat, myChats } = getMyChats;
+  console.log(myChats);
+
+  //create message from redux store
+  const messageCreate = useSelector((state) => state.messageCreate);
+  const { loading: loadCreateMessage, error: errorCreateMessage, messages, success} =
+    messageCreate;
+
+  console.log(messages)
+  //get all message from a chat from redux store
+  const getAllMessages = useSelector((state) => state.getAllMessages);
+  const {
+    loading: loadingMessage,
+    error: errorMessage,
+    myMessages,
+  } = getAllMessages;
+
   // useEffect(() => {
   //   const getChats = async () => {
   //     const { data } = await Axios.get("/api/v1/user/chat", {
@@ -50,69 +77,126 @@ function ChatPage() {
       });
       setLoading(false);
       setSearchResult(data);
-      setDisp("show")
+      setShow("show");
     } catch (error) {
       setError(error.message);
     }
   };
   console.log(searchResult);
-  //<h1>Chat Page</h1>;
-  //{
-  // chats.map(
-  //   (chat) =>
-  //    chat._id !== userInfo._id && <div key={chat._id}>{chat.name}</div>
-  //);
-  //}
- 
   
+
   useEffect(() => {
     if (selectedChat) {
       dispatch(createChat(selectedChat._id));
-      setDisp("hide");
+      setShow("hide");
     }
-    
-  },[dispatch, searchResult, selectedChat])
-   
+  }, [dispatch, searchResult, selectedChat]);
 
   if (successCreate) {
-    window.location = '/chatpage'
+    window.location = "/chatpage";
   }
 
   useEffect(() => {
-    dispatch(getChats())
-  },[dispatch])
+    dispatch(getChats());
+  }, [dispatch]);
 
+  //typing handler
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value)
+    //typing indicator logic here
+  };
+
+  //send message
+  // const sendMessage = async() => {
+  //   try {
+  //     if (chatNow) {
+  //       setLoadingMessage(true)
+  //       const { data } = await Axios.get(
+  //         `/api/v1/message`,
+  //         {
+  //           content: newMessage,
+  //           chatId: chatNow._id,
+  //         },
+  //         {
+  //           headers: { Authorization: `Bearer ${userInfo.token}` },
+  //         }
+  //       );
+  //       setLoadingMessage(false)
+  //       console.log(data);
+  //       setNewMessage("");
+  //       setMessages([...messages, data]);
+  //     }
+      
+  //   } catch (error) {
+  //     setErrorMessage(error.message);
+  //   }
+  //  };
+ 
+  //send message with keybord
+  // const handleKeyDown = async (event) => {
+  //   if (event.key === "enter" && newMessage) {
+  //     try {
+  //       const { data } = await Axios.get(`/api/v1/message`, {
+  //         content: newMessage,
+  //         chatId: chatNow._id
+  //       }, {
+  //         headers: { Authorization: `Bearer ${userInfo.token}` },
+  //       });
+  //       console.log(data)
+  //       setNewMessage("");
+  //       setMessages([...messages, data])
+  //     } catch (error) {
+  //       setError(error.message);
+  //     }
+  //   }
+  // }
+  const sendMessage = () => {
+    if (chatNow) {
+      dispatch(createMessage(newMessage, chatNow._id));
+      setNewMessage('')
+    }
+  }
+
+  //call the function to get all messages from a chat
+  useEffect(() => {
+    if (chatNow || success) {
+      dispatch(getMessages(chatNow._id))
+    }
+  }, [chatNow, dispatch, success])
+  console.log(myMessages)
+  console.log(myChats)
+  
   return (
     <div>
       <div className="row around">
-        <div>
-          <div class="input-group">
+        <div className="search">
+          <div className="search-input">
             <input
               type="text"
-              class="form-control"
-              placeholder="Search User"
+              placeholder="Search by name"
               onChange={(e) => setSearch(e.target.value)}
             />
-            <div class="input-group-append">
-              <button
-                class="btn btn-success"
-                type="button"
-                onClick={handleSearch}
-              >
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
+          </div>
+          <div className="search-button">
+            <button type="button" onClick={handleSearch}>
+              <i class="fa fa-search"></i>
+            </button>
           </div>
         </div>
 
-        <div>
-          <i class="fa fa-bell"></i>
-          {userInfo.name}
+        <div className="chat-profile">
+          <span>
+            <i class="fa fa-bell"></i>
+          </span>
+          <span>
+            <img className="small-chat-img" src={userInfo.image} alt="" />
+          </span>
+          <span>{userInfo.name}</span>
         </div>
       </div>
       {loadingCreate && <LoadingBox></LoadingBox>}
       {errorCreate && <MessageBox variant="danger">{errorCreate}</MessageBox>}
-      <div className={disp}>
+      <div className={show}>
         {loading && <LoadingBox></LoadingBox>}
         {error && <MessageBox variant="danger">{error}</MessageBox>}
         {searchResult?.map(
@@ -143,24 +227,71 @@ function ChatPage() {
           {loadingChats && <LoadingBox></LoadingBox>}
           {errorChat && <MessageBox variant="danger">{errorChat}</MessageBox>}
           <h3>My Chats</h3>
-          {myChats?.map(
-            (mychat) =>
-              mychat.users[1]._id !== userInfo._id && (
-                <div key={mychat._id} className="chat-search-result">
-                  <div>
-                    <img
-                      className="small-chat-img"
-                      src={mychat.users[1].image}
-                      alt={mychat.users[1].name}
-                    />
-                  </div>
-                  <div>{mychat.users[1].name}</div>
-                </div>
-              )
-          )}
+          {myChats?.map((mychat) => (
+            <div
+              key={mychat._id}
+              className="chat-search-result"
+              onClick={() => setChatNow(mychat)}
+            >
+              {mychat.users.map(
+                (chat) =>
+                  chat._id !== userInfo._id && (
+                    <>
+                      <div key={chat._id}>
+                        <img
+                          className="small-chat-img"
+                          src={chat.image}
+                          alt={chat.name}
+                        />
+                      </div>
+                      <div>{chat.name}</div>
+                    </>
+                  )
+              )}
+            </div>
+          ))}
         </div>
         <div className="mychats-box">
           <h3>Chat Messages</h3>
+          {/* <i class="fa fa-arrow-left"></i> */}
+          {chatNow ? (
+            <>
+              {loadCreateMessage && <LoadingBox></LoadingBox>}
+              {errorCreateMessage && (
+                <MessageBox variant="danger">{errorCreateMessage}</MessageBox>
+              )}
+              {loadingMessage && <LoadingBox></LoadingBox>}
+              {errorMessage && (
+                <MessageBox variant="danger">{errorMessage}</MessageBox>
+              )}
+
+              <div className="messages">
+                <ScrollableChat messages={myMessages} />
+              </div>
+
+              <div class="send chatbottom">
+                <div className='sendInput'>
+                  <input
+                    type="text"
+                    placeholder="Enter your message"
+                    value={newMessage}
+                    onChange={typingHandler}
+                  />
+                </div>
+                <div className='sendButton'>
+                  <button
+                    class="primary"
+                    type="button"
+                    onClick={sendMessage}
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <h4>Click on a user to start chatting.</h4>
+          )}
         </div>
       </div>
     </div>

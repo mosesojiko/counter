@@ -12,7 +12,8 @@ function RegisterPage(props) {
     const [ password, setPassword ] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [image, setImage] = useState('')
-    const [ show, setShow ] = useState(false)
+    const [show, setShow] = useState(false)
+    const [showConfirm, setShowConfirm] = useState(false);
 
     const redirect = props.location.search? props.location.search.split('=')[1] : '/';
 
@@ -20,8 +21,10 @@ function RegisterPage(props) {
     const userRegister = useSelector((state) => state.userRegister)
     const { userInfo, loading, error } = userRegister;
 
-    const dispatch = useDispatch();
-    const handleClick = () => setShow(!show)
+  const dispatch = useDispatch();
+  //view password in input field
+  const handleClick = () => setShow(!show)
+  const ConfirmPassword = () => setShowConfirm(!showConfirm)
 
     //function to submit the form
     const handleSummit = (e) => {
@@ -67,25 +70,44 @@ function RegisterPage(props) {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
           <div>
             <label htmlFor="password">Password</label>
-            <input
-                        type={show? "test":"password"}
-              id="password"
-              placeholder="Enter your password"
-              required
-              onChange={(e) => setPassword(e.target.value)}
-                    /><button type="button"  onClick={ handleClick}>{ show? "Hide":"Show"}</button>
+            <div className="register-password">
+              <input
+                type={show ? "test" : "password"}
+                id="password"
+                placeholder="Enter your password"
+                required
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button type="button" onClick={handleClick}>
+                {show ? (
+                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                ) : (
+                  <i class="fa fa-eye"></i>
+                )}
+              </button>
+            </div>
           </div>
           <div>
             <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Enter confirm password"
-              required
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+            <div className="register-password">
+              <input
+                type={showConfirm ? "test" : "password"}
+                id="confrimPassword"
+                placeholder="Confirm password"
+                required
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <button type="button" onClick={ConfirmPassword}>
+                {showConfirm ? (
+                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                ) : (
+                  <i class="fa fa-eye"></i>
+                )}
+              </button>
+            </div>
           </div>
           <div>
             <p>Add your photo</p>

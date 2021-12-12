@@ -8,10 +8,10 @@ import MessageBox from '../components/MessageBox';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 import { editStore } from '../actions/storeActions';
 
-function ProfilePage() {
+function ProfilePage(props) {
     const [name, setName ] = useState('')
     const [phone, setPhone ] = useState('')
-    const [businessEmail, setBusinessEmail ] = useState('')
+    const [address, setAddress ] = useState('')
     const [image, setImage ] = useState('')
 
     const userLogin = useSelector(state =>state.userLogin);
@@ -40,7 +40,7 @@ function ProfilePage() {
             //fill the input fields with user details
             setName(user.name);
             setPhone(user.phone)
-            setBusinessEmail(user.businessEmail)
+            setAddress(user.address)
             setImage(user.image)
         }
 
@@ -57,19 +57,24 @@ function ProfilePage() {
         //     }))
         // }
         dispatch(updateUserProfile({
-                 userId: user._id, name, phone, businessEmail, image
+                 userId: user._id, name, phone, address, image
                  }))
         //also update store with the new user details
         dispatch(editStore({
-            id: userStore._id, creatorName: name, creatorPhone: phone, creatorEmail:businessEmail, creatorImage:image
+            id: userStore._id, creatorName: name, creatorPhone: phone, creatorAddress:address, creatorImage:image
         }));
-                 //redirect the user to his store page
-                //  props.history.push('/userstore')
-             }
+    }
+    if (successUpdate) {
+        if (userInfo.isSeller) {
+                props.history.push("/userstore");
+        } else {
+            props.history.push('/')
+            }
+    }
     return (
         <div>
             <form className ="form" onSubmit = { submitHandler }>
-                <div><h1>User Profile</h1></div>
+                <div><h1>Edit Profile</h1></div>
                 {
                     loading? <LoadingBox></LoadingBox>:
                     error? <MessageBox variant ="danger">{error}</MessageBox>:
@@ -90,9 +95,9 @@ function ProfilePage() {
                         </input>
                     </div>
                     <div>
-                        <lable htmlFor="businessEmail">Business Email</lable>
-                        <input type ="email" id ="email" placeholder="Enter business email"
-                        value ={businessEmail} onChange = {(e) =>setBusinessEmail(e.target.value)}>
+                        <lable htmlFor="address">Address</lable>
+                        <input type ="text" id ="address" placeholder="Enter address"
+                        value ={address} onChange = {(e) =>setAddress(e.target.value)}>
                         </input>
                     </div>
                     <div>

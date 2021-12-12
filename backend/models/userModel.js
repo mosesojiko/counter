@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     isAdmin: { type: Boolean, default: false },
     isSeller: { type: Boolean, default: false },
     phone: { type: String },
-    businessEmail: { type: String },
+    address: { type: String },
     image: {
       type: String,
       default:

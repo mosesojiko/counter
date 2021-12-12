@@ -20,7 +20,7 @@ export const createChatReducer = (state = {}, action) => {
 
 
 
-//create chat reducer
+//get chat reducer
 export const getChatsReducer = (state = { myChats: []}, action) => {
     switch (action.type) {
       case GET_MY_CHAT_REQUEST:

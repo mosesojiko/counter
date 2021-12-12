@@ -10,7 +10,7 @@ import {
 } from "../actions/storeActions";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-import Rating from "../components/Rating";
+
 
 function UserStore() {
   //get login user details from store
@@ -76,15 +76,16 @@ function UserStore() {
   return (
     <div>
       {loading && <LoadingBox></LoadingBox>}
-                {error && (
-                  <MessageBox variant="danger">{error}</MessageBox>
-                )}
+      {error && <MessageBox variant="danger">{error}</MessageBox>}
       <div className="row top bottom">
         <div className="col-1">
           <div className="profile-card">
             <div className="row around">
               <div>
-                <h3>Store owner</h3>
+                <h3>
+                  <span className="name-description">Store owner Name:</span>{" "}
+                  {userInfo.name}
+                </h3>
                 <img
                   className="img medium"
                   src={userStore && userStore.creatorImage}
@@ -93,7 +94,6 @@ function UserStore() {
               </div>
               <div>
                 <div>
-                  <h2>Name: {userStore && userStore.creatorName} </h2>
                   <div className="contact">
                     <p>
                       <span>
@@ -109,13 +109,9 @@ function UserStore() {
                     </p>
                   </div>
                 </div>
-                <div className="profile-links">
-                  
-                  <Link to="/chat">
-                    <img className="chat-image" src ="/stores/chat1.png" alt="chat-me" />Chat me
-                  </Link>
+                {/* <div className="profile-links">
                  
-                  {/* <Link to="#">
+                  <Link to="#">
                     <i class="fa fa-twitter"></i>
                   </Link>
                   <Link to="#">
@@ -123,8 +119,8 @@ function UserStore() {
                   </Link>
                   <Link to="#">
                     <i class="fa fa-facebook"></i>
-                  </Link> */}
-                </div>
+                  </Link>
+                </div> */}
               </div>
             </div>
             <div>
@@ -139,9 +135,10 @@ function UserStore() {
         <div className="col-2">
           <div className="row around">
             <div className="store-image">
-              <h1 className="store-name">
-                Store Name: <strong>{userStore && userStore.name}</strong>{" "}
-              </h1>
+              <h3 className="store-name">
+                <span className="name-description"> Store Name:</span>{" "}
+                <strong>{userStore && userStore.name}</strong>{" "}
+              </h3>
               <img
                 className="img large"
                 src={userStore && userStore.image}
@@ -167,12 +164,32 @@ function UserStore() {
                 Description:{" "}
                 <strong>{userStore && userStore.description}</strong>
               </p>
-              <div>
-                {
+              <div className="store-utils">
+                <p>
                   <Link to="/editstore">
-                    <button className="profile-button">Edit store</button>
+                    <button className="primary">Edit store</button>
                   </Link>
-                }
+                </p>
+
+                <p>
+                  {userStore && userStore.isPosted ? (
+                    <button
+                      className="primary"
+                      type="submit"
+                      onClick={handleUnpost}
+                    >
+                      Unpost store
+                    </button>
+                  ) : (
+                    <button
+                      className="primary"
+                      type="submit"
+                      onClick={handlePost}
+                    >
+                      Post store
+                    </button>
+                  )}
+                </p>
               </div>
               <div>
                 {loadingPost && <LoadingBox></LoadingBox>}
@@ -184,21 +201,7 @@ function UserStore() {
                     Store posted to stores page successfully.
                   </MessageBox>
                 )}
-                {
-                 userStore && userStore.isPosted? 
-                 (<button
-                  className="primary"
-                  type="submit"
-                  onClick={handleUnpost}
-                >
-                  Unpost store
-                </button>):
-                (<button className="primary" type="submit" onClick={handlePost}>
-                Post store
-              </button>)
 
-                }
-                
                 {loadingUnpost && <LoadingBox></LoadingBox>}
                 {errorUnpost && (
                   <MessageBox variant="danger">{errorUnpost}</MessageBox>
@@ -219,9 +222,9 @@ function UserStore() {
           Checkout list of my items below for your shopping pleasure.
         </h2>
         {loadingProduct && <LoadingBox></LoadingBox>}
-                {errorProduct && (
-                  <MessageBox variant="danger">{errorProduct}</MessageBox>
-                )}
+        {errorProduct && (
+          <MessageBox variant="danger">{errorProduct}</MessageBox>
+        )}
       </div>
       <div>
         {
@@ -230,23 +233,23 @@ function UserStore() {
           </Link>
         }
         {loadPostProduct && <LoadingBox></LoadingBox>}
-                {errorPostProduct && (
-                  <MessageBox variant="danger">{errorPostProduct}</MessageBox>
-                )}
-                {successPostProduct && (
-                  <MessageBox variant="success">
-                    Product posted to product page successfully.
-                  </MessageBox>
-                )}
-                {loadingUnpostProduct && <LoadingBox></LoadingBox>}
-                {errorUnpostProduct && (
-                  <MessageBox variant="danger">{errorUnpost}</MessageBox>
-                )}
-                {sucessUnpostProduct && (
-                  <MessageBox variant="success">
-                    Product removed from product page successfully.
-                  </MessageBox>
-                )}
+        {errorPostProduct && (
+          <MessageBox variant="danger">{errorPostProduct}</MessageBox>
+        )}
+        {successPostProduct && (
+          <MessageBox variant="success">
+            Product posted to product page successfully.
+          </MessageBox>
+        )}
+        {loadingUnpostProduct && <LoadingBox></LoadingBox>}
+        {errorUnpostProduct && (
+          <MessageBox variant="danger">{errorUnpost}</MessageBox>
+        )}
+        {sucessUnpostProduct && (
+          <MessageBox variant="success">
+            Product removed from product page successfully.
+          </MessageBox>
+        )}
       </div>
 
       <div className="row center">
@@ -254,7 +257,6 @@ function UserStore() {
           userProducts.map((product) => (
             <div key={product._id} className="card">
               <Link to={`/product/${product._id}`}>
-                {/* image size should be 680px by 830px */}
                 <img
                   className="medium"
                   src={product.image}
@@ -266,33 +268,42 @@ function UserStore() {
                   <h2>{product.name}</h2>
                   {product.isSold && <h3 className="sold">Item Sold</h3>}
                 </Link>
-                <Rating
-                  rating={product.rating}
-                  numReviews={product.numReviews}
-                />
                 <div className="price">#{product.price}</div>
 
-                <div>
-                {
-                  product.isPosted? 
-                  (<button className="primary" type="submit"
-                  onClick ={() =>  dispatch(unPostedProduct({ id: product._id }))}>
-                    unPost
-                  </button>):
-                  (
-                    <button className="primary" type="submit"
-                  onClick={() =>dispatch(editPostedProduct({ id: product._id }))}>
-                    Post
-                  </button>
-                  )
-                }
-                  
-                  <Link to={`/update/${product._id}`}>
-                    <button className="primary">Edit</button>
-                  </Link>
-                  <Link to={`/delete/${product._id}`}>
-                    <button className="primary">Delete</button>
-                  </Link>
+                <div className="store-utils">
+                  <p>
+                    {product.isPosted ? (
+                      <button
+                        className="primary"
+                        type="submit"
+                        onClick={() =>
+                          dispatch(unPostedProduct({ id: product._id }))
+                        }
+                      >
+                        unPost
+                      </button>
+                    ) : (
+                      <button
+                        className="primary"
+                        type="submit"
+                        onClick={() =>
+                          dispatch(editPostedProduct({ id: product._id }))
+                        }
+                      >
+                        Post
+                      </button>
+                    )}
+                  </p>
+                  <p>
+                    <Link to={`/update/${product._id}`}>
+                      <button className="primary">Edit</button>
+                    </Link>
+                  </p>
+                  <p>
+                    <Link to={`/delete/${product._id}`}>
+                      <button className="primary">Delete</button>
+                    </Link>
+                  </p>
                 </div>
               </div>
             </div>

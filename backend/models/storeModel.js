@@ -17,7 +17,7 @@ const storeSchema = new mongoose.Schema(
     isPosted: { type: Boolean, default: false },
     creatorId: { type: String },
     creatorName: { type: String },
-    creatorEmail: { type: String },
+    creatorAddress: { type: String },
     creatorPhone: { type: String },
     creatorImage: { type: String },
     user: {

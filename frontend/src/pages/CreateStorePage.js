@@ -17,6 +17,11 @@ function CreateStore(props) {
  const { userInfo } = userLogin;
  console.log(userInfo)
 
+    if (!userInfo) {
+        window.location = '/login';
+      //props.history.push("/login");
+    }
+
 
 //get user details
 const userDetails = useSelector(state => state.userDetails);
@@ -27,10 +32,7 @@ const userDetails = useSelector(state => state.userDetails);
 // const { success } = userCreateStore
  
 
- if(!userInfo) {
-     props.history.push('/login')
- }
-
+ 
   const [name, setName ] = useState('')
     const [address, setAddress ] = useState('')
     const [city, setCity ] = useState('')

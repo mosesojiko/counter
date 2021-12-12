@@ -69,7 +69,7 @@ userRouter.post('/login', expressAsyncHandler( async(req, res) => {
                 email: user.email,
                 isAdmin: user.isAdmin,
                 isSeller: user.isSeller,
-                businessEmail: user.businessEmail,
+                address: user.address,
                 phone: user.phone,
                 image: user.image,
                 token
@@ -99,23 +99,23 @@ userRouter.put('/profile', isAuth, expressAsyncHandler(async(req, res)=>{
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
         user.phone = req.body.phone || user.phone;
-        user.businessEmail = req.body.businessEmail || user.businessEmail;
+        user.address = req.body.address || user.address;
         user.image = req.body.image || user.image;
         if(req.body.password) {
             user.password = bcrypt.hashSync(req.body.password, 8)
         }
         const updatedUser = await user.save();
         res.json({
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-            isAdmin: updatedUser.isAdmin,
-            isSeller: updatedUser.isSeller,
-            phone: updatedUser.phone,
-            businessEmail: updatedUser.businessEmail,
-            image: updatedUser.image,
-            
-        })
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          isAdmin: updatedUser.isAdmin,
+          isSeller: updatedUser.isSeller,
+          phone: updatedUser.phone,
+          address: updatedUser.address,
+          image: updatedUser.image,
+          token: generateToken(updatedUser),
+        });
     }
 }))
 

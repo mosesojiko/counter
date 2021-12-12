@@ -1,0 +1,93 @@
+
+.search {
+  display: flex;
+}
+.search-input {
+  flex: 0.8;
+}
+.search-button {
+  flex: 0.2
+}
+.chat-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chat-profile > span {
+  margin: 3px;
+}
+.chat-search-result {
+  display: flex;
+  align-items: center;
+  margin-top:10px;
+  padding: 5px;
+  border-bottom: 1px dotted gray;
+  height: 60px;
+  background-color: #f8f8f8;
+  color:black;
+}
+.chat-search-result > div {
+  margin: 5px;
+}
+.small-chat-img {
+  width: 50px;
+  border-radius: 10px;
+}
+.smaller-chat-img {
+  width:30px;
+  max-height: 30px;
+}
+.mychats {
+  display: flex;
+  width: 100%;
+  padding: 5px;
+  background-color: #f8f8f8;
+  color: black;
+min-height: 40vh;
+}
+.mychats-1 {
+  flex: 0.3;
+  border-right: 2px solid gray;
+  padding: 5px;
+}
+.mychats-box {
+  flex: 0.7;
+  padding-left: 5px;
+   position: relative;
+}
+
+.show {
+  display: block
+}
+.hide {
+  display: none
+}
+
+.chatbottom {
+  position: absolute;
+  bottom: 0;
+}
+.messages {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  margin-bottom: 60px;
+}
+.send {
+  display:flex;
+  width: 100%;
+  padding: 5px;
+}
+.sendInput {
+  flex: 0.8
+}
+.sendInput > input {
+  width:100%
+}
+.sendButton {
+  flex: 0.2
+}
+.sendButton > button {
+  width: 100%
+}
