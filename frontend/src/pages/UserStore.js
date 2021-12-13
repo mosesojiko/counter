@@ -24,7 +24,11 @@ function UserStore() {
 
   //get user products from redux store
   const userproducts = useSelector((state) => state.userproducts);
-  const {loading: loadingProduct, error: errorProduct, userProducts } = userproducts;
+  const {
+    loading: loadingProduct,
+    error: errorProduct,
+    userProducts,
+  } = userproducts;
   console.log(userProducts);
 
   const dispatch = useDispatch();
@@ -43,6 +47,14 @@ function UserStore() {
   const handlePost = () => {
     dispatch(editPostedStore({ id: userStore._id }));
   };
+
+  //refresh to update success post
+  if (successPost) {
+    setTimeout(() => {
+      window.location = "/userStore";
+    }, 2000);
+  }
+
   //get unpost store from redux
   const unpostStore = useSelector((state) => state.unpostStore);
   const {
@@ -55,6 +67,12 @@ function UserStore() {
     dispatch(unPostedStore({ id: userStore._id }));
   };
 
+  //reload window to clear the message after 2 seconds
+  if (sucessUnpost) {
+    setTimeout(() => {
+      window.location = "/userStore";
+    }, 2000);
+  }
   //get posted product from redux store
   const postedProduct = useSelector((state) => state.postedProduct);
   const {
@@ -63,7 +81,12 @@ function UserStore() {
     success: successPostProduct,
   } = postedProduct;
 
-
+  //reload products to clear the message and refresh the button
+  if (successPostProduct) {
+    setTimeout(() => {
+      window.location ="/userstore"
+    }, 2000);
+  }
   //get unpost product from redux store
   const unpostProduct = useSelector((state) => state.unpostProduct);
   const {
@@ -72,18 +95,44 @@ function UserStore() {
     success: sucessUnpostProduct,
   } = unpostProduct;
 
+  //reload products to clear the message and refresh the button
+  if (sucessUnpostProduct) {
+    setTimeout(() => {
+      window.location ="/userstore"
+    }, 2000);
+  }
 
   return (
     <div>
       {loading && <LoadingBox></LoadingBox>}
       {error && <MessageBox variant="danger">{error}</MessageBox>}
+      <div className="row around">
+        <div className="home-header">
+          <h4>
+            <Link to="/stores">Stores</Link>
+          </h4>
+          <h4>
+            <Link to="/guide">Guide</Link>
+          </h4>
+          <h4>
+            <Link to="/">Products</Link>
+          </h4>
+        </div>
+        <div>
+          <h4>
+            <Link to="/createproduct">
+              <button className="primary">Add items for sale</button>
+            </Link>
+          </h4>
+        </div>
+      </div>
       <div className="row top bottom">
         <div className="col-1">
           <div className="profile-card">
             <div className="row around">
               <div>
                 <h3>
-                  <span className="name-description">Store owner Name:</span>{" "}
+                  <span className="name-description">Seller Name:</span>{" "}
                   {userInfo.name}
                 </h3>
                 <img
@@ -218,20 +267,18 @@ function UserStore() {
       </div>
 
       <div>
-        <h2 className="store-name">
-          Checkout list of my items below for your shopping pleasure.
-        </h2>
         {loadingProduct && <LoadingBox></LoadingBox>}
         {errorProduct && (
           <MessageBox variant="danger">{errorProduct}</MessageBox>
         )}
       </div>
       <div>
-        {
+        <div className="add-item">
           <Link to="/createproduct">
-            <button className="profile-button">Add items to your store</button>
+            <button className="primary">Add items for sale</button>
           </Link>
-        }
+        </div>
+
         {loadPostProduct && <LoadingBox></LoadingBox>}
         {errorPostProduct && (
           <MessageBox variant="danger">{errorPostProduct}</MessageBox>

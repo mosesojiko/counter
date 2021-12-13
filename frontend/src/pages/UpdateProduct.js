@@ -81,6 +81,14 @@ function UpdateProduct(props) {
         }))
        
     }
+
+    if (success) {
+        setTimeout(() => {
+            dispatch({ type: GET_PRODUCT_FOR_UPDATE_RESET });
+            dispatch({ type: UPDATE_PRODUCT_RESET });
+            window.location ="/userstore"
+        },2000)
+    }
     return (
         <div>
             <form className = "form" onSubmit = {submitHandler} >

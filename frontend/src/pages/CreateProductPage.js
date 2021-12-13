@@ -87,6 +87,11 @@ console.log(productStoreId)
     dispatch(createProduct(name, price, category, numberInStore, image, countInStock, brand, description, sellerName, sellerEmail, sellerId, sellerPhone, productStoreId, storeName, storeAddress, storeCity, storeCountry,{ ...userStore}));
   
   }
+  if (success) {
+    setTimeout(() => {
+      window.location ="/userstore"
+    },2000)
+  }
 
     return (
         <div>

@@ -59,7 +59,7 @@ function App() {
               Mosganda
             </a>
           </div>
-          <div>{userInfo && <Link to="/chatpage">Chat</Link>}</div>
+          
           <div>
             <Link to="/basket/:id">
               Basket
@@ -67,7 +67,7 @@ function App() {
                 <span className="badge">{basketItems.length}</span>
               )}
             </Link>
-            {userInfo ? "" : <Link to="/register">Register</Link>}
+            {userInfo ? <Link to="/chatpage">Chat</Link> : <Link to="/register">Register</Link>}
             {
               /* Show name of user that logged in. Also implement logout */
               userInfo ? (

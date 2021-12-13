@@ -82,7 +82,7 @@ const userDetails = useSelector(state => state.userDetails);
 
   const submitHandler = (e) =>{
     e.preventDefault();
-    dispatch(createStore(name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage, {user:userInfo._id}));
+    dispatch(createStore(name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage));
     //update isSeller
     dispatch(updateUserCreateStore({
         user: user._id

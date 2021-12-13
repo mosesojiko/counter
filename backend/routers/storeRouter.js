@@ -5,6 +5,7 @@ const storeRouter = express.Router();
 
 const Mosgandastore = require('../models/storeModel.js');
 const Product = require('../models/productModel.js');
+const User = require("../models/userModel.js");
 const { isAuth } = require('../utils/isAuth.js');
 
 
@@ -30,30 +31,48 @@ storeRouter.get('/userstore', isAuth, expressAsyncHandler(async(req, res)=>{
 //create a store 
 storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>{
     const { name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage } =
-    req.body;
-
-    const store = new Mosgandastore({
-        name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage, user: req.user._id
-    });
-    const createdStore = await store.save();
-    res.json({
-        _id: createdStore._id,
-        name: createdStore.name,
-        address: createdStore.address,
-        city: createdStore.city,
-        state: createdStore.state,
-        country: createdStore.country,
-        description: createdStore.description,
-        image: createdStore.image,
-        creatorId: createdStore.creatorId,
-        creatorName: createdStore.creatorName,
-        creatorEmail: createdStore.creatorEmail,
-        creatorPhone: createdStore.creatorPhone,
-        creatorImage: createdStore.creatorImage,
-        user: req.user._id,
-        
-    })
+        req.body;
+    
+    const user = await User.findOne({ user: req.user._id });
+    if (user.isSeller) {
+        return res.json({ message: "You have created a store already." })
+    } else {
+        const store = new Mosgandastore({
+          name,
+          address,
+          city,
+          state,
+          country,
+          description,
+          image,
+          creatorId,
+          creatorName,
+          creatorEmail,
+          creatorPhone,
+          creatorImage,
+          user: req.user._id,
+        });
+        const createdStore = await store.save();
+        res.json({
+          _id: createdStore._id,
+          name: createdStore.name,
+          address: createdStore.address,
+          city: createdStore.city,
+          state: createdStore.state,
+          country: createdStore.country,
+          description: createdStore.description,
+          image: createdStore.image,
+          creatorId: createdStore.creatorId,
+          creatorName: createdStore.creatorName,
+          creatorEmail: createdStore.creatorEmail,
+          creatorPhone: createdStore.creatorPhone,
+          creatorImage: createdStore.creatorImage,
+          user: req.user._id,
+        });
   
+    }
+
+    
 }))
 
 //get store details, single store and its product for non logged in user

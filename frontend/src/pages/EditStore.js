@@ -59,14 +59,30 @@ function EditStore(props) {
 
     //form handler function
    const submitHandler= (e) =>{
-    e.preventDefault();
-    dispatch(editStore({
-        id: userStore._id, name, address, city, state, country, description, image
-    }));
-    //redirect the user to his store page
-    props.history.push('/userstore')
+     e.preventDefault();
+     dispatch(
+       editStore({
+         id: userStore._id,
+         name,
+         address,
+         city,
+         state,
+         country,
+         description,
+         image,
+       })
+       );
+        
     }
-
+    if (successEdit) {
+      setTimeout(() => {
+        //reset successEdit when we open editstore for the second time
+        dispatch({ type: Edit_STORE_RESET });
+        dispatch(getUserStore());
+        props.history.push("/userstore");
+      }, 2000);
+    }
+    
     return (
         <div>
             <form className ="form" onSubmit={submitHandler}>

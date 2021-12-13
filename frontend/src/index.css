@@ -434,9 +434,18 @@ p.title {
 
 .name-description {
   color: gray;
+  font-size: 12px;
 
 }
 .store-utils {
+  display: flex;
+  justify-content: space-around;
+}
+.add-item {
+  text-align: center;
+  margin: 10px;
+}
+.delete-product {
   display: flex;
   justify-content: space-around;
 }
