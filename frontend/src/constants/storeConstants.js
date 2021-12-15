@@ -1,6 +1,7 @@
 //create a store constants
 export const CREATE_STORE_REQUEST = "CREATE_STORE_REQUEST";
 export const CREATE_STORE_SUCCESS = "CREATE_STORE_SUCCESS";
+export const CREATE_STORE_RESET = "CREATE_STORE_RESET";
 export const CREATE_STORE_FAIL = "CREATE_STORE_FAIL";
 
 //get store actions

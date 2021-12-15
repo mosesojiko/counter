@@ -94,77 +94,117 @@ console.log(productStoreId)
   }
 
     return (
-        <div>
-          <Link to ="/stores">Stores Page</Link>
-          <Link to ="/">Product Page</Link>
-         
-          <form className = "form" onSubmit={submitHandler}>
+      <div>
+        <div className="row around">
+          <div className="home-header">
+            <h4>
+              <Link to="/stores">Stores</Link>
+            </h4>
+            <h4>
+              <Link to="/">Product Page</Link>
+            </h4>
+          </div>
+          <div>
+            {/* <h4>
+              <Link to="/createstore">Create-Store</Link>
+            </h4> */}
+          </div>
+        </div>
 
-           <div>
-           {/*<pre>{JSON.stringify(imageUrl, null, '\t')}</pre> */}
-           <h1>Create Product</h1>
-           </div>
-           {loading && <LoadingBox></LoadingBox>}
-           { error && <MessageBox variant="danger">{error}</MessageBox> }
-           { success && <MessageBox variant="success">Product created successfully.</MessageBox> }
-            <div>
-                <lable htmlFor="name">Product Name</lable>
-                <input type ="text" id ="name" placeholder="Iphone 3"
-                 onChange = {(e) =>setName( e.target.value)} >   
-                </input>
-           </div>
-           <div>
-                <lable htmlFor="price">Price</lable>
-                <input type ="text" id ="price" placeholder="10000"
-                 onChange = {(e) =>setPrice( e.target.value)} >   
-                </input>
-           </div>
-           <div>
-                <lable htmlFor="category">Product Category</lable>
-                <input type ="text" id ="category" placeholder="Electronics"
-                 onChange = {(e) =>setCategory( e.target.value)} >   
-                </input>
-           </div>
-           <div>
-                <lable htmlFor="numberInStore">Number in store</lable>
-                <input type ="text" id ="numberInStore" placeholder="Unique code e.g 1234"
-                 onChange = {(e) =>setNumberInStore( e.target.value)} >   
-                </input>
-           </div>
-           <div>
-                <lable htmlFor="countInStock">Count in stock</lable>
-                <input type ="text" id ="countInStock" placeholder="How many in store? e.g 12"
-                 onChange = {(e) =>setCountInStock( e.target.value)} >   
-                </input>
-           </div>
-           <div>
-                <lable htmlFor="brand">Brand</lable>
-                <input type ="text" id ="brand" placeholder="Apple"
-                 onChange = {(e) =>setBrand( e.target.value)} >   
-                </input>
-           </div>
-                    <div>
-                        <lable htmlFor="description">Description</lable>
-                        <input type ="text" id ="description" placeholder="Enter store description"
-                        onChange = {(e) =>setDescription( e.target.value)}
-                        >
-                        </input>
-                    </div>
-                    
-                    <div>
-                        
-                        <FileBase64 type ="file" multiple={false}  
-                        onDone = {({base64}) => setImage(base64)}
-                        />
-                    </div>
-                    
-            <div>
-                        <label />
-                        <button className ="primary" type ="submit">Create Product</button>
-                    </div>
-            </form>
-      </div>  
-    )
+        <form className="form" onSubmit={submitHandler}>
+          <div>
+            {/*<pre>{JSON.stringify(imageUrl, null, '\t')}</pre> */}
+            <h1>Create Product</h1>
+          </div>
+
+          <div>
+            <lable htmlFor="name">Product Name</lable>
+            <input
+              type="text"
+              id="name"
+              placeholder="Iphone 3"
+              onChange={(e) => setName(e.target.value)}
+            ></input>
+          </div>
+          <div>
+            <lable htmlFor="price">Price</lable>
+            <input
+              type="text"
+              id="price"
+              placeholder="10000"
+              onChange={(e) => setPrice(e.target.value)}
+            ></input>
+          </div>
+          <div>
+            <lable htmlFor="category">Product Category</lable>
+            <input
+              type="text"
+              id="category"
+              placeholder="Electronics"
+              onChange={(e) => setCategory(e.target.value)}
+            ></input>
+          </div>
+          <div>
+            <lable htmlFor="numberInStore">Number in store</lable>
+            <input
+              type="text"
+              id="numberInStore"
+              placeholder="Unique code e.g 1234"
+              onChange={(e) => setNumberInStore(e.target.value)}
+            ></input>
+          </div>
+          <div>
+            <lable htmlFor="countInStock">Count in stock</lable>
+            <input
+              type="text"
+              id="countInStock"
+              placeholder="How many in store? e.g 12"
+              onChange={(e) => setCountInStock(e.target.value)}
+            ></input>
+          </div>
+          <div>
+            <lable htmlFor="brand">Brand</lable>
+            <input
+              type="text"
+              id="brand"
+              placeholder="Apple"
+              onChange={(e) => setBrand(e.target.value)}
+            ></input>
+          </div>
+          <div>
+            <lable htmlFor="description">Description</lable>
+            <input
+              type="text"
+              id="description"
+              placeholder="Enter store description"
+              onChange={(e) => setDescription(e.target.value)}
+            ></input>
+          </div>
+
+          <div>
+            <FileBase64
+              type="file"
+              multiple={false}
+              onDone={({ base64 }) => setImage(base64)}
+            />
+          </div>
+          {loading && <LoadingBox></LoadingBox>}
+          {error && <MessageBox variant="danger">{error}</MessageBox>}
+          {success && (
+            <MessageBox variant="success">
+              Product created successfully.
+            </MessageBox>
+          )}
+
+          <div>
+            <label />
+            <button className="primary" type="submit">
+              Create Product
+            </button>
+          </div>
+        </form>
+      </div>
+    );
 }
 
 export default CreateProductPage

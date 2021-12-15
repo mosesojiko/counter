@@ -5,7 +5,7 @@ const storeRouter = express.Router();
 
 const Mosgandastore = require('../models/storeModel.js');
 const Product = require('../models/productModel.js');
-const User = require("../models/userModel.js");
+//const User = require("../models/userModel.js");
 const { isAuth } = require('../utils/isAuth.js');
 
 
@@ -32,10 +32,11 @@ storeRouter.get('/userstore', isAuth, expressAsyncHandler(async(req, res)=>{
 storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>{
     const { name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage } =
         req.body;
-    
-    const user = await User.findOne({ user: req.user._id });
-    if (user.isSeller) {
-        return res.json({ message: "You have created a store already." })
+
+    //check if user has created store before
+    const storeOwner = await Mosgandastore.findOne({ user: req.user._id });
+    if (storeOwner) {
+        return res.json({message: "You have created a store already."})
     } else {
         const store = new Mosgandastore({
           name,
@@ -71,8 +72,7 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
         });
   
     }
-
-    
+        
 }))
 
 //get store details, single store and its product for non logged in user

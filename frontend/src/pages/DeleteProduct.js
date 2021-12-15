@@ -37,7 +37,7 @@ function DeleteProduct(props) {
             }
         }
         fetchData()
-    },[])
+    },[id, userInfo])
 
     const handleDelete = async () =>{
         const { data } = await axios.delete(`/api/v1/product/delete/${id}`,{

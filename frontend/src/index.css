@@ -103,13 +103,16 @@ input:hover,
 select:hover, 
 textarea:hover,
 button:hover {
-  border: 1px solid #404040;
+  border: 1px solid #023c3f;
 }
 
 button.primary {
   background-color: #90c041;
   color: #000;
   font-weight: bolder;
+}
+button.primary:hover {
+  background-color: #71c671;
 }
 
 button.block {
@@ -322,6 +325,13 @@ p.title {
 .form {
   max-width: 600px;
   margin: 0 auto;
+  background-color: #f8f8f8;
+  border-radius: 15px;
+  box-shadow: -5px -3px 2px 0px #023c3f;
+  font-weight: bold;
+}
+.form > div > h1 {
+  text-align: center;
 }
 .form > div {
   display: flex;
@@ -448,4 +458,9 @@ p.title {
 .delete-product {
   display: flex;
   justify-content: space-around;
+}
+
+.widthdrawal-steps {
+  background-color: #f8f8f8;
+  padding: 5px;
 }

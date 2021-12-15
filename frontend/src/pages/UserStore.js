@@ -33,9 +33,9 @@ function UserStore() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getUserStore());
-    dispatch(getUserProducts());
-  }, [dispatch, userInfo]);
+        dispatch(getUserStore());
+        dispatch(getUserProducts());
+  }, [dispatch]);
 
   //get editPost from redux store
   const postedStore = useSelector((state) => state.postedStore);
@@ -104,8 +104,6 @@ function UserStore() {
 
   return (
     <div>
-      {loading && <LoadingBox></LoadingBox>}
-      {error && <MessageBox variant="danger">{error}</MessageBox>}
       <div className="row around">
         <div className="home-header">
           <h4>
@@ -118,6 +116,8 @@ function UserStore() {
             <Link to="/">Products</Link>
           </h4>
         </div>
+        {loading && <LoadingBox></LoadingBox>}
+        {error && <MessageBox variant="danger">{error}</MessageBox>}
         <div>
           <h4>
             <Link to="/createproduct">
@@ -173,11 +173,9 @@ function UserStore() {
               </div>
             </div>
             <div>
-              {
-                <Link to="/profile">
-                  <button className="profile-button">Edit profile</button>
-                </Link>
-              }
+              <Link to="/profile">
+                <button className="profile-button">Edit profile</button>
+              </Link>
             </div>
           </div>
         </div>
@@ -216,7 +214,7 @@ function UserStore() {
               <div className="store-utils">
                 <p>
                   <Link to="/editstore">
-                    <button className="primary">Edit store</button>
+                    <button className="primary">Edit </button>
                   </Link>
                 </p>
 
@@ -227,7 +225,7 @@ function UserStore() {
                       type="submit"
                       onClick={handleUnpost}
                     >
-                      Unpost store
+                      Unpost 
                     </button>
                   ) : (
                     <button
@@ -235,7 +233,7 @@ function UserStore() {
                       type="submit"
                       onClick={handlePost}
                     >
-                      Post store
+                      Post 
                     </button>
                   )}
                 </p>
@@ -266,12 +264,7 @@ function UserStore() {
         </div>
       </div>
 
-      <div>
-        {loadingProduct && <LoadingBox></LoadingBox>}
-        {errorProduct && (
-          <MessageBox variant="danger">{errorProduct}</MessageBox>
-        )}
-      </div>
+      <div></div>
       <div>
         <div className="add-item">
           <Link to="/createproduct">
@@ -300,6 +293,10 @@ function UserStore() {
       </div>
 
       <div className="row center">
+        {loadingProduct && <LoadingBox></LoadingBox>}
+        {errorProduct && (
+          <MessageBox variant="danger">{errorProduct}</MessageBox>
+        )}
         {userProducts &&
           userProducts.map((product) => (
             <div key={product._id} className="card">

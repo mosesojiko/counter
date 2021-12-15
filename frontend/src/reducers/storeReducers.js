@@ -1,5 +1,6 @@
 import { 
     CREATE_STORE_FAIL, 
+    CREATE_STORE_RESET,
     CREATE_STORE_REQUEST, 
     CREATE_STORE_SUCCESS, 
     Edit_STORE_FAIL, 
@@ -32,10 +33,12 @@ export const createStoreReducer = (state = {}, action) =>{
         return {loading: true}
 
         case CREATE_STORE_SUCCESS:
-        return {loading: false, success:true, stores: action.payload}
+        return {loading: false, success:true}
 
         case CREATE_STORE_FAIL:
-        return {loading: false, error: action.payload}
+            return { loading: false, error: action.payload }
+        case CREATE_STORE_RESET:
+            return {}
 
         default:
         return state

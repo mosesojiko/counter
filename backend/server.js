@@ -89,9 +89,54 @@ app.use((err, req, res, next) =>{
     next()
 })
 const port = process.env.PORT || 5000
-app.listen(port, ()=>{
+
+//making use of socket
+app.listen(port, () => {
     console.log(`Serve as http://localhost:${port}`)
 })
+
+// const io = require('socket.io')(server, {
+//     pingTimeout: 60000, //goes off after waiting for 60 second if user didn't send message
+//     cors: {
+//         origin: "http://localhost:3000",
+//     }
+// })
+
+// //create a connection
+// io.on('connection', (socket) => {
+//     console.log('connected to socket io');
+//     //everytime a user opens the app, he should be connected to his own socket
+//     socket.on('setup', (userData) => { 
+//         socket.join(userData._id);//to be replaced by userInfo from frontend
+//         console.log(userData._id)//create a room for that user
+//         socket.emit('connected')
+//     })
+
+//     //joining a chat, the room will be the chat id in the frontend
+//     socket.on('join chat', (room) => {
+//         socket.join(room)
+//         console.log(`User join room ${room}`)
+//     })
+
+//     //track new message
+//     socket.on('new message', (newMessageRecieved) => {
+//         //check the chat that the message belongs to
+//         var chat = newMessageRecieved.chat;
+//         if(!chat) return console.log("chat.users not defined")
+//         //if there are users, send the message only to the other users
+//         chat.users.forEach((user) => {
+//             if (user._id === newMessageRecieved.sender._id) return // i am not to recieve it
+//             socket.in(user._id).emit("message received", newMessageRecieved)
+//             //we will check which user the newMessageRecieved object belongs to in the frontend
+//         })
+//     })
+
+//     //off the socket
+//     socket.off("setup", () => {
+//         console.log("User disconnected")
+//         socket.leave(userData._id)
+//     })
+// })
 
 
   

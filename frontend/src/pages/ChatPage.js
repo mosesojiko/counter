@@ -7,12 +7,16 @@ import MessageBox from '../components/MessageBox';
 import { createChat, getChats } from '../actions/chatActions';
 import { createMessage, getMessages } from '../actions/messageActions';
 import ScrollableChat from '../components/ScrollableChat';
-import './ChatPage.css'
+import './ChatPage.css';
+//import io from 'socket.io-client'
 //import styled from "styled-components";
 
+//create my endpoint for socket io connection, to be changed when deployed
+// const ENDPOINT = "http://localhost:5000";
+// var socket, selectedChatCompare;
 
 function ChatPage() {
-  //const [chats, setChats] = useState([]);
+  //const [roomChats, setRoomChats] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,9 +25,11 @@ function ChatPage() {
   const [show, setShow] = useState("");
   const [chatNow, setChatNow] = useState();
   const [newMessage, setNewMessage] = useState();
- 
-  //npm install react-scrollable-feed, used for the Scrollable component
+  //const [socketConnected, setSocketConnected] = useState(false);
   
+  
+
+  //npm install react-scrollable-feed, used for the Scrollable component
 
   const dispatch = useDispatch();
   //get login user details from store
@@ -45,10 +51,14 @@ function ChatPage() {
 
   //create message from redux store
   const messageCreate = useSelector((state) => state.messageCreate);
-  const { loading: loadCreateMessage, error: errorCreateMessage, messages, success} =
-    messageCreate;
+  const {
+    loading: loadCreateMessage,
+    error: errorCreateMessage,
+    messages,
+    success,
+  } = messageCreate;
 
-  console.log(messages)
+  console.log(messages);
   //get all message from a chat from redux store
   const getAllMessages = useSelector((state) => state.getAllMessages);
   const {
@@ -68,6 +78,13 @@ function ChatPage() {
   //   getChats();
   // }, [userInfo.token]);
 
+  //socket io things
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  //   socket.emit("setup", userInfo);
+  //   socket.on("connection", () => setSocketConnected(true));
+  // }, []);
+
   //handle search
   const handleSearch = async () => {
     try {
@@ -83,7 +100,6 @@ function ChatPage() {
     }
   };
   console.log(searchResult);
-  
 
   useEffect(() => {
     if (selectedChat) {
@@ -92,17 +108,17 @@ function ChatPage() {
     }
   }, [dispatch, searchResult, selectedChat]);
 
-  if (successCreate) {
-    window.location = "/chatpage";
-  }
+  // if (successCreate) {
+  //   window.location = "/chatpage";
+  // }
 
   useEffect(() => {
-    dispatch(getChats());
+      dispatch(getChats());
   }, [dispatch]);
 
   //typing handler
   const typingHandler = (e) => {
-    setNewMessage(e.target.value)
+    setNewMessage(e.target.value);
     //typing indicator logic here
   };
 
@@ -126,12 +142,12 @@ function ChatPage() {
   //       setNewMessage("");
   //       setMessages([...messages, data]);
   //     }
-      
+
   //   } catch (error) {
   //     setErrorMessage(error.message);
   //   }
   //  };
- 
+
   //send message with keybord
   // const handleKeyDown = async (event) => {
   //   if (event.key === "enter" && newMessage) {
@@ -153,19 +169,38 @@ function ChatPage() {
   const sendMessage = () => {
     if (chatNow) {
       dispatch(createMessage(newMessage, chatNow._id));
-      setNewMessage('')
+      //socket.emit("new message", messages);
+      setNewMessage("");
     }
-  }
+  };
 
   //call the function to get all messages from a chat
   useEffect(() => {
-    if (chatNow || success) {
-      dispatch(getMessages(chatNow._id))
+    if (chatNow) {
+      dispatch(getMessages(chatNow._id));
+      // socket.emit("join chat", chatNow._id);
+      // //we need this to determine whether to display the chat or send notification
+      // selectedChatCompare = chatNow;
     }
-  }, [chatNow, dispatch, success])
-  console.log(myMessages)
-  console.log(myChats)
-  
+  }, [chatNow, dispatch, success, successCreate]);
+  console.log(myMessages);
+  console.log(myChats);
+
+  //this useEffect is going to be updated everytime our state updates, so we remove the dependency array
+  // useEffect(() => {
+  //   socket.on("message received", (newMessageRecieved) => {
+  //     //check if we select the correct chat
+  //     if (
+  //       !selectedChatCompare ||
+  //       selectedChatCompare._id !== newMessageRecieved.chat._id
+  //     ) {
+  //       //give notificatio
+  //     } else {
+        
+  //     }
+  //   });
+  // });
+
   return (
     <div>
       <div className="row around">
@@ -270,7 +305,7 @@ function ChatPage() {
               </div>
 
               <div class="send chatbottom">
-                <div className='sendInput'>
+                <div className="sendInput">
                   <input
                     type="text"
                     placeholder="Enter your message"
@@ -278,12 +313,8 @@ function ChatPage() {
                     onChange={typingHandler}
                   />
                 </div>
-                <div className='sendButton'>
-                  <button
-                    class="primary"
-                    type="button"
-                    onClick={sendMessage}
-                  >
+                <div className="sendButton">
+                  <button class="primary" type="button" onClick={sendMessage}>
                     Send
                   </button>
                 </div>

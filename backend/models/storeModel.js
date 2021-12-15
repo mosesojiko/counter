@@ -18,6 +18,7 @@ const storeSchema = new mongoose.Schema(
     creatorId: { type: String },
     creatorName: { type: String },
     creatorAddress: { type: String },
+    creatorEmail: {type: String},
     creatorPhone: { type: String },
     creatorImage: { type: String },
     user: {
