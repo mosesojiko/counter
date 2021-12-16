@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const express = require("express");
 const expressAsyncHandler = require("express-async-handler");
+const { createGroupChat, renameGroup, removeFromGroup, addToGroup } = require("../controllers/chatController.js");
 //const bcrypt = require("bcryptjs");
 const chatRouter = express.Router();
 
@@ -76,5 +77,16 @@ chatRouter.get('/', isAuth, expressAsyncHandler(async (req, res) => {
     }
 }))
 
+//Create group chat
+chatRouter.post('/group', isAuth, createGroupChat);
+
+//rename group
+chatRouter.put("/rename", isAuth, renameGroup);
+
+//remove a user from group
+chatRouter.put('/groupremove', isAuth, removeFromGroup)
+
+//add someone to group
+chatRouter.put('/groupadd', isAuth, addToGroup)
 
 module.exports = chatRouter

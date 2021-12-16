@@ -25,6 +25,7 @@ import CustomerOrders from './pages/CustomerOrders';
 import SoldProducts from './pages/SoldProducts';
 import WidthdrawHistory from './pages/WidthdrawHistory';
 import ChatPage from './pages/ChatPage';
+import Chats from './pages/Chats';
 
 
 
@@ -59,7 +60,7 @@ function App() {
               Mosganda
             </a>
           </div>
-          
+
           <div>
             <Link to="/basket/:id">
               Basket
@@ -67,7 +68,11 @@ function App() {
                 <span className="badge">{basketItems.length}</span>
               )}
             </Link>
-            {userInfo ? <Link to="/chatpage">Chat</Link> : <Link to="/register">Register</Link>}
+            {userInfo ? (
+              <Link to="/chats">Chat</Link>
+            ) : (
+              <Link to="/register">Register</Link>
+            )}
             {
               /* Show name of user that logged in. Also implement logout */
               userInfo ? (
@@ -119,6 +124,7 @@ function App() {
           </div>
         </header>
         <main>
+          <Route path="/chats" component={Chats}></Route>
           <Route path="/chatpage" component={ChatPage}></Route>
           <Route path="/findwidthdrawals" component={WidthdrawHistory}></Route>
           <Route path="/soldproducts" component={SoldProducts}></Route>

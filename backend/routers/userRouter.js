@@ -7,6 +7,7 @@ const userRouter = express.Router();
 const User = require('../models/userModel.js');
 const { generateToken } = require('../utils/generateToken.js');
 const { isAuth } = require('../utils/isAuth.js');
+const { allUsers } = require('../controllers/userController.js');
 
 
 
@@ -46,13 +47,14 @@ userRouter.get('/find', expressAsyncHandler( async(req, res)=> {
 
 }));
 
-//find chat users
-userRouter.get('/chat', isAuth, expressAsyncHandler(async (req, res) => {
-    const users = await User.find({name: { $regex: req.query.search, $options: "i" }});
-    res.json(users)
+// //find chat users
+// userRouter.get('/chat', isAuth, expressAsyncHandler(async (req, res) => {
+//     const users = await User.find({name: { $regex: req.query.search, $options: "i" }});
+//     res.json(users)
    
-}))
+// }))
 
+userRouter.get('/', isAuth, allUsers)
 //Login router
 
 userRouter.post('/login', expressAsyncHandler( async(req, res) => {
