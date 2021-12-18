@@ -11,9 +11,11 @@ import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from './ChatLoading';
 import { Stack } from "@chakra-ui/layout";
 import { getSender } from '../../config/ChatLogics';
+import GroupChatModal from './GroupChatModal';
 
-function MyChats() {
-  const [loggedUser, setLoggedUser ] = useState()
+function MyChats({fetchAgain}) {
+  const [loggedUser, setLoggedUser] = useState()
+  const [ loading, setLoading ] = useState(false)
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -27,6 +29,7 @@ function MyChats() {
     const fetchChats = async () => {
       // console.log(user._id);
       try {
+        setLoading(true);
         const config = {
           headers: {
             Authorization: `Bearer ${userInfo.token}`,
@@ -35,6 +38,7 @@ function MyChats() {
 
           const { data } = await axios.get("/api/v1/chat", config);
         setChats(data);
+        setLoading(false)
       } catch (error) {
         toast({
           title: "Error",
@@ -44,14 +48,17 @@ function MyChats() {
           isClosable: true,
           position: "bottom-left",
         });
+        setLoading(false)
+        return
       }
     };
 
     //call the function in a useEffect
+  //whenever the fetchAgain changes, this useEffect runs again
     useEffect(() => {
         setLoggedUser(userInfo)
         fetchChats()
-    },[])
+    },[fetchAgain])
     return (
       <Box
         d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
@@ -74,13 +81,15 @@ function MyChats() {
           alignItems="center"
         >
           My Chats
-          <Button
-            d="flex"
-            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-            rightIcon={<AddIcon />}
-          >
-            New Group Chat
-          </Button>
+          <GroupChatModal>
+            <Button
+              d="flex"
+              fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+              rightIcon={<AddIcon />}
+            >
+              New Group Chat
+            </Button>
+          </GroupChatModal>
         </Box>
         <Box
           d="flex"
@@ -92,7 +101,9 @@ function MyChats() {
           borderRadius="lg"
           overflowY="hidden"
         >
-          {chats ? (
+          {loading ? (
+            <ChatLoading />
+          ) : (
             <Stack overflowY="scroll">
               {chats.map((chat) => (
                 <Box
@@ -121,9 +132,8 @@ function MyChats() {
                 </Box>
               ))}
             </Stack>
-          ) : (
-            <ChatLoading />
-          )}
+          )
+          }
         </Box>
       </Box>
     );
