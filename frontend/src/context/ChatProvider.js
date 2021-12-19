@@ -9,12 +9,21 @@ const ChatProvider = ({ children }) => {
     //store selectedChat in context
     const [selectedChat, setSelectedChat] = useState();
     //chat to hold all of our chats
-    const [ chats, setChats ] = useState([])
+  const [chats, setChats] = useState([])
+  //for notification
+  const [notification, setNotification] = useState([])
 
 
     return (
       <ChatContext.Provider
-        value={{ selectedChat, setSelectedChat, chats, setChats }}
+        value={{
+          selectedChat,
+          setSelectedChat,
+          chats,
+          setChats,
+          notification,
+          setNotification,
+        }}
       >
         {children}
       </ChatContext.Provider>

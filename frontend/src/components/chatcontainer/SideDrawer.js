@@ -31,6 +31,7 @@ import ChatLoading from "./ChatLoading";
 import UserListItem from "./userAvatar/UserListItem";
 import { ChatState } from '../../context/ChatProvider'
 import LoadingBox from "../LoadingBox";
+import { getSender } from "../../config/ChatLogics";
 
 
 
@@ -46,7 +47,8 @@ function SideDrawer() {
   const { userInfo } = userLogin;
 
   //import state from context
-  const { setSelectedChat, chats, setChats } = ChatState();
+  const { setSelectedChat, chats, setChats, notification, setNotification } =
+    ChatState();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -135,8 +137,27 @@ function SideDrawer() {
           <Menu>
             <MenuButton p={1}>
               <BellIcon fontSize="2xl" m={1} />
+              <span className="badge">{notification.length}</span>
             </MenuButton>
-            {/* <MenuList></MenuList> */}
+            <MenuList p={2}>
+              {!notification.length && "No New Message(s)"}
+              {notification?.map((notif) => (
+                <MenuItem
+                  key={notif._id}
+                  onClick={() => {
+                    setSelectedChat(notif.chat);
+                    setNotification(notification.filter((n) => n !== notif));
+                  }}
+                >
+                  {notif.chat.isGroupChat
+                    ? `New Message in ${notif.chat.chatName}`
+                    : `New Message from ${getSender(
+                        userInfo,
+                        notif.chat.users
+                      )}`}
+                </MenuItem>
+              ))}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -167,29 +188,25 @@ function SideDrawer() {
 
           <DrawerBody>
             <Box d="flex" pb={2}>
-              <Input placeholder="Search user by name"
+              <Input
+                placeholder="Search user by name"
                 mr={2}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button onClick={handleSearch}
-              >Go</Button>
+              <Button onClick={handleSearch}>Go</Button>
             </Box>
-            {
-              loading ? (
-                <ChatLoading/>
-              ) : (
-                  
-                  searchResult?.map((user) => (
-                    <UserListItem
-                      key={user._id}
-                      user={user}
-                      handleFunction = {() => accessChat(user._id)}
-                    />
-                    ))
-                  
-              )
-            }
+            {loading ? (
+              <ChatLoading />
+            ) : (
+              searchResult?.map((user) => (
+                <UserListItem
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => accessChat(user._id)}
+                />
+              ))
+            )}
             {loadingChat && <LoadingBox></LoadingBox>}
           </DrawerBody>
 

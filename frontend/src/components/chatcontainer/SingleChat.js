@@ -34,7 +34,8 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   const { userInfo } = userLogin;
 
   //import state from context
-  const { selectedChat, setSelectedChat } = ChatState();
+  const { selectedChat, setSelectedChat, notification, setNotification } =
+    ChatState();
 
   const toast = useToast();
 
@@ -138,12 +139,19 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
         //give notification
+        //add the new message to notification if it is not in the notification array
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification])
+          //update our messages again to add the new message
+          setFetchAgain(!fetchAgain)
+        }
       } else {
         //add the new message to the existing list of messages
         setMessages([...messages, newMessageRecieved]);
       }
     });
   });
+  
 
   //typing handler function
   const typingHandler = (e) => {
