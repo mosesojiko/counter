@@ -10,6 +10,7 @@ import {
 } from "../actions/storeActions";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
+import Button from "@mui/material/Button";
 
 
 function UserStore() {
@@ -107,13 +108,25 @@ function UserStore() {
       <div className="row around">
         <div className="home-header">
           <h4>
-            <Link to="/stores">Stores</Link>
+            <Link to="/stores">
+              <Button variant="contained" color="success" size="small">
+                Stores
+              </Button>
+            </Link>
           </h4>
           <h4>
-            <Link to="/guide">Guide</Link>
+            <Link to="/guide">
+              <Button variant="contained" color="success" size="small">
+                Guide
+              </Button>
+            </Link>
           </h4>
           <h4>
-            <Link to="/">Products</Link>
+            <Link to="/">
+              <Button variant="contained" color="success" size="small">
+                Products
+              </Button>
+            </Link>
           </h4>
         </div>
         {loading && <LoadingBox></LoadingBox>}
@@ -214,27 +227,31 @@ function UserStore() {
               <div className="store-utils">
                 <p>
                   <Link to="/editstore">
-                    <button className="primary">Edit </button>
+                    <Button variant="contained" color="success" size="small">
+                      Edit
+                    </Button>
                   </Link>
                 </p>
 
                 <p>
                   {userStore && userStore.isPosted ? (
-                    <button
-                      className="primary"
-                      type="submit"
+                    <Button
+                      variant="contained"
+                      color="success"
+                      size="small"
                       onClick={handleUnpost}
                     >
-                      Unpost 
-                    </button>
+                      Unpost
+                    </Button>
                   ) : (
-                    <button
-                      className="primary"
-                      type="submit"
+                    <Button
+                      variant="contained"
+                      color="success"
+                      size="small"
                       onClick={handlePost}
                     >
-                      Post 
-                    </button>
+                      Post
+                    </Button>
                   )}
                 </p>
               </div>
@@ -317,35 +334,41 @@ function UserStore() {
                 <div className="store-utils">
                   <p>
                     {product.isPosted ? (
-                      <button
-                        className="primary"
-                        type="submit"
+                      <Button
+                        variant="contained"
+                        color="success"
+                        size="small"
                         onClick={() =>
                           dispatch(unPostedProduct({ id: product._id }))
                         }
                       >
-                        unPost
-                      </button>
+                        Unpost
+                      </Button>
                     ) : (
-                      <button
-                        className="primary"
-                        type="submit"
+                      <Button
+                        variant="contained"
+                        color="success"
+                        size="small"
                         onClick={() =>
                           dispatch(editPostedProduct({ id: product._id }))
                         }
                       >
                         Post
-                      </button>
+                      </Button>
                     )}
                   </p>
                   <p>
                     <Link to={`/update/${product._id}`}>
-                      <button className="primary">Edit</button>
+                      <Button variant="contained" color="success" size="small">
+                        Edit
+                      </Button>
                     </Link>
                   </p>
                   <p>
                     <Link to={`/delete/${product._id}`}>
-                      <button className="primary">Delete</button>
+                      <Button variant="contained" color="success" size="small">
+                        Delete
+                      </Button>
                     </Link>
                   </p>
                 </div>

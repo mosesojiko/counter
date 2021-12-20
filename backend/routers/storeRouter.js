@@ -4,7 +4,7 @@ const expressAsyncHandler = require('express-async-handler');
 const storeRouter = express.Router();
 
 const Mosgandastore = require('../models/storeModel.js');
-const Product = require('../models/productModel.js');
+//const Product = require('../models/productModel.js');
 //const User = require("../models/userModel.js");
 const { isAuth } = require('../utils/isAuth.js');
 
@@ -78,12 +78,12 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
 //get store details, single store and its product for non logged in user
 storeRouter.get('/:id', expressAsyncHandler( async(req, res)=>{
     const singleStore = await Mosgandastore.findById(req.params.id);
-    const products = await Product.find({productStore:req.params.id})
+    //const products = await Product.find({productStore:req.params.id})
     
     if(singleStore){
         return res.json({
             singleStore,
-            products
+           
         });
     }else{
         res.status(404).json({

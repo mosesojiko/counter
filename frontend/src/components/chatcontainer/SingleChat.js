@@ -28,6 +28,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   //state for typing functionality
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  
 
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
@@ -133,7 +134,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   //if it received any message, it should put it in the chat
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
-      //if non of the chat is selected or the one selected does not match the one that received the message, give notificatio
+      //if non of the chat is selected or the one selected does not match the one that received the message, give notification
       if (
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageRecieved.chat._id

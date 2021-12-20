@@ -221,12 +221,10 @@ img.medium {
  
 }
 .card-body-span {
-   border-top: 1px solid #023c3f;
    text-align: center;
 }
 .card-body-span > span{
   margin: 2px 5px;
-  border-right: 2px solid #023c3f;
   padding-right: 2px;
 }
 .card:hover {
@@ -463,4 +461,12 @@ p.title {
 .widthdrawal-steps {
   background-color: #f8f8f8;
   padding: 5px;
+}
+.login {
+  width: 300px;
+  background-color: #f8f8f8;
+  margin: 0 auto;
+  padding: 10px;
+  border: 2px solid #90c041;
+  border-radius: 5px;
 }

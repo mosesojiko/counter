@@ -6,6 +6,7 @@ import LoadingBox from '../components/LoadingBox';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../actions/productActions';
 import { Link } from 'react-router-dom';
+import Button from "@mui/material/Button";
 
 
 function HomePage() {
@@ -21,17 +22,29 @@ function HomePage() {
         <div className="row around">
           <div className="home-header">
             <h4>
-              <Link to="/stores">Stores</Link>
+              <Link to="/stores">
+                <Button variant="contained" color="success">
+                  Stores
+                </Button>
+              </Link>
             </h4>
+
             <h4>
-              <Link to="/guide">Guide</Link>
+              <Link to="/guide">
+                <Button variant="contained" color="success">
+                  Guide
+                </Button>
+              </Link>
             </h4>
           </div>
           <div>
             <h4>
-              <Link to="/createstore">Create-Store</Link>
+              <Link to="/createstore">
+                <Button variant="contained" color="success">
+                  Create-store
+                </Button>
+              </Link>
             </h4>
-            
           </div>
         </div>
 

@@ -24,8 +24,8 @@ import DeleteProduct from './pages/DeleteProduct';
 import CustomerOrders from './pages/CustomerOrders';
 import SoldProducts from './pages/SoldProducts';
 import WidthdrawHistory from './pages/WidthdrawHistory';
-import ChatPage from './pages/ChatPage';
 import Chats from './pages/Chats';
+import { ChatState } from "./context/ChatProvider";
 
 
 
@@ -35,22 +35,26 @@ import Chats from './pages/Chats';
 
 
 function App() {
-    //get access to basket items
-    const basket = useSelector(state => state.basket);
-    const { basketItems } = basket;
+  //get access to basket items
+  const basket = useSelector((state) => state.basket);
+  const { basketItems } = basket;
 
-    //get access to userLogin from redux store
-    const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
-    console.log(userInfo)
+  //get access to userLogin from redux store
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  console.log(userInfo);
 
-    //logout function
-    const dispatch = useDispatch()
-    const logoutHandler = () =>{
-        dispatch(logout());
-        window.location ='/'
-    }
-    
+  //logout function
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+    dispatch(logout());
+    window.location = "/";
+  };
+
+  //import state from context
+  const { notification, setNotification } = ChatState();
+
+
   return (
     <BrowserRouter>
       <div className="grid-container">
@@ -69,7 +73,11 @@ function App() {
               )}
             </Link>
             {userInfo ? (
-              <Link to="/chats">Chat</Link>
+              <>
+                <Link to="/chats">Chat</Link>
+                {notification.length > 0 && 
+                (<span className="badge">{notification.length}</span>)}
+              </>
             ) : (
               <Link to="/register">Register</Link>
             )}
@@ -125,7 +133,6 @@ function App() {
         </header>
         <main>
           <Route path="/chats" component={Chats}></Route>
-          <Route path="/chatpage" component={ChatPage}></Route>
           <Route path="/findwidthdrawals" component={WidthdrawHistory}></Route>
           <Route path="/soldproducts" component={SoldProducts}></Route>
           <Route path="/orderedproducts" component={CustomerOrders}></Route>

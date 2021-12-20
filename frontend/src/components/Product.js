@@ -2,6 +2,7 @@ import React from "react";
 //import { useState } from "react";
 import { Link } from "react-router-dom";
 //import Rating from "./Rating";
+import Button from "@mui/material/Button";
 
 function Product(props) {
   const { product } = props;
@@ -27,16 +28,26 @@ function Product(props) {
         </div>
         <div className="card-body-span">
           <span>
-            <Link to={`/basket/${product._id}?qty=${qty}`}><strong>Buy</strong></Link>
-          </span>
-          <span>
-            <Link to={`/product/${product._id}`}>detail</Link>
-          </span>
-          <span>
-            <Link to={`/store/${product.productStoreId}`}>
-              view-store
+            <Link to={`/basket/${product._id}?qty=${qty}`}>
+              <Button variant="contained" color="success" size="small">
+                Buy
+              </Button>
             </Link>
           </span>
+          <span>
+            <Link to={`/product/${product._id}`}>
+              <Button variant="contained" color="success" size="small">
+                Detail
+              </Button>
+            </Link>
+          </span>
+            <span>
+              <Link to={`/store/${product.productStoreId}`}>
+                <Button variant="contained" color="success" size="small">
+                  View-store
+                </Button>
+              </Link>
+            </span>
         </div>
 
         {/* <Rating rating={product.rating} numReviews={product.numReviews} /> */}

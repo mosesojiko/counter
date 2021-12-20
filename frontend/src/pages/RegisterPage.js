@@ -43,7 +43,7 @@ function RegisterPage(props) {
         }
     },[props.history, redirect, userInfo])
     return (
-      <div>
+      <div className='login'>
         <form className="form" onSubmit={handleSummit}>
           <div>
             <h1>Create Account</h1>
@@ -110,7 +110,7 @@ function RegisterPage(props) {
             </div>
           </div>
           <div>
-            <p>Add your photo</p>
+            <p>Add your photo (optional)</p>
             <FileBase64
               type="file"
               multiple={false}

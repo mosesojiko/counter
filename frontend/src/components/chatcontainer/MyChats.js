@@ -21,7 +21,7 @@ function MyChats({fetchAgain}) {
   const { userInfo } = userLogin;
 
   //import state from context
-    const { selectedChat, setSelectedChat, chats, setChats } = ChatState();
+    const { selectedChat, setSelectedChat, chats, setChats, notification } = ChatState();
     
     const toast = useToast()
 
@@ -87,7 +87,7 @@ function MyChats({fetchAgain}) {
               fontSize={{ base: "17px", md: "10px", lg: "17px" }}
               rightIcon={<AddIcon />}
             >
-              New Group Chat
+              Create Group
             </Button>
           </GroupChatModal>
         </Box>
@@ -117,9 +117,11 @@ function MyChats({fetchAgain}) {
                   key={chat._id}
                 >
                   <Text>
+                    
                     {!chat.isGroupChat
                       ? getSender(loggedUser, chat.users)
                       : chat.chatName}
+                    
                   </Text>
                   {chat.latestMessage && (
                     <Text fontSize="xs">
@@ -132,8 +134,7 @@ function MyChats({fetchAgain}) {
                 </Box>
               ))}
             </Stack>
-          )
-          }
+          )}
         </Box>
       </Box>
     );

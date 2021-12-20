@@ -1,7 +1,9 @@
 import React from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { getSingleStore } from '../actions/storeActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -10,17 +12,43 @@ import Product from '../components/Product';
 function StoreDetailsPage(props) {
     const dispatch = useDispatch();
     const storeId = props.match.params.id
+    const [loadProduct, setLoadProduct] = useState(false);
+    const [errorProduct, setErrorProduct ] = useState('')
+    const [products, setProducts ] = useState([])
+    const [email, setEmail] = useState('');
+    
 
     //get store details from redux store
     const storeDetails = useSelector((state) =>state.storeDetails);
     const { loading, error, store } = storeDetails;
     console.log(store)
-   
-
+    useEffect(() => {
+        if (store) {
+            setEmail(store.email)
+        }
+        
+    }, [store])
+console.log(email)
     useEffect(() => {
         dispatch(getSingleStore(storeId));
 
     }, [dispatch, storeId])
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                setLoadProduct(true);
+                const { data } = await axios.get('/api/v1/product', { email: store.email })
+                setLoadProduct(false);
+                setProducts(data)
+            } catch (error) {
+                setErrorProduct(error.message);
+                setLoadProduct(false);
+                
+            }
+        }
+        fetchProduct()
+    },[store])
     
     return (
         <div>
@@ -78,9 +106,11 @@ function StoreDetailsPage(props) {
                <div>
                    <h2 className="store-name">Checkout list of my items below for your shopping pleasure.</h2>
                </div>
-               <div className="row center">
+                            <div className="row center">
+                                {loadProduct && <LoadingBox></LoadingBox>}
+                                {errorProduct && <MessageBox variant="danger">{ errorProduct}</MessageBox>}
                    {
-                       store.products.map((product) =>(
+                       products.map((product) =>(
                         <Product key = {product._id} product = {product}></Product>
                        ))
                    }

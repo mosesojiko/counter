@@ -5,16 +5,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './store';
-import { ChakraProvider } from "@chakra-ui/react";
+//import { ChakraProvider } from "@chakra-ui/react";
 import ChatProvider from './context/ChatProvider';
 
 
 ReactDOM.render(
   <Provider store={store}>
     <ChatProvider>
-      <ChakraProvider>
-        <App />
-      </ChakraProvider>
+      {/* <ChakraProvider></ChakraProvider> */}
+      <App />
     </ChatProvider>
     ,
   </Provider>,

@@ -42,6 +42,7 @@ function SideDrawer() {
   const [loadingChat, setLoadingChat] = useState()
   
   
+  
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -53,6 +54,7 @@ function SideDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast()
+
 
   //handleSearch function to search for users
   const handleSearch = async() => {
@@ -114,6 +116,7 @@ function SideDrawer() {
       });
     }
   }
+ 
   return (
     <>
       <Box

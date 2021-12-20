@@ -5,6 +5,7 @@ import { getProductDetails } from '../actions/productActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 //import Rating from "../components/Rating"
+import Button from "@mui/material/Button";
 
 
 function ProductPage(props) {
@@ -34,12 +35,20 @@ function ProductPage(props) {
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
           <div>
-            <Link to="/">Back to homepage</Link>
+            <Link to="/">
+              <Button variant="contained" color="success" size="small">
+                Back to homepage
+              </Button>
+            </Link>
             <div className="row top">
               <div className="col-2">
                 <img className="large" src={product.image} alt={product.name} />
                 <Link to={`/store/${product.productStoreId}`}>
-                  <p>View store</p>
+                  <p>
+                    <Button variant="contained" color="success" size="small">
+                      View-store
+                    </Button>
+                  </p>
                 </Link>
               </div>
               <div className="col-1">

@@ -30,7 +30,7 @@ function LoginPage(props) {
         }
     },[props.history, redirect, userInfo])
     return (
-      <div>
+      <div className='login'>
         <form className="form" onSubmit={handleSummit}>
           <div>
             <h1>Login</h1>
