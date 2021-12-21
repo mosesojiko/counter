@@ -159,8 +159,8 @@ productRouter.get(
 );
 
 //get user products for non logged in user
-productRouter.get('/nonuser', expressAsyncHandler(async (req, res) => {
-  const nonuserProducts = await Product.find({ sellerEmail: req.body.email });
+productRouter.get('/nonuser/:id', expressAsyncHandler(async (req, res) => {
+  const nonuserProducts = await Product.find({ productStoreId: req.params.id });
   if (nonuserProducts) {
     res.json(nonuserProducts)
   }

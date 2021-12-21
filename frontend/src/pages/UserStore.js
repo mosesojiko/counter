@@ -130,7 +130,7 @@ function UserStore() {
           </h4>
         </div>
         {loading && <LoadingBox></LoadingBox>}
-        {error && <MessageBox variant="danger">{error}</MessageBox>}
+        {error && <MessageBox variant="danger">{error }. Please, kindly logout and login again to access your store.</MessageBox>}
         <div>
           <h4>
             <Link to="/createproduct">

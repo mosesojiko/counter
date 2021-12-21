@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 
 function Product(props) {
-  const { product } = props;
+  const { product, showStoreButton} = props;
   //const [qty, setQty] = useState(1);
   const qty = 1;
   return (
@@ -41,13 +41,16 @@ function Product(props) {
               </Button>
             </Link>
           </span>
-            <span>
+          {
+            showStoreButton === true ? 
+              (<span>
               <Link to={`/store/${product.productStoreId}`}>
                 <Button variant="contained" color="success" size="small">
                   View-store
                 </Button>
               </Link>
-            </span>
+            </span>):""
+            }
         </div>
 
         {/* <Rating rating={product.rating} numReviews={product.numReviews} /> */}

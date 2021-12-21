@@ -15,20 +15,15 @@ function StoreDetailsPage(props) {
     const [loadProduct, setLoadProduct] = useState(false);
     const [errorProduct, setErrorProduct ] = useState('')
     const [products, setProducts ] = useState([])
-    const [email, setEmail] = useState('');
+    //const [email, setEmail] = useState('');
     
 
     //get store details from redux store
     const storeDetails = useSelector((state) =>state.storeDetails);
     const { loading, error, store } = storeDetails;
     console.log(store)
-    useEffect(() => {
-        if (store) {
-            setEmail(store.email)
-        }
-        
-    }, [store])
-console.log(email)
+    
+    
     useEffect(() => {
         dispatch(getSingleStore(storeId));
 
@@ -38,7 +33,7 @@ console.log(email)
         const fetchProduct = async () => {
             try {
                 setLoadProduct(true);
-                const { data } = await axios.get('/api/v1/product', { email: store.email })
+                const { data } = await axios.get(`/api/v1/product/nonuser/${storeId}`)
                 setLoadProduct(false);
                 setProducts(data)
             } catch (error) {
@@ -111,7 +106,7 @@ console.log(email)
                                 {errorProduct && <MessageBox variant="danger">{ errorProduct}</MessageBox>}
                    {
                        products.map((product) =>(
-                        <Product key = {product._id} product = {product}></Product>
+                        <Product key = {product._id} product = {product} showStoreButton={false}></Product>
                        ))
                    }
 

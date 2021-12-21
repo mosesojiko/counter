@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import Button from "@mui/material/Button";
 
 function DeleteProduct(props) {
     const id = props.match.params.id
@@ -76,20 +77,18 @@ function DeleteProduct(props) {
                 <h2>{product.name}</h2>
               </Link>
               {/* <Rating rating={product.rating} numReviews={product.numReviews} /> */}
-              <div className="price">${product.price}</div>
+              <div className="price">#{product.price}</div>
               <div className='delete-product'>
                 <p>
-                  <button
-                    className="primary"
-                    type="submit"
-                    onClick={handleDelete}
-                  >
-                    Delete
-                  </button>
+                  <Button variant="contained" color="success" onClick={handleDelete}>
+                  Delete
+                </Button>
                 </p>
                 <p>
                   <Link to="/userstore">
-                    <button className="primary">Cancel</button>
+                    <Button variant="contained" color="success">
+                  Cancel
+                </Button>
                   </Link>
                 </p>
               </div>

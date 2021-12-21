@@ -25,7 +25,7 @@ const app = express();
 //     console.log("Connected to local db")
 // })
 //connect to db
-mongoose.connect(process.env.CONNECT_TO_DB,{ useNewUrlParser: true, useUnifiedTopology: true },()=>{
+mongoose.connect(process.env.MONGODB_CONNECT,{ useNewUrlParser: true, useUnifiedTopology: true },()=>{
     console.log('connected to db')
 })
 
@@ -139,11 +139,11 @@ io.on('connection', (socket) => {
         })
     })
 
-//     //off the socket
-    // socket.off("setup", () => {
-    //     console.log("User disconnected")
-    //     socket.leave(userData._id)
-    // })
+    //off the socket
+    socket.off("setup", () => {
+        console.log("User disconnected")
+        socket.leave(userData._id)
+    })
  })
 
 

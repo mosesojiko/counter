@@ -157,7 +157,7 @@ function UpdateProduct(props) {
                     />
                 </div>
                 <div>
-                        <p>Image of the product</p>
+                                    <p>{product.image?"Change image": "Image of the product"}</p>
                         <FileBase64 type ="file" multiple={false}  
                         onDone = {({base64}) => setImage(base64)}
                         />

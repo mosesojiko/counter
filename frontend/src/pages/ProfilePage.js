@@ -65,6 +65,9 @@ function ProfilePage(props) {
         }));
     }
     if (successUpdate) {
+        //reset successUpdate when we open profile screen for second time
+        dispatch({ type: USER_UPDATE_PROFILE_RESET })
+        
         if (userInfo.isSeller) {
                 props.history.push("/userstore");
         } else {
@@ -109,7 +112,7 @@ function ProfilePage(props) {
                         </input>
                     </div>
                     <div>
-                        <p>Add your photo</p>
+                        <p>{userInfo.image? "Change photo":"Add your photo"}</p>
                         <FileBase64 type ="file" multiple={false}  
                         onDone = {({base64}) => setImage(base64)}
                         />

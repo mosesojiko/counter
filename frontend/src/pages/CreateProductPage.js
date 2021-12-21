@@ -8,6 +8,7 @@ import FileBase64 from 'react-file-base64';
  import MessageBox from '../components/MessageBox';
 import { createProduct } from '../actions/productActions';
 import { getUserStore } from '../actions/storeActions';
+import Button from "@mui/material/Button";
 
 
 function CreateProductPage(props) {
@@ -98,10 +99,14 @@ console.log(productStoreId)
         <div className="row around">
           <div className="home-header">
             <h4>
-              <Link to="/stores">Stores</Link>
+              <Link to="/stores"><Button variant="contained" color="success">
+                  Stores 
+                </Button></Link>
             </h4>
             <h4>
-              <Link to="/">Product Page</Link>
+              <Link to="/"><Button variant="contained" color="success">
+                  Products
+                </Button></Link>
             </h4>
           </div>
           <div>

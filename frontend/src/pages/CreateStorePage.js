@@ -10,6 +10,7 @@ import { createStore, getUserStore } from '../actions/storeActions';
 //import { USER_CREATE_STORE_RESET } from '../constants/userConstants';
 import { updateUserCreateStore } from '../actions/userActions';
 import { CREATE_STORE_RESET } from '../constants/storeConstants';
+import Button from "@mui/material/Button";
 
 
 function CreateStore(props) {
@@ -121,7 +122,10 @@ dispatch(getUserStore());
   
     return (
       <div>
-        <Link to="/stores">Stores Page</Link>
+        <Link to="/stores">
+          <Button variant="contained" color="success">
+                  Stores Page
+                </Button></Link>
         {storeOwner && (
           <MessageBox variant="danger">
             Yuo have created a store already.
