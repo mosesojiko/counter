@@ -68,12 +68,12 @@ function StoreDetailsPage(props) {
                                                <p><span><i class="fa fa-envelope" aria-hidden="true"></i></span>{store.singleStore.creatorEmail}</p>
                                            </div>
                                        </div>
-                                    <div className="profile-links">
+                                    {/* <div className="profile-links">
                                     <Link to="#"><i class="fa fa-instagram"></i></Link> 
                                     <Link to="#"><i class="fa fa-twitter"></i></Link>  
                                     <Link to="#"><i class="fa fa-linkedin"></i></Link>  
                                     <Link to="#"><i class="fa fa-facebook"></i></Link>
-                                    </div>
+                                    </div> */}
                                    </div>
                                </div>
                                

@@ -35,7 +35,11 @@ const [storeOwner, setStoreOwner ] = useState(false)
     if (!userInfo) {
         window.location = '/login';
       //props.history.push("/login");
-    }
+  }
+  
+  if (userInfo && userInfo.isSeller === true) {
+    window.location = "/userstore"
+  }
 
  const dispatch = useDispatch();
 //get user details

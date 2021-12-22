@@ -6,6 +6,7 @@ import { getStores } from '../actions/storeActions';
 import Store from '../components/Store';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import Button from "@mui/material/Button";
 
 
 function StoresPage() {
@@ -20,8 +21,36 @@ function StoresPage() {
   },[dispatch])
   return (
     <div>
-      <Link to ="/createstore">Create Store</Link>
-      <Link to = "/createproduct">Create Product</Link>
+      <div className="row around">
+          <div className="home-header">
+            <h4>
+              <Link to="/">
+                <Button variant="contained" color="success">
+                  Products
+                </Button>
+              </Link>
+            </h4>
+
+            <h4>
+              <Link to="/guide">
+                <Button variant="contained" color="success">
+                  Guide
+                </Button>
+              </Link>
+            </h4>
+          </div>
+          <div>
+            <h4>
+              <Link to="/createstore">
+                <Button variant="contained" color="success">
+                  Create-store
+                </Button>
+              </Link>
+            </h4>
+          </div>
+        </div>
+
+     
       {
           loading? 
           <LoadingBox></LoadingBox>

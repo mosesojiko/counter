@@ -80,7 +80,7 @@ function DeleteProduct(props) {
               <div className="price">#{product.price}</div>
               <div className='delete-product'>
                 <p>
-                  <Button variant="contained" color="success" onClick={handleDelete}>
+                  <Button variant="contained" color="error" onClick={handleDelete}>
                   Delete
                 </Button>
                 </p>

@@ -38,7 +38,10 @@ function PlaceOrderPage(props) {
     //using it for tax
     //basket.taxPrice = toPrice(0.15 * basket.itemsPrice);
     //for total price
-    basket.totalPrice = basket.itemsPrice + basket.shippingPrice  // + basket.taxPrice
+    
+    //service charge
+    const service = 0.02 * basket.itemsPrice
+    basket.totalPrice = basket.itemsPrice + basket.shippingPrice + service // + basket.taxPrice
 console.log(basket)
 console.log(basket.basketItems)
 console.log(buyerName)
@@ -161,8 +164,9 @@ useEffect(() =>{
                             </li>
                             <li>
                                 <div className = "row">
-                                    <div>Shipping</div>
-                                    <div>#{basket.shippingPrice.toFixed(2)}</div>
+                                    <div>Service</div>
+                                    <div>#{0.02 * basket.itemsPrice.toFixed(2)}</div>
+                                    {/* <div>#{basket.shippingPrice.toFixed(2)}</div> */}
                                 </div>
                             </li>
                             {

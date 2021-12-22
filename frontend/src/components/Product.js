@@ -9,7 +9,7 @@ function Product(props) {
   //const [qty, setQty] = useState(1);
   const qty = 1;
   return (
-    <div key={product._id} className="card">
+    <div key={product._id} className="card product">
       <Link to={`/product/${product._id}`}>
         <img className="medium" src={product.image} alt={product.name} />
       </Link>

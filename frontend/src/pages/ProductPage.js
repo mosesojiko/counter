@@ -76,6 +76,9 @@ function ProductPage(props) {
                     <strong>
                       {product.storeAddress}, {product.storeCity}
                     </strong>
+                      </li>
+                      <li>
+                    Seller-Name: <strong>{product.sellerName}</strong>
                   </li>
                 </ul>
               </div>

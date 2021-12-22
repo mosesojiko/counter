@@ -22,6 +22,7 @@ function UserStore() {
   //get userstore from redux store
   const userStoreDetails = useSelector((state) => state.userStoreDetails);
   const { loading, error, userStore } = userStoreDetails;
+ 
 
   //get user products from redux store
   const userproducts = useSelector((state) => state.userproducts);
@@ -227,7 +228,7 @@ function UserStore() {
               <div className="store-utils">
                 <p>
                   <Link to="/editstore">
-                    <Button variant="contained" color="success" size="small">
+                    <Button variant="contained" color="secondary" size="small">
                       Edit
                     </Button>
                   </Link>
@@ -359,14 +360,14 @@ function UserStore() {
                   </p>
                   <p>
                     <Link to={`/update/${product._id}`}>
-                      <Button variant="contained" color="success" size="small">
+                      <Button variant="contained" color="secondary" size="small">
                         Edit
                       </Button>
                     </Link>
                   </p>
                   <p>
                     <Link to={`/delete/${product._id}`}>
-                      <Button variant="contained" color="success" size="small">
+                      <Button variant="contained" color="error" size="small">
                         Delete
                       </Button>
                     </Link>

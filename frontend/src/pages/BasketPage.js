@@ -68,17 +68,7 @@ function BasketPage(props) {
                         alt={item.name}
                         className="small"
                       ></img>
-                      <Link to={`/store/${item.storeId}`}>
-                        <p>
-                          <Button
-                            variant="contained"
-                            color="success"
-                            size="small"
-                          >
-                            View-store
-                          </Button>
-                        </p>
-                      </Link>
+                      
                     </div>
                     <div className="min-30">
                       <Link to={`/product/${item.product}`}>{item.name}</Link>
@@ -86,6 +76,20 @@ function BasketPage(props) {
                       <p>
                         Location: {item.storeCity}, {item.storeCountry}
                       </p>
+                      <p>
+                        Seller-name: {item.sellerName}
+                      </p>
+                      <p><Link to={`/store/${item.storeId}`}>
+                        
+                          <Button
+                            variant="contained"
+                            color="success"
+                            size="small"
+                          >
+                            View-store
+                          </Button>
+                        
+                      </Link></p>
                     </div>
                     <div>
                       <select
