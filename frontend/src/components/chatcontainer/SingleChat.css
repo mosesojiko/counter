@@ -3,4 +3,18 @@
     flex-direction: "column";
     overflow-y: scroll;
     scrollbar-width: "none";
+   
+}
+.messageSender {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 0;
+    width: "100%";
+    
+}
+.messageSender > input {
+    flex: 0.9;
+}
+.messageSender > button {
+    flex: 0.1
 }

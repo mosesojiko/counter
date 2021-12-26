@@ -3,27 +3,30 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ChatState } from "../../context/ChatProvider";
-import { useToast } from '@chakra-ui/react'
 import { useEffect } from 'react';
-import { Box, Text } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/button";
-import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from './ChatLoading';
-import { Stack } from "@chakra-ui/layout";
+import Box from '@mui/material/Box';
 import { getSender } from '../../config/ChatLogics';
 import GroupChatModal from './GroupChatModal';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+//import Alert from '@mui/material/Alert';
+//import Stack from '@mui/material/Stack';
+import AddIcon from '@mui/icons-material/Add';
 
 function MyChats({fetchAgain}) {
   const [loggedUser, setLoggedUser] = useState()
-  const [ loading, setLoading ] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [getChatError, setGetChatError] = useState(false)
+  
+ 
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   //import state from context
-    const { selectedChat, setSelectedChat, chats, setChats, notification } = ChatState();
-    
-    const toast = useToast()
+    const { selectedChat, setSelectedChat, chats, setChats } = ChatState();
+   
 
     //function to fetch all the chats
     const fetchChats = async () => {
@@ -40,100 +43,165 @@ function MyChats({fetchAgain}) {
         setChats(data);
         setLoading(false)
       } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to Load the chats",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left",
-        });
+        setGetChatError(true)
         setLoading(false)
         return
       }
-    };
+  };
+  
+  console.log(chats)
+
+  //edit chat and set notification to false when a chat is selected
+  const clearNotified = async (id) => {
+    try {
+      const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+
+      const { data } = await axios.put("/api/v1/chat/unnotification", { id }, config);
+
+      //fetch chats again
+      fetchChats()
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
     //call the function in a useEffect
   //whenever the fetchAgain changes, this useEffect runs again
     useEffect(() => {
         setLoggedUser(userInfo)
         fetchChats()
-    },[fetchAgain])
-    return (
-      <Box
-        d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
-        flexDir="column"
-        alignItems="center"
-        p={3}
-        bg="white"
-        w={{ base: "100%", md: "31%" }}
-        borderRadius="lg"
-        borderWidth="1px"
+    }, [fetchAgain])
+  
+  
+  //fetch all user notifications
+  const myNotification = async () => {
+    try {
+      const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+
+      const { data } = await axios.get("/api/v1/chat/findnotification", config);
+      console.log(data)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ 
+  useEffect(() => {
+    myNotification()
+  },[userInfo, selectedChat])
+console.log(selectedChat)
+  //const addToNotification = () => setNotificationCount(notificationCount += 1)
+
+  
+  return (
+    
+    <Box
+      sx={{
+        display:{xs: selectedChat? "none":"flex", sm: selectedChat? "none":"flex", md:"flex"},
+        flexDirection: "column",
+        alignItems: "center",
+        p:3,
+        bgcolor: "white",
+        width: {xs:"100%", sm: "100%", md: "31%",  },
+        borderRadius: "10px",
+        borderWidth: "1px",
+      }}
       >
-        <Box
-          pb={3}
-          px={3}
-          fontSize={{ base: "28px", md: "30px" }}
-          fontFamily="Work sans"
-          d="flex"
-          w="100%"
-          justifyContent="space-between"
-          alignItems="center"
+      <Box
+        sx={{
+          pb: 3,
+          px: 3,
+          fontSize: { xs: "20px", sm: "20px", md: "22px" },
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems:"center",
+        }}
         >
-          My Chats
-          <GroupChatModal>
-            <Button
-              d="flex"
-              fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-              rightIcon={<AddIcon />}
+       <Box> My Chats</Box>
+      
+        <GroupChatModal>
+          <Button
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems:"center"
+              // fontSize: {xs:"17px", sm:"10px", md:"17px"}
+            }}
             >
-              Create Group
+              Create Group <span><AddIcon /></span>
             </Button>
+          
           </GroupChatModal>
-        </Box>
-        <Box
-          d="flex"
-          flexDir="column"
-          p={3}
-          bg="#F8F8F8"
-          w="100%"
-          h="100%"
-          borderRadius="lg"
-          overflowY="hidden"
+      </Box>
+      
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          p: 3,
+          bgcolor: "#f8f8f8",
+          width: "100%",
+          height: "100%",
+          borderRadius: "40px",
+          overflowY:"hidden"
+        }}
+         
         >
           {loading ? (
             <ChatLoading />
           ) : (
-            <Stack overflowY="scroll">
+            <Box>
               {chats.map((chat) => (
                 <Box
-                  onClick={() => setSelectedChat(chat)}
-                  cursor="pointer"
-                  bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-                  color={selectedChat === chat ? "white" : "black"}
-                  px={3}
-                  py={2}
-                  borderRadius="lg"
+                  onClick={() => {
+                    setSelectedChat(chat)
+                    chat.notification && chat.latestMessage.sender._id !== userInfo._id && clearNotified(chat._id)
+                  }}
+                  sx={{
+                    cursor: "pointer",
+                    bgcolor: { xs: selectedChat === chat ? "#38B2AC" : "#e8e8e8", sm: selectedChat === chat ? "#38B2AC" : "#e8e8e8", md: selectedChat === chat ? "#38B2AC" : "#e8e8e8", lg: selectedChat === chat ? "#38B2AC" : "#e8e8e8" },
+                    color: { xs: selectedChat === chat ? "white" : "black", sm: selectedChat === chat ? "white" : "black", md: selectedChat === chat ? "white" : "black", lg: selectedChat === chat ? "white" : "black" },
+                    px: 3,
+                    py: 2,
+                    borderRadius: "10px",
+                    my:1
+                  }}
                   key={chat._id}
                 >
-                  <Text>
+                  <Typography>
                     
                     {!chat.isGroupChat
                       ? getSender(loggedUser, chat.users)
                       : chat.chatName}
-                    
-                  </Text>
+                     {chat.notification && chat.latestMessage.sender._id !== userInfo._id &&
+                      (<span className="badge">!</span>)
+                    }   
+                   
+                  </Typography>
                   {chat.latestMessage && (
-                    <Text fontSize="xs">
+                    <Typography sx={{fontSize:"12px"}}>
                       <b>{chat.latestMessage.sender.name} : </b>
                       {chat.latestMessage.content.length > 50
                         ? chat.latestMessage.content.substring(0, 51) + "..."
                         : chat.latestMessage.content}
-                    </Text>
+                    </Typography>
                   )}
+                  
                 </Box>
               ))}
-            </Stack>
+            </Box>
+            
           )}
         </Box>
       </Box>

@@ -32,7 +32,7 @@ export const isSameSender = (messages, m, i, userId) => {
 };
 
 //takes in the current message array, the index, and the userId
-//check if it is the last message of the messages the the guest user has sent
+//check if it is the last message of the messages that the guest user has sent
 //To know this, the guest user id should !== the logged in user id. then return true or false
 export const isLastMessage = (messages, i, userId) => {
   return (
@@ -53,3 +53,5 @@ export const getSender = (loggedUser, users) => {
 export const getSenderFull = (loggedUser, users) => {
   return users[0]._id === loggedUser._id ? users[1] : users[0];
 };
+
+

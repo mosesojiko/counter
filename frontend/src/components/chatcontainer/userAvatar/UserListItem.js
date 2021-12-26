@@ -1,40 +1,43 @@
 import React from 'react'
-import { Box, Text } from "@chakra-ui/layout";
- import { Avatar } from "@chakra-ui/avatar";
+import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar'
+import Typography from '@mui/material/Typography';
 
 function UserListItem({user, handleFunction }) {
   
-    return (
+  return (
+     
       <Box
-        onClick={handleFunction}
-        cursor="pointer"
-        bg="#e8e8e8"
-        _hover={{
-          background: "#38B2AC",
+      onClick={handleFunction}
+      sx={{
+        cursor: "pointer",
+        bgcolor:"#e8e8e8",
+         ":hover":{
+          bgcolor: "#38B2AC",
           color: "white",
-        }}
-        width="100%"
-        d="flex"
-        alignItems="center"
-        color="black"
-        px={3}
-        py={3}
-        mb={2}
-        borderRadius="lg"
+        },
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        color: "black",
+        px: 3,
+        py: 1,
+        mb: 2,
+        
+      }}
+
       >
-            <Avatar
-                mr={2}
-          size="sm"
-          cursor="pointer"
+      <Avatar
+        sx={{width:"24px", height:"24px", cursor:"pointer",mr:2}}
           name={user.name}
           src={user.image}
             />
             <Box>
-                <Text>{user.name}</Text>
-                <Text fontSize="xs">
+                <Typography>{user.name}</Typography>
+                <Typography fontSize="xs">
                     <b>Email: </b>
                     {user.email}
-                </Text>
+                </Typography>
             </Box>
       </Box>
     );

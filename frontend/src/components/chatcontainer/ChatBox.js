@@ -1,24 +1,28 @@
 import React from 'react'
 import { ChatState } from "../../context/ChatProvider";
-import { Box } from "@chakra-ui/layout";
+import Box from '@mui/material/Box';
 import SingleChat from './SingleChat';
+
 
 
 function ChatBox({fetchAgain, setFetchAgain}) {
   //import state from context
   const { selectedChat } = ChatState();
-    return (
-      <Box
-        d={{ base: selectedChat ? "flex" : "none", md: "flex" }}
-        alignItems="center"
-        flexDir="column"
-        p={3}
-        bg="white"
-        w={{ base: "100%", md: "68%" }}
-        borderRadius="lg"
-        borderWidth="1px"
-      >
-        <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+  return (
+    
+    < Box
+    sx = {{
+        display: { xs: selectedChat ? "flex" : "none", sm: selectedChat ? "flex" : "none", md: "flex", lg:"flex" },
+        alignItems: "center",
+        flexDirection: "column",
+        p: 3,
+        bgcolor: "white",
+        width: { sm: "100%", md: "68%" },
+        borderRadius: "40px",
+      borderWidth:"1px"
+    }}
+    >
+         <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} /> 
       </Box>
     );
     

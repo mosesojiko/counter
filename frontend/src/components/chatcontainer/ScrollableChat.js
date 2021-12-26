@@ -2,29 +2,33 @@ import React from "react";
 import { useSelector } from "react-redux";
 import ScrollableFeed from "react-scrollable-feed";
 import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from "../../chatLogics";
-import { Avatar } from "@chakra-ui/avatar";
-import { Tooltip } from "@chakra-ui/react";
+import Tooltip from '@mui/material/Tooltip';
+import Avatar from '@mui/material/Avatar';
 
 
 function ScrollableChat({ messages }) {
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log(userInfo);
+ 
 
   return (
+  
     <ScrollableFeed>
       {messages &&
         messages.map((m, i) => (
           <div style={{ display: "flex" }} key={m._id}>
             {(isSameSender(messages, m, i, userInfo._id) ||
               isLastMessage(messages, i, userInfo._id)) && (
-              <Tooltip label={m.sender.name} placement="bottom-start" hasArrow>
+              <Tooltip label={m.sender.name} placement="bottom-start">
                 <Avatar
-                  mt="7px"
-                  mr={1}
-                  size="sm"
-                  cursor="pointer"
+                  sx={{
+                   mt:2, 
+                  mr:1,
+                    width: "20px",
+                  height: "20px",
+                  cursor:"pointer"
+                  }}
                   name={m.sender.name}
                   src={m.sender.image}
                 />

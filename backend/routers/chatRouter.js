@@ -55,6 +55,37 @@ chatRouter.post('/', isAuth, expressAsyncHandler(async (req, res) => {
       }
     }
 }))
+// chatRouter.get('/every', expressAsyncHandler(async (req, res) => {
+//     const chat = await Chat.find({})
+//     res.json(chat)
+// }))
+
+chatRouter.get('/findnotification', isAuth, expressAsyncHandler(async (req, res) => {
+  try {
+        Chat.find({ users: { $elemMatch: { $eq: req.user._id } }, notification:true })
+          .populate("users", "-password")
+          .populate("groupAdmin", "-password")
+          .populate("latestMessage")
+          .sort({ updatedAt: -1 })
+          .then(async (results) => {
+            results = await User.populate(results, {
+              path: "latestMessage.sender",
+              select: "name image email",
+            });
+            res.status(200).send(results);
+          });
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
+
+  // const chatNotification = await Chat.find({users: { $elemMatch: { $eq: req.user._id } }, notification:true})
+  // if (chatNotification) {
+  //   res.json(chatNotification)
+  // } else {
+  //   res.json({message:"not found"})
+  // }
+}))
 
 // get chats from a particular user
 chatRouter.get('/', isAuth, expressAsyncHandler(async (req, res) => {
@@ -88,5 +119,28 @@ chatRouter.put('/groupremove', isAuth, removeFromGroup)
 
 //add someone to group
 chatRouter.put('/groupadd', isAuth, addToGroup)
+
+//edit chat for notification to be true
+chatRouter.put('/notification', isAuth, expressAsyncHandler( async(req,res) =>{
+    const chat = await Chat.findById(req.body.id);
+    if(chat){
+        chat.notification = true;
+    }
+    const notifiedChat = await chat.save();
+        res.json(notifiedChat)
+}))
+
+
+//edit chat for notification to be false
+chatRouter.put('/unnotification', isAuth, expressAsyncHandler( async(req,res) =>{
+    const chat = await Chat.findById(req.body.id);
+    if(chat){
+        chat.notification = false;
+    }
+    const unNotifiedChat = await chat.save();
+        res.json(unNotifiedChat)
+}))
+
+
 
 module.exports = chatRouter

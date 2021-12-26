@@ -1,34 +1,56 @@
 import React, { useState } from "react";
-import { useDisclosure } from "@chakra-ui/hooks";
 import axios from "axios";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  FormControl,
-  Input,
-} from "@chakra-ui/react";
-import { ViewIcon } from "@chakra-ui/icons";
-import { IconButton } from "@chakra-ui/button";
-import { Button } from "@chakra-ui/button";
+
 import { useSelector } from "react-redux";
-import { useToast } from "@chakra-ui/react";
-import { Box } from "@chakra-ui/layout";
 import { ChatState } from "../../context/ChatProvider";
 import UserBadgeItem from "./userAvatar/UserBadgeItem";
 import LoadingBox from "../LoadingBox";
 import UserListItem from "./userAvatar/UserListItem";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import IconButton from '@mui/material/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
   const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [noSearchValue, setNoSearchValue] = useState(false)
+  const [ searchError, setSearchError ] = useState(false)
   const [renameLoading, setRenameLoading] = useState(false);
+  const [noNewName, setNoNewName] = useState(false)
+  const [errorRename, setErrorRename] = useState(false)
+  const [successRename, setSuccessRename] = useState(false)
+  const [userInGroup, setUserInGroup] = useState(false)
+  const [notAdmin, setNotAdmin] = useState(false)
+  const [addingUser, setAddingUser] = useState(false)
+  const [errorAddingUser, setErrorAddingUser] = useState(false)
+  const [notAdminRemove, setNotAdminRemove] = useState(false)
+  const [loadingRemove, setLoadingRemove] = useState(false)
+  const [errorRemove, setErrorRemove] = useState(false)
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
 
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
@@ -36,36 +58,23 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
 
   //import state from context
   const { selectedChat, setSelectedChat } = ChatState();
-  const toast = useToast();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  
 
   //add user to the group
   const handleAddUser = async (user1) => {
     //check if the user is already in the group
     if (selectedChat.users.find((u) => u._id === user1._id)) {
-      toast({
-        title: "User already in the group",
-        status: "Error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
+      setUserInGroup(true)
       return;
     }
     //check if the user is an admin. only admins can add users
     if (selectedChat.groupAdmin._id !== userInfo._id) {
-      toast({
-        title: "Only admin can add user!",
-        status: "Error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
+      setNotAdmin(true)
+      //Only admins can add users
       return;
     }
     try {
-      setLoading(true);
+      setAddingUser(true);
       const config = {
         headers: {
           Authorization: `Bearer ${userInfo.token}`,
@@ -82,17 +91,11 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
 
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
-      setLoading(false);
+      setAddingUser(false);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error.response.data.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      setLoading(false);
+      setErrorAddingUser(true)
+      //error adding a user
+      setAddingUser(false);
     }
     setGroupChatName("");
   };
@@ -104,17 +107,12 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
       selectedChat.groupAdmin._id !== userInfo._id &&
       user1._id !== userInfo._id
     ) {
-      toast({
-        title: "Only admin can remove user!",
-        status: "Error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
+      //only admin can remove user
+      setNotAdminRemove(true)
       return;
     }
     try {
-      setLoading(true);
+      setLoadingRemove(true);
       const config = {
         headers: {
           Authorization: `Bearer ${userInfo.token}`,
@@ -133,16 +131,10 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
       setFetchAgain(!fetchAgain);
       //fetch the messages again after removing someone
       fetchMessages();
-      setLoading(false);
+      setLoadingRemove(false);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error.response.data.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
+      //error removing a user
+      setErrorRemove(true)
       setLoading(false);
     }
     setGroupChatName("");
@@ -150,7 +142,10 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
 
   //rename a group chat
   const handleRename = async () => {
-    if (!groupChatName) return;
+    if (!groupChatName) {
+      setNoNewName(true);
+      return
+    }
 
     try {
       setRenameLoading(true);
@@ -170,15 +165,9 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setRenameLoading(false);
+      setSuccessRename(true)
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error.response.data.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
+      setErrorRename(true)
       setRenameLoading(false);
     }
     setGroupChatName("");
@@ -188,6 +177,7 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
   const handleSearch = async (query) => {
     setSearch(query);
     if (!query) {
+      setNoSearchValue(true)
       return;
     }
     try {
@@ -200,20 +190,154 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
       //console.log(data);
       setSearchResult(data);
     } catch (error) {
-      toast({
-        title: "Got an error",
-        description: "Cannot load search result",
-        status: "Error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
+     setSearchError(true)
       setLoading(false);
     }
   };
+  
   return (
     <>
-      <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
+      <IconButton sx={{display:{sm:"flex"}}} onClick={handleOpen}><VisibilityIcon/></IconButton>
+      {/* <Button onClick={handleOpen}>Open modal</Button> */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography sx={{textAlign:"center"}} id="modal-modal-title" variant="h4" component="h2">
+            {selectedChat.chatName}
+          </Typography>
+          <Box sx={{width:"100%", display:"flex", flexWrap:"wrap", pb:3}}>
+              {selectedChat.users.map((u) => (
+                <UserBadgeItem
+                  key={u._id}
+                  user={u}
+                  admin={selectedChat.groupAdmin}
+                  handleFunction={() => handleRemove(u)}
+                />
+              ))}
+          </Box>
+          <Box sx={{display:"flex", alignItems:"center", mb:1}}>
+            <input
+                placeholder="Group name"
+                mb={3}
+                value={groupChatName}
+                onChange={(e) => setGroupChatName(e.target.value)}
+              />
+              <Button
+                variant="contained"
+                color="warning"
+                ml={1}
+                isLoading={renameLoading}
+                onClick={handleRename}
+              >
+                Update
+              </Button>
+          </Box>
+          {
+            noSearchValue && <Stack sx={{ width: '100%' }} spacing={2}>
+              <Alert severity="warning" onClose={() => setNoSearchValue(false)}>Search cannot be empty.</Alert>
+      
+            </Stack>
+          }
+          {
+            searchError && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="error" onClose={() => setSearchError(false)}>Search not successful.</Alert>
+      
+    </Stack>
+          }
+          {
+            noNewName && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="warning" onClose={() => setNoNewName(false)}>Enter the new group name.</Alert>
+      
+    </Stack>
+          }
+          {
+            renameLoading && <LoadingBox></LoadingBox>
+          }
+          {
+            successRename && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="success" onClose={() => setSuccessRename(false)}>Group renamed successfully.</Alert>
+      
+    </Stack>
+          }
+          {
+            errorRename && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="error" onClose={() => setErrorRename(false)}>Error renaming group.</Alert>
+      
+    </Stack>
+          }
+          {
+            userInGroup && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="warning" onClose={() => setUserInGroup(false)}>User is added already.</Alert>
+      
+    </Stack>
+          }
+          {
+            notAdmin && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="warning" onClose={() => setNotAdmin(false)}>Only admin can add someone.</Alert>
+      
+    </Stack>
+          }
+          {
+            addingUser && <LoadingBox></LoadingBox>
+          }
+          {
+            errorAddingUser && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="error" onClose={() => setErrorAddingUser(false)}>Error adding user.</Alert>
+      
+    </Stack>
+          }
+          {
+            notAdminRemove && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="warning" onClose={() => setNotAdminRemove(false)}>Only admin can remove someone.</Alert>
+      
+    </Stack>
+          }
+          {
+            loadingRemove && <LoadingBox></LoadingBox>
+          }
+          {
+            errorRemove && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="warning" onClose={() => setErrorRemove(false)}>Error removing user.</Alert>
+      
+    </Stack>
+          }
+          
+          <Box>
+            <input
+                placeholder="Add users"
+                mb={1}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+          </Box>
+          <Box sx={{width:"90%"}}>
+            {loading ? (
+              <LoadingBox></LoadingBox>
+            ) : (
+              searchResult
+                ?.slice(0, 4)
+                .map((user) => (
+                  <UserListItem
+                    key={user._id}
+                    user={user}
+                    handleFunction={() => handleAddUser(user)}
+                  />
+                ))
+            )}
+          </Box>
+          
+          <Box sx={{display:"flex", justifyContent:"space-between", mt:1}}>
+            <Button variant="contained" color="error" onClick={() => handleRemove(userInfo)}>
+              Leave Group
+            </Button>
+          <Button variant ="outlined" color="error" onClick={handleClose}>Close</Button>
+          </Box>
+        </Box>
+      </Modal>
+      {/* <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
@@ -257,7 +381,7 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </FormControl>
-            {/* show result of search */}
+           
             {loading ? (
               <LoadingBox></LoadingBox>
             ) : (
@@ -279,7 +403,7 @@ function UpdateGroupChatModal({ fetchAgain, setFetchAgain, fetchMessages }) {
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

@@ -26,11 +26,8 @@ import SoldProducts from './pages/SoldProducts';
 import WidthdrawHistory from './pages/WidthdrawHistory';
 import Chats from './pages/Chats';
 import { ChatState } from "./context/ChatProvider";
-
-
-
-
-
+import axios from 'axios';
+import {useEffect, useState } from 'react';
 
 
 
@@ -38,6 +35,7 @@ function App() {
   //get access to basket items
   const basket = useSelector((state) => state.basket);
   const { basketItems } = basket;
+  const [notifs, setNotifs] = useState([]) //for notification
 
   //get access to userLogin from redux store
   const userLogin = useSelector((state) => state.userLogin);
@@ -51,10 +49,32 @@ function App() {
     window.location = "/";
   };
 
-  //import state from context
-  const { notification, setNotification } = ChatState();
+   //import state from context
+    const { selectedChat, chats } = ChatState();
 
+  //fetch all user notifications
+  const myNotification = async () => {
+    try {
+      const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
 
+      const { data } = await axios.get("/api/v1/chat/findnotification", config);
+      setNotifs(data)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ 
+  useEffect(() => {
+    myNotification()
+  },[userInfo, selectedChat, chats])
+ 
+  const myNotifications = notifs.filter((n) => n.latestMessage.sender._id !== userInfo._id)
+  
   return (
     <BrowserRouter>
       <div className="grid-container">
@@ -74,9 +94,12 @@ function App() {
             </Link>
             {userInfo ? (
               <>
-                <Link to="/chats">Chat</Link>
-                {notification.length > 0 && 
-                (<span className="badge">{notification.length}</span>)}
+                <Link to="/chats">Chat
+                  {myNotifications.length > 0 && (
+                <span className="badge">{myNotifications.length}</span>
+              )}
+                </Link>
+                
               </>
             ) : (
               <Link to="/register">Register</Link>

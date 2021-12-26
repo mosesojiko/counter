@@ -12,6 +12,7 @@ const ChatProvider = ({ children }) => {
   const [chats, setChats] = useState([])
   //for notification
   const [notification, setNotification] = useState([])
+ 
 
 
     return (

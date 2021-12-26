@@ -1,19 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { ChatState } from "../../context/ChatProvider";
-import { Box, Text } from "@chakra-ui/layout";
-import { ArrowBackIcon } from "@chakra-ui/icons";
-import { IconButton } from "@chakra-ui/button";
 import { getSender, getSenderFull } from "../../config/ChatLogics";
 import ProfileModal from "./ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import { useEffect, useState } from "react";
 import LoadingBox from "../LoadingBox";
-import { FormControl } from "@chakra-ui/form-control";
 import axios from "axios";
-import { useToast, Input } from "@chakra-ui/react";
 import "./SingleChat.css";
 import ScrollableChat from "./ScrollableChat";
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+
+
 import io from "socket.io-client";
 
 //for socket io connection
@@ -23,11 +26,14 @@ let socket, selectedChatCompare;
 function SingleChat({ fetchAgain, setFetchAgain }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errorFetchMessage, setErrorFetchMessage] = useState(false)
   const [newMessage, setNewMessage] = useState();
+  const[sendMessageError, setSendMessageError] = useState(false)
   const [socketConnected, setSocketConnected] = useState(false);
   //state for typing functionality
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  
   
 
   //get login user details from store
@@ -37,8 +43,6 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   //import state from context
   const { selectedChat, setSelectedChat, notification, setNotification } =
     ChatState();
-
-  const toast = useToast();
 
   //useEffect to connect socket io
   useEffect(() => {
@@ -74,23 +78,48 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
           },
           config
         );
-        //console.log(data)
+        console.log(data)
         //send new messages with socket
         socket.emit("new message", data);
         setMessages([...messages, data]);
+        //set notification
+        notified(selectedChat._id)
       } catch (error) {
-        toast({
-          title: "Got an error",
-          description: "Failed to send your message",
-          status: "Error",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
-        });
+        setSendMessageError(true) //failed to send message
       }
     }
   };
 
+  //using button to send message
+  const sendMessageWithButton = async () => {
+    //if message has been sent, emit stop typing
+      socket.emit("stop typing", selectedChat._id);
+      try {
+        const config = {
+          "Content-Type": "apllication/json",
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+        setNewMessage("");
+        const { data } = await axios.post(
+          "/api/v1/message",
+          {
+            content: newMessage,
+            chatId: selectedChat._id,
+          },
+          config
+        );
+        //console.log(data)
+        //send new messages with socket
+        socket.emit("new message", data);
+        setMessages([...messages, data]);
+        //give notification
+        notified(selectedChat._id)
+      } catch (error) {
+        setSendMessageError(true) //failed to send message
+      }
+  } 
   //get all the messages for a particular chat
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -111,16 +140,12 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
       //user join room with the chat id
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
-      toast({
-        title: "Got an error",
-        description: "Failed to load messages.",
-        status: "Error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
+      setErrorFetchMessage(true) //Failed to load messages
+      setLoading(false)
     }
   };
+
+
 
   //call the fetch message in a useEffect everytime selectedChat changes
   useEffect(() => {
@@ -134,6 +159,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   //if it received any message, it should put it in the chat
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
+      //monitor the socket for new messages
       //if non of the chat is selected or the one selected does not match the one that received the message, give notification
       if (
         !selectedChatCompare ||
@@ -143,6 +169,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
         //add the new message to notification if it is not in the notification array
         if (!notification.includes(newMessageRecieved)) {
           setNotification([newMessageRecieved, ...notification])
+          
           //update our messages again to add the new message
           setFetchAgain(!fetchAgain)
         }
@@ -154,9 +181,25 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   });
   
 
-  //typing handler function
-  const typingHandler = (e) => {
-    setNewMessage(e.target.value);
+  //edit chat and set notification true when there is a notification
+  const notified = async (id) => {
+    try {
+      const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+
+      const { data } = await axios.put("/api/v1/chat/notification", { id }, config);
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // //typing handler function
+   const typingHandler = (e) => {
+     setNewMessage(e.target.value);
     //typing indicator logic
     //if socket is not connected
     if (!socketConnected) return;
@@ -179,27 +222,35 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
       }
     }, timerLength);
   };
+  
+
+  
 
   return (
     <>
-      {selectedChat ? (
-        <>
-          <Text
-            fontSize={{ base: "20px", md: "25px" }}
-            pb={3}
-            px={2}
-            w="100%"
-            d="flex"
-            justifyContent={{ base: "space-between" }}
-            alignItems="center"
+      {
+        selectedChat ? (
+          <>
+            <Typography 
+              sx={{
+                fontSize: { sm: "28px", md: "35px" },
+                pb: 3,
+                px: 2,
+                width: "100%",
+                display: "flex",
+                justifyContent: { sm: "space-between" },
+                alignItems:"center"
+              }}
           >
-            <IconButton
-              d={{ base: "flex", md: "none" }}
-              icon={<ArrowBackIcon />}
+              <IconButton
+                sx={{
+                  display:{ sm: "flex", md: "none"}
+                }}
+             
               onClick={() => setSelectedChat("")}
-            />
-            {/* display the name of the chat if its group chat */}
-            {!selectedChat.isGroupChat ? (
+              >  <ArrowBackIcon /></IconButton>
+              
+              {!selectedChat.isGroupChat ? (
               <>
                 {getSender(userInfo, selectedChat.users)}
                 <ProfileModal
@@ -216,45 +267,59 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
                 />
               </>
             )}
-          </Text>
-          <Box
-            d="flex"
-            flexDir="column"
-            justifyContent="flex-end"
-            p={3}
-            bg="#E8E8E8"
-            w="100%"
-            h="100%"
-            borderRadius="lg"
-            overflowY="hidden"
-          >
-            {/* Messages here */}
-            {loading ? (
-              <LoadingBox></LoadingBox>
-            ) : (
-              <div className="messages">
-                <ScrollableChat messages={messages} />
+            </Typography>
+            <Box sx={{
+              display:"flex",
+            flexDirection:"column",
+            justifyContent:"flex-end",
+            p:3,
+            bgcolor:"#E8E8E8",
+            width:"100%",
+              height: "100%",
+            borderRadius:"10px",
+              overflowY: "hidden",
+           
+            }}>
+              {
+                loading ? (<LoadingBox sx={{alignSelf:"center", margin:"auto"}}></LoadingBox>) :
+                  (
+                    <div className="messages">
+                      <ScrollableChat messages={messages} />
+                    </div>
+                  )
+              }
+              {
+            sendMessageError && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="error" onClose={() => setSendMessageError(false)}>Failed to send message.</Alert>
+      
+    </Stack>
+              }
+              {
+            errorFetchMessage && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="error" onClose={() => setErrorFetchMessage(false)}>Failed to load messages.</Alert>
+      
+    </Stack>
+              }
+              {isTyping && <p style={{ color:"#023c3f"}}>Typing...</p>}
+              <div className="messageSender">
+                <input type="text" placeholder="Enter your message"
+                  onChange={typingHandler}
+                  value={newMessage}
+                  onKeyDown={sendMessage}
+                />
+                <button type="button" onClick={sendMessageWithButton}>send</button>
               </div>
-            )}
-            <FormControl onKeyDown={sendMessage} isRequired mt={3}>
-              {isTyping ? <div>Typing...</div> : <></>}
-              <Input
-                variant="filled"
-                bg="#E0E0E0"
-                placeholder="Enter your message here"
-                onChange={typingHandler}
-                value={newMessage}
-              />
-            </FormControl>
-          </Box>
-        </>
-      ) : (
-        <Box d="flex" alignItems="center" justifyContent="center" h="100%">
-          <Text fontSize="3xl" p={3}>
+            </Box>
+            </>
+        ): (
+            <Box sx={{display:"flex", alignItems:"center", justifyContent:"center", height:"100%"}} >
+          <Typography sx={{fontSize:"30px", p:3}}>
             Click on a user to start chatting.
-          </Text>
+          </Typography>
         </Box>
-      )}
+        )
+      }
+      
     </>
   );
 }

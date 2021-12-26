@@ -89,6 +89,9 @@ app.use((err, req, res, next) =>{
     next()
 })
 const port = process.env.PORT || 5000
+// app.listen(port, () => {
+//     console.log(`Serve as http://localhost:${port}`)
+// })
 
 //making use of socket
 const server = app.listen(port, () => {
@@ -102,7 +105,7 @@ const io = require('socket.io')(server, {
     }
 })
 
-// //create a connection
+ //create a connection
 io.on('connection', (socket) => {
     console.log('connected to socket io');
     //everytime a user opens the app, he should be connected to his own socket

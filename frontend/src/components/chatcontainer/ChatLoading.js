@@ -1,21 +1,25 @@
 import React from 'react';
-import { Stack } from '@chakra-ui/layout';
-import { Skeleton } from "@chakra-ui/skeleton";
+import Skeleton from '@mui/material/Skeleton';
+import Box from '@mui/material/Box';
 
 function ChatLoading() {
-    return (
-      <Stack>
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-        <Skeleton height="45px" />
-      </Stack>
+  return (
+     
+      <Box sx={{ width: "90%" }}>
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton animation="wave" />
+      <Skeleton animation={false} />
+    </Box>
     );
 }
 

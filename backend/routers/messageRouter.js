@@ -53,6 +53,12 @@ messageRouter.get('/:chatId', isAuth, expressAsyncHandler(async (req, res) => {
     res.json(messages)
 }))
 
+messageRouter.get('/', expressAsyncHandler(async (req, res) => {
+    const m = await Message.find({})
+    if (m) {
+        res.json(m)
+    }
+}))
 
 
 module.exports = messageRouter;

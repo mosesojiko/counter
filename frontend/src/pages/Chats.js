@@ -1,12 +1,13 @@
 import React from 'react'
-import './Chats.css'
 //import {Container} from '@chakra-ui/react'
-import { Box } from '@chakra-ui/layout'
+//import { Box } from '@chakra-ui/layout'
+import Box from '@mui/material/Box';
 import { useSelector } from 'react-redux';
 import SideDrawer from '../components/chatcontainer/SideDrawer';
 import MyChats from '../components/chatcontainer/MyChats';
 import ChatBox from '../components/chatcontainer/ChatBox';
 import { useState } from 'react';
+
 
 
 
@@ -21,12 +22,18 @@ function Chats() {
   return (
     <div style={{ width: "100%" }}>
       {userInfo && <SideDrawer />}
-      <Box d="flex" justifyContent="space-between" w="100%" h="90vh" p="10px">
-        {userInfo && <MyChats fetchAgain={fetchAgain} />}
+
+      <Box sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%", height: "95vh",
+        padding: '10px',
+      }}>
+         {userInfo && <MyChats fetchAgain={fetchAgain} />}
         {userInfo && (
           <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
         )}
-      </Box>
+        </Box>
     </div>
   );
 }
