@@ -7,7 +7,11 @@ import { findProductForUpdate, updateUserProduct } from '../actions/productActio
 import { detailsUser } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { GET_PRODUCT_FOR_UPDATE_RESET, UPDATE_PRODUCT_RESET } from '../constants/productConstants';
+import {
+    GET_PRODUCT_FOR_UPDATE_RESET,
+    UPDATE_PRODUCT_RESET
+} from '../constants/productConstants';
+import Button from '@mui/material/Button';
 
 
 function UpdateProduct(props) {
@@ -26,17 +30,17 @@ function UpdateProduct(props) {
     //get access to logged in user
     const userLogin = useSelector(state =>state.userLogin);
     const { userInfo } = userLogin;
-    console.log(userInfo)
+    
 
     //get details of a loggged in user
     const userDetails = useSelector(state => state.userDetails);
     const { loading, error, user } = userDetails;
-    console.log(user)
+  
 
     //get access to the product for update
     const productForUpdate = useSelector((state) => state.productForUpdate);
     const {loading: loadingProduct, error:errorProduct, product } = productForUpdate
-    console.log(product)
+  
 
     //get access to update product from redux store
     const updateProduct = useSelector((state) => state.updateProduct);
@@ -89,6 +93,12 @@ function UpdateProduct(props) {
             window.location ="/userstore"
         },2000)
     }
+    if (errorUpdate) {
+        setTimeout(() => {
+            dispatch({ type: GET_PRODUCT_FOR_UPDATE_RESET });
+            dispatch({ type: UPDATE_PRODUCT_RESET });
+        },2000)
+    }
     return (
         <div>
             <form className = "form" onSubmit = {submitHandler} >
@@ -97,23 +107,15 @@ function UpdateProduct(props) {
                 </div>
                 {
                     loading? <LoadingBox></LoadingBox>:
-                    error? <MessageBox variant="danger">{error}</MessageBox>:
+                    error? <MessageBox variant="danger">Error</MessageBox>:
                     <>
                     {
                         loadingProduct && <LoadingBox></LoadingBox>
                     }
                     {
-                        errorProduct && <MessageBox variant="danger">{errorProduct}</MessageBox>
+                        errorProduct && <MessageBox variant="danger">Could not load product</MessageBox>
                     }
-                    {
-                        loadingUpdate && <LoadingBox></LoadingBox>
-                    }
-                    {
-                        errorUpdate && <MessageBox variant ="danger">{errorUpdate}</MessageBox>
-                    }
-                    {
-                        success && <MessageBox variant ="success">Product Updated Successfully.</MessageBox>
-                    } 
+                    
                 <div>
                     <label htmlFor="name">Product Name</label>
                     <input type="text" id="name" placeholder="Product name"
@@ -157,14 +159,26 @@ function UpdateProduct(props) {
                     />
                 </div>
                 <div>
-                                    <p>{product.image?"Change image": "Image of the product"}</p>
+                        <p>{product.image?"Change image?": "Image of the product"}</p>
                         <FileBase64 type ="file" multiple={false}  
                         onDone = {({base64}) => setImage(base64)}
                         />
-                    </div>
+                                </div>
+                                {
+                        loadingUpdate && <LoadingBox></LoadingBox>
+                    }
+                    {
+                        errorUpdate && <MessageBox variant ="danger">Failed to update product.</MessageBox>
+                    }
+                    {
+                        success && <MessageBox variant ="success">Product Updated Successfully.</MessageBox>
+                    } 
                     <div>
                         <label />
-                        <button className ="primary" type ="submit">Update</button>
+                         {/* <button className ="primary" type ="submit">Update</button> */}
+                         <Button type="submit" sx={{mb:2}} variant="contained" color="success" size="large">
+                        Update
+                      </Button>
                     </div>
                     </>
                   }

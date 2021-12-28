@@ -81,7 +81,7 @@ useEffect(() => {
       setSellerPhone(userInfo.phone)
   }
   },[dispatch, userInfo])
-console.log(productStoreId)
+//console.log(productStoreId)
  
   const submitHandler = (e) =>{
     e.preventDefault();
@@ -203,9 +203,12 @@ console.log(productStoreId)
 
           <div>
             <label />
-            <button className="primary" type="submit">
+            {/* <button className="primary" type="submit">
               Create Product
-            </button>
+            </button> */}
+            <Button variant="contained" color="success" type="submit" size="large" sx={{mb:2}}>
+                  Create Product
+            </Button>
           </div>
         </form>
       </div>

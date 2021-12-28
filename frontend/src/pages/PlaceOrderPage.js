@@ -9,6 +9,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { orderedProduct } from '../actions/productActions';
 import { UPDATE_ORDERED_PRODUCT_RESET } from '../constants/productConstants';
+import { useHistory } from 'react-router-dom'
 
 function PlaceOrderPage(props) {
     const dispatch = useDispatch();
@@ -16,12 +17,12 @@ function PlaceOrderPage(props) {
     const [buyerAddress, setBuyerAddress ] = useState('')
     const [buyerPhone, setBuyerPhone ] = useState('')
    
-
+const history = useHistory()
     //get cart from redux store
     const basket = useSelector((state) => state.basket)
     //check if user entered payment method, if not redirect the user to payment method
     if(!basket.paymentMethod) {
-        props.history.push('/payment')
+        history.push('/payment')
     }
     //get orderCreate from redux store
     const orderCreate = useSelector(state => state.orderCreate);
@@ -42,9 +43,9 @@ function PlaceOrderPage(props) {
     //service charge
     const service = 0.02 * basket.itemsPrice
     basket.totalPrice = basket.itemsPrice + basket.shippingPrice + service // + basket.taxPrice
-console.log(basket)
-console.log(basket.basketItems)
-console.log(buyerName)
+//console.log(basket)
+//console.log(basket.basketItems)
+//console.log(buyerName)
 useEffect(() =>{
     if(basket) {
         setBuyerName(basket.shippingAddress.fullName);
@@ -79,16 +80,17 @@ useEffect(() =>{
     useEffect(() =>{
         if(success && successProduct) {
             //redirect the user to order details screen
-            props.history.push(`/order/${order._id}`);
+            //history.push(`/order/${order._id}`);
             dispatch({
                 type: CREATE_ORDER_RESET
             })
             dispatch({
                 type: UPDATE_ORDERED_PRODUCT_RESET
             })
+             window.location = `/order/${order._id}`
         }
     
-    }, [dispatch, order, props.history, success, successProduct])
+    }, [dispatch, order, history, success, successProduct])
     
     return (
         <div>

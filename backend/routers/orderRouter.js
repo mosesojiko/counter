@@ -24,6 +24,18 @@ orderRouter.get('/mine', isAuth, expressAsyncHandler(async(req, res)=>{
 //     }
 // }))
 
+//update order after delivery
+orderRouter.put('/delivered', isAuth, expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.body.id);
+    if (order) {
+        order.isDelivered = true
+        order.deliveredAt = Date.now()
+    }
+
+    const deliveredOrder = await order.save()
+    res.json(deliveredOrder)
+}))
+
 // Create an order
 orderRouter.post('/', isAuth, expressAsyncHandler( async(req, res) =>{
     //check if order items contains order or not
@@ -85,6 +97,7 @@ orderRouter.put('/:id/pay', isAuth, expressAsyncHandler( async(req, res) =>{
         res.status(404).json({message: "Order Not Found."})
     }
 }))
+
 
 
 module.exports = orderRouter;

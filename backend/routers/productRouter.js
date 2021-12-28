@@ -287,4 +287,15 @@ productRouter.put('/paidproducts', expressAsyncHandler( async(req, res) => {
   res.json(paidProduct);
 }))
 
+//update a product when it is delivered
+productRouter.put('/isdelivered', expressAsyncHandler( async(req, res) => {
+  const product = await Product.findById(req.body.id);
+  if(product) {
+    product.isDelivered = true;
+    product.isDeliveredAt = Date.now()
+  }
+  const deliveredProduct = await product.save();
+  res.json(deliveredProduct);
+}))
+
 module.exports = productRouter;

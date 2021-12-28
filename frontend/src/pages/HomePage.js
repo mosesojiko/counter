@@ -48,17 +48,26 @@ function HomePage() {
           </div>
         </div>
 
-        {loading ? (
+        {/* {loading ? (
           <LoadingBox></LoadingBox>
         ) : error ? (
-          <MessageBox variant="danger">{error}</MessageBox>
+          <MessageBox variant="danger">Failed to load products</MessageBox>
         ) : (
           <div className="row center">
             {products.map((product) => (
               <Product key={product._id} product={product} showStoreButton={true}></Product>
             ))}
           </div>
-        )}
+        )} */}
+        
+        <div className="row center">
+          {loading && <LoadingBox></LoadingBox>}
+          {error && <MessageBox variant="danger">Failed to load products</MessageBox>}
+            {products?.map((product) => (
+              <Product key={product._id} product={product} showStoreButton={true}></Product>
+            ))}
+          </div>
+        
       </div>
     );
 }

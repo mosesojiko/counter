@@ -17,7 +17,7 @@ function UserStore() {
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log(userInfo);
+  //console.log(userInfo);
 
   //get userstore from redux store
   const userStoreDetails = useSelector((state) => state.userStoreDetails);
@@ -39,6 +39,7 @@ function UserStore() {
         dispatch(getUserProducts());
   }, [dispatch]);
 
+  
   //get editPost from redux store
   const postedStore = useSelector((state) => state.postedStore);
   const {
@@ -46,6 +47,8 @@ function UserStore() {
     error: errorPost,
     success: successPost,
   } = postedStore;
+
+  //Post store
   const handlePost = () => {
     dispatch(editPostedStore({ id: userStore._id }));
   };
@@ -53,7 +56,7 @@ function UserStore() {
   //refresh to update success post
   if (successPost) {
     setTimeout(() => {
-      window.location = "/userStore";
+      window.location='/userstore'
     }, 2000);
   }
 
@@ -62,7 +65,7 @@ function UserStore() {
   const {
     loading: loadingUnpost,
     error: errorUnpost,
-    success: sucessUnpost,
+    success: successUnpost,
   } = unpostStore;
 
   const handleUnpost = () => {
@@ -70,11 +73,23 @@ function UserStore() {
   };
 
   //reload window to clear the message after 2 seconds
-  if (sucessUnpost) {
+  if (successUnpost) {
     setTimeout(() => {
-      window.location = "/userStore";
+      window.location = "/userstore";
     }, 2000);
   }
+
+  if (errorPost) {
+    setTimeout(() => {
+      window.location = "/userstore";
+    }, 3000);
+  }
+  if (errorUnpost) {
+    setTimeout(() => {
+      window.location = "/userstore";
+    }, 3000);
+  }
+
   //get posted product from redux store
   const postedProduct = useSelector((state) => state.postedProduct);
   const {
@@ -131,11 +146,14 @@ function UserStore() {
           </h4>
         </div>
         {loading && <LoadingBox></LoadingBox>}
-        {error && <MessageBox variant="danger">{error }. Please, kindly logout and login again to access your store.</MessageBox>}
+        {error && <MessageBox variant="danger">Failed. Please, kindly logout and login again to access your store.</MessageBox>}
         <div>
           <h4>
             <Link to="/createproduct">
-              <button className="primary">Add items for sale</button>
+              {/* <button className="primary">Add items for sale</button> */}
+              <Button variant="contained" color="success" size="large">
+                Add Items For Sale
+              </Button>
             </Link>
           </h4>
         </div>
@@ -188,7 +206,10 @@ function UserStore() {
             </div>
             <div>
               <Link to="/profile">
-                <button className="profile-button">Edit profile</button>
+                 <button className="profile-button">Edit profile</button> 
+                {/* <Button variant="contained" color="success" size="large">
+                Edit Profile
+              </Button> */}
               </Link>
             </div>
           </div>
@@ -259,8 +280,9 @@ function UserStore() {
               <div>
                 {loadingPost && <LoadingBox></LoadingBox>}
                 {errorPost && (
-                  <MessageBox variant="danger">{errorPost}</MessageBox>
+                  <MessageBox variant="danger">Failed to post store. Check your network and try again.</MessageBox>
                 )}
+                
                 {successPost && (
                   <MessageBox variant="success">
                     Store posted to stores page successfully.
@@ -269,9 +291,9 @@ function UserStore() {
 
                 {loadingUnpost && <LoadingBox></LoadingBox>}
                 {errorUnpost && (
-                  <MessageBox variant="danger">{errorUnpost}</MessageBox>
+                  <MessageBox variant="danger">Failed to remove store from stores page. Check your network and try again.</MessageBox>
                 )}
-                {sucessUnpost && (
+                {successUnpost && (
                   <MessageBox variant="success">
                     Store removed from stores page successfully.
                   </MessageBox>
@@ -286,7 +308,10 @@ function UserStore() {
       <div>
         <div className="add-item">
           <Link to="/createproduct">
-            <button className="primary">Add items for sale</button>
+            {/* <button className="primary">Add items for sale</button> */}
+            <Button variant="contained" color="success" size="large">
+                Add Items For Sale
+              </Button>
           </Link>
         </div>
 
@@ -313,7 +338,7 @@ function UserStore() {
       <div className="row center">
         {loadingProduct && <LoadingBox></LoadingBox>}
         {errorProduct && (
-          <MessageBox variant="danger">{errorProduct}</MessageBox>
+          <MessageBox variant="danger">Failed to load items. Check your network and try again.</MessageBox>
         )}
         {userProducts &&
           userProducts.map((product) => (

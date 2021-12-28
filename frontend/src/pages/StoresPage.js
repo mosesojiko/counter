@@ -51,7 +51,7 @@ function StoresPage() {
         </div>
 
      
-      {
+      {/* {
           loading? 
           <LoadingBox></LoadingBox>
           :
@@ -64,7 +64,17 @@ function StoresPage() {
             ))
           }
       </div>
-        }
+      } */}
+      
+      <div className="row center">
+        {loading && <LoadingBox></LoadingBox>}
+        {error && <MessageBox variant="danger">Failed to load stores.</MessageBox>}
+          {
+            stores?.map(store =>(
+                <Store key={store._id} store={store}></Store>
+            ))
+          }
+      </div>
     </div>
   )
 }

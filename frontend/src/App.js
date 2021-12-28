@@ -28,6 +28,8 @@ import Chats from './pages/Chats';
 import { ChatState } from "./context/ChatProvider";
 import axios from 'axios';
 import {useEffect, useState } from 'react';
+import Guide from './pages/Guide';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 
 
@@ -109,7 +111,7 @@ function App() {
               userInfo ? (
                 <div className="dropdown">
                   <Link to="#">
-                    {userInfo.name} <i className="fa fa-caret-down"></i>{" "}
+                    {userInfo.name}<span><ArrowDropDownIcon /></span> {" "}
                   </Link>
                   <ul className="dropdown-content">
                     <li>
@@ -155,6 +157,7 @@ function App() {
           </div>
         </header>
         <main>
+          <Route path="/guide" component={Guide}></Route>
           <Route path="/chats" component={Chats}></Route>
           <Route path="/findwidthdrawals" component={WidthdrawHistory}></Route>
           <Route path="/soldproducts" component={SoldProducts}></Route>

@@ -12,6 +12,7 @@ const storeRouter = require('./routers/storeRouter.js');
 const widthdrawRouter = require('./routers/widthdrawRouter.js')
 const chatRouter = require('./routers/chatRouter.js');
 const messageRouter = require('./routers/messageRouter.js');
+const rejectionRouter = require('./routers/rejectionRouter.js')
 
 dotenv.config();
 const app = express();
@@ -53,6 +54,7 @@ app.use('/api/v1/store', storeRouter)
 app.use('/api/v1/widthdraw', widthdrawRouter);
 app.use('/api/v1/chat', chatRouter);
 app.use('/api/v1/message', messageRouter)
+app.use('/api/v1/reject', rejectionRouter)
 
 // //api for paypay
 // app.get('/api/v1/config/paypal', (req, res) =>{

@@ -253,8 +253,8 @@ p.title {
   outline: 0;
   display: inline-block;
   padding: 8px;
-  background-color: #90c041;
-  color: #000;
+  background-color: #011628;
+  color: #fff;
   font-weight: bolder;
   text-align: center;
   cursor: pointer;
@@ -382,16 +382,19 @@ p.title {
 .table {
   width: 100%;
   border-collapse: collapse;
+  overflow-x: scroll;
 }
 
 .table tbody tr:nth-of-type(odd) {
   background-color: #f4f4f4;
+  color:green;
 }
 
 .table td, .table th {
   text-align: left;
   border: 1px solid #e4e4e4;
   padding: 5px;
+  background-color: #f8f8f8;
 }
 
 .table button {

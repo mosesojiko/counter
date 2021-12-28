@@ -14,12 +14,12 @@ function DeleteProduct(props) {
     const [product, setProduct] = useState({});
     const [ loading, setLoading ] = useState(false)
     const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [ errorDelete, setErrorDelete ] = useState(false)
 
     //get login user details from store
     const userLogin = useSelector(state =>state.userLogin);
     const { userInfo } = userLogin;
-    console.log(userInfo)
 
     useEffect(() =>{
         const fetchData = async () => {
@@ -41,13 +41,17 @@ function DeleteProduct(props) {
     },[id, userInfo])
 
     const handleDelete = async () =>{
-        const { data } = await axios.delete(`/api/v1/product/delete/${id}`,{
+        try {
+          const { data } = await axios.delete(`/api/v1/product/delete/${id}`,{
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
                 }
         })
         setProduct(data)
         setSuccess(true)
+        } catch (error) {
+          setErrorDelete(true)
+        }
     }
 
     //Take us back to userstore after delete
@@ -55,19 +59,29 @@ function DeleteProduct(props) {
         setTimeout(() => {
            window.location ="/userstore" 
         },2000)
-    }
+  }
+  if (errorDelete) {
+    setTimeout(() => {
+      setErrorDelete(false)
+    },2000)
+  }
     return (
       <div>
-        {loading && <LoadingBox></LoadingBox>}
-        {error && <MessageBox variant="danger">{error}</MessageBox>}
+        
+        <div className="row center">
+          
+          <div key={product._id} className="card">
+            {loading && <LoadingBox></LoadingBox>}
+        {error && <MessageBox variant="danger">Failed to fetch product.</MessageBox>}
         {success && (
           <MessageBox variant="success">
             Product deleted successfully
           </MessageBox>
         )}
-        <div className="row center">
-          <div key={product._id} className="card">
-            <h1>You want to delete {product.name}?</h1>
+        {
+          errorDelete && <MessageBox variant="danger">Failed to delete product.</MessageBox>
+        }
+            <h1>Delete {product.name}?</h1>
             <Link to={`/product/${product._id}`}>
               {/* image size should be 680px by 830px */}
               <img className="medium" src={product.image} alt={product.name} />

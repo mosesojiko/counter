@@ -11,22 +11,22 @@ function CustomerOrders() {
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log(userInfo);
+ 
 
   //get ordered products from redux store
   const customerOrders = useSelector((state) => state.customerOrders);
   const { loading, error, orderedProducts } = customerOrders
-  console.log(orderedProducts);
-const dispatch = useDispatch();
+  
+  const dispatch = useDispatch();
 
-useEffect(() =>{
+  useEffect(() =>{
     dispatch(getOrderedProducts())
-},[dispatch])
+  },[dispatch])
 
                 
     return (
         <div>
-            <h1>Customer orders</h1>
+            <h1 style={{textAlign:"center"}}>Customer orders</h1>
             {
                 loading? <LoadingBox></LoadingBox>:
                 error? <MessageBox variant ="danger"></MessageBox>:
@@ -51,7 +51,7 @@ useEffect(() =>{
                                 <h3>Customer Information</h3>
                                 <p>Name: <strong>{product.buyerName}</strong></p>
                                 <p>Phone: <strong>{product.buyerPhone}</strong></p>
-                                <p>Address: <strong>{product.buyerAddress}</strong></p>
+                                <p style={{maxWidth:"250px"}}>Address: <strong>{product.buyerAddress}</strong></p>
                                 <p>Payment Status: <strong>{product.isPaid? "Paid": "Not Yet Paid"}</strong></p>
                                 <p>Payment Date: <strong>{product.isPaid? product.isPaidAt.substring(0, 10): "Not Yet Paid"}</strong></p>
                                 </div> 

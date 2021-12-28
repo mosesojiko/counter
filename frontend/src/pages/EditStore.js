@@ -8,6 +8,8 @@ import { detailsUser } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { Edit_STORE_RESET } from '../constants/storeConstants';
+import Button from "@mui/material/Button";
+//import { useHistory } from 'react-router-dom'
 
 
 function EditStore(props) {
@@ -23,16 +25,15 @@ function EditStore(props) {
     const { userInfo } = userLogin;
     const userDetails = useSelector(state => state.userDetails);
     const {loading, error, user } = userDetails;
-    console.log(user)
-
+   
     const userStoreDetails = useSelector(state => state.userStoreDetails);
     const { userStore } = userStoreDetails
-    console.log(userStore)
 
     //get editUserStore from redux store
     const editUserStore = useSelector(state => state.editUserStore);
     const {success: successEdit, loading: loadingEdit, error: errorEdit} = editUserStore;
 
+    //const history = useHistory()
     const dispatch = useDispatch();
     useEffect(() => {
         if(!user) {
@@ -79,10 +80,17 @@ function EditStore(props) {
         //reset successEdit when we open editstore for the second time
         dispatch({ type: Edit_STORE_RESET });
         dispatch(getUserStore());
-        props.history.push("/userstore");
+        window.location ="/userstore";
       }, 2000);
     }
     
+    if (errorEdit) {
+      setTimeout(() => {
+        //reset and clear the message after 3 second
+          dispatch({ type: Edit_STORE_RESET });
+          
+      }, 3000);
+    }
     return (
         <div>
             <form className ="form" onSubmit={submitHandler}>
@@ -91,17 +99,9 @@ function EditStore(props) {
                 </div>
                 {
                     loading? <LoadingBox></LoadingBox>:
-                    error? <MessageBox variant="danger">{error}</MessageBox>:
+                    error? <MessageBox variant="danger">Could not load page</MessageBox>:
                     <>
-                    {
-                        loadingEdit && <LoadingBox></LoadingBox>
-                    }
-                    {
-                        errorEdit && <MessageBox variant ="danger">{errorEdit}</MessageBox>
-                    }
-                    {
-                        successEdit && <MessageBox variant ="success">Store Updated Successfully.</MessageBox>
-                    }
+                    
                     <div>
                     <label htmlFor="name">Store name</label>
                     <input type="text" id="name" placeholder="Enter store name"
@@ -139,14 +139,26 @@ function EditStore(props) {
                     />
                 </div>
                 <div>
-                        <p>Image of your store</p>
+                        <p>{userStore.image? "Change Image" :"Image of your store"}</p>
                         <FileBase64 type ="file" multiple={false}  
                         value={image} onDone = {({base64}) => setImage(base64)}
                         />
-                </div>
+                                </div>
+                                {
+                        loadingEdit && <LoadingBox></LoadingBox>
+                    }
+                    {
+                        errorEdit && <MessageBox variant ="danger">Failed to edit store. Check your network and try again.</MessageBox>
+                    }
+                    {
+                        successEdit && <MessageBox variant ="success">Store Updated Successfully.</MessageBox>
+                    }
                 <div>
                     <label />
-                    <button className ="primary" type ="submit">Edit store</button>
+                        {/* <button className ="primary" type ="submit">Edit store</button> */}
+                        <Button sx={{mb:2}} type="submit" variant="contained" color="success" size="large">
+                        Edit Store
+                        </Button>
                 </div>
 
                     </>

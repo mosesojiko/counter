@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'; 
 import FileBase64 from 'react-file-base64';
-
+import { useHistory } from 'react-router-dom'
 import { detailsUser, updateUserProfile } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 import { editStore } from '../actions/storeActions';
+import Button from '@mui/material/Button';
+//import Stack from '@mui/material/Stack';
+//import Alert from '@mui/material/Alert';
 
 function ProfilePage(props) {
     const [name, setName ] = useState('')
@@ -18,7 +21,7 @@ function ProfilePage(props) {
     const { userInfo } = userLogin;
     const userDetails = useSelector(state => state.userDetails);
     const { loading, error, user } = userDetails;
-    console.log(user)
+    //console.log(user)
 
     const userUpdateProfile = useSelector(state => state.userUpdateProfile);
     const { success: successUpdate, error: errorUpdate, loading: loadingUpdate } = userUpdateProfile;
@@ -27,9 +30,10 @@ function ProfilePage(props) {
     //want to update the userstore when user is updated
     const userStoreDetails = useSelector(state => state.userStoreDetails);
     const { userStore } = userStoreDetails
-    console.log(userStore)
+    //console.log(userStore)
 
-
+ 
+    const history = useHistory()
    const dispatch = useDispatch()
     useEffect(()=>{
         if(!user){
@@ -65,15 +69,24 @@ function ProfilePage(props) {
         }));
     }
     if (successUpdate) {
-        //reset successUpdate when we open profile screen for second time
-        dispatch({ type: USER_UPDATE_PROFILE_RESET })
-        
-        if (userInfo.isSeller) {
-                props.history.push("/userstore");
+
+        setTimeout(() => {
+            //reset redirect to the right page
+            dispatch({ type: USER_UPDATE_PROFILE_RESET })
+            if (userInfo.isSeller) {
+                history.push("/userstore");
         } else {
-            props.history.push('/')
+            history.push('/')
             }
+    }, 2000);
     }
+
+    //refresh the page if there is error update
+  if (errorUpdate) {
+    setTimeout(() => {
+      dispatch({ type: USER_UPDATE_PROFILE_RESET })
+    }, 3000);
+  }
     return (
         <div>
             <form className ="form" onSubmit = { submitHandler }>
@@ -85,9 +98,15 @@ function ProfilePage(props) {
                     {
                         loadingUpdate && <LoadingBox></LoadingBox>
                     }
-                    {
-                        errorUpdate && <MessageBox variant ="danger">{errorUpdate}</MessageBox>
-                    }
+                     {
+                        errorUpdate && <MessageBox variant ="danger">Failed to update profile.</MessageBox>
+                    } 
+                      {/* {
+            errorUpdate && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="warning" onClose={() => setErrorUpdate(false)} sx={{width:"80%", fontSize:"15px"}}>Failed to update profile</Alert>
+      
+    </Stack>
+          }           */}
                     {
                         successUpdate && <MessageBox variant ="success">Profile Updated Successfully.</MessageBox>
                     }
@@ -119,7 +138,8 @@ function ProfilePage(props) {
                     </div>
                     <div>
                         <label />
-                        <button className ="primary" type ="submit">Update</button>
+                                    {/* <button className ="primary" type ="submit">Update</button> */}
+                                    <Button sx={{mb:2}} type="submit" variant="contained" color="success" size="large">Update</Button>
                     </div>
                     </>
                 }

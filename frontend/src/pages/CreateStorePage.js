@@ -11,6 +11,7 @@ import { createStore, getUserStore } from '../actions/storeActions';
 import { updateUserCreateStore } from '../actions/userActions';
 import { CREATE_STORE_RESET } from '../constants/storeConstants';
 import Button from "@mui/material/Button";
+import { useHistory } from 'react-router-dom'
 
 
 function CreateStore(props) {
@@ -30,15 +31,18 @@ const [storeOwner, setStoreOwner ] = useState(false)
  //Only login user should be able to create a store
  const userLogin = useSelector((state) => state.userLogin);
  const { userInfo } = userLogin;
- console.log(userInfo)
+  console.log(userInfo)
+  
+  const history = useHistory()
 
     if (!userInfo) {
-        window.location = '/login';
-      //props.history.push("/login");
+        //window.location = '/login';
+      history.push("/login");
   }
   
   if (userInfo && userInfo.isSeller === true) {
-    window.location = "/userstore"
+    //window.location = "/userstore"
+    history.push('/userstore')
   }
 
  const dispatch = useDispatch();
