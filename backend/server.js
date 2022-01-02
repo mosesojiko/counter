@@ -147,10 +147,10 @@ io.on('connection', (socket) => {
     })
 
     //off the socket
-    // socket.off("setup", () => {
-    //     console.log("User disconnected")
-    //     socket.leave(userData._id)
-    // })
+    socket.off("setup", () => {
+        console.log("User disconnected")
+        socket.leave(userData._id)
+    })
  })
 
 
