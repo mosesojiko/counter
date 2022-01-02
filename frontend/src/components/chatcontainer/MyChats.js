@@ -6,13 +6,16 @@ import { ChatState } from "../../context/ChatProvider";
 import { useEffect } from 'react';
 import ChatLoading from './ChatLoading';
 import Box from '@mui/material/Box';
-import { getSender } from '../../config/ChatLogics';
+//import { getSender } from '../../config/ChatLogics';
 import GroupChatModal from './GroupChatModal';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 //import Alert from '@mui/material/Alert';
 //import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
+import { getSenderImage } from '../../chatLogics';
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
 
 function MyChats({fetchAgain}) {
   const [loggedUser, setLoggedUser] = useState()
@@ -48,8 +51,7 @@ function MyChats({fetchAgain}) {
         return
       }
   };
-  
-  console.log(chats)
+ 
 
   //edit chat and set notification to false when a chat is selected
   const clearNotified = async (id) => {
@@ -60,7 +62,7 @@ function MyChats({fetchAgain}) {
           },
         };
 
-      const { data } = await axios.put("/api/v1/chat/unnotification", { id }, config);
+       await axios.put("/api/v1/chat/unnotification", { id }, config);
 
       //fetch chats again
       fetchChats()
@@ -99,9 +101,6 @@ function MyChats({fetchAgain}) {
   useEffect(() => {
     myNotification()
   },[userInfo, selectedChat])
-console.log(selectedChat)
-  //const addToNotification = () => setNotificationCount(notificationCount += 1)
-
   
   return (
     
@@ -179,11 +178,16 @@ console.log(selectedChat)
                   }}
                   key={chat._id}
                 >
-                  <Typography>
+                  <Typography sx={{display:"flex"}}>
                     
                     {!chat.isGroupChat
-                      ? getSender(loggedUser, chat.users)
-                      : chat.chatName}
+                      ? getSenderImage(loggedUser, chat.users)
+                      : (<Box sx={{display:"flex", alignItems:"center"}}>
+                        <Stack sx={{mr:1}} direction="row" spacing={2}>
+                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                        </Stack>
+                        {chat.chatName}
+                      </Box>)}
                      {chat.notification && chat.latestMessage.sender._id !== userInfo._id &&
                       (<span className="badge">!</span>)
                     }   

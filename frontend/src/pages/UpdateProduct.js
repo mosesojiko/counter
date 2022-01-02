@@ -21,7 +21,6 @@ function UpdateProduct(props) {
     const [ name, setName ] = useState('');
     const [ price, setPrice ] = useState('');
     const [ category, setCategory ] = useState('');
-    const [ numberInStore, setNumberInStore ] = useState('');
     const [ image, setImage ] = useState('');
     const [ countInStock, setCountInStock ] = useState('');
     const [ brand, setBrand ] = useState('');
@@ -70,7 +69,6 @@ function UpdateProduct(props) {
             setName(product.name)
             setPrice(product.price)
             setCategory(product.category)
-            setNumberInStore(product.numberInStore)
             setImage(product.image)
             setCountInStock(product.countInStock)
             setBrand(product.brand)
@@ -81,7 +79,7 @@ function UpdateProduct(props) {
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(updateUserProduct({
-            id, name, price, category, numberInStore, image, countInStock, brand, description
+            id, name, price, category, image, countInStock, brand, description
         }))
        
     }
@@ -113,7 +111,7 @@ function UpdateProduct(props) {
                         loadingProduct && <LoadingBox></LoadingBox>
                     }
                     {
-                        errorProduct && <MessageBox variant="danger">Could not load product</MessageBox>
+                        errorProduct && <MessageBox variant="danger">Could not load product.</MessageBox>
                     }
                     
                 <div>
@@ -134,12 +132,7 @@ function UpdateProduct(props) {
                     value ={category} onChange ={(e) => setCategory(e.target.value)}
                     />
                 </div>
-                <div>
-                    <label htmlFor="numberInStore">Number in store</label>
-                    <input type="text" id="numberInStore" placeholder="5252"
-                    value ={numberInStore} onChange ={(e) => setNumberInStore(e.target.value)}
-                    />
-                </div>
+                
                 <div>
                     <label htmlFor="countInStock">How many in store?</label>
                     <input type="text" id="countInStock" placeholder="5"

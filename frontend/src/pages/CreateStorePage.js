@@ -30,8 +30,9 @@ function CreateStore(props) {
 const [storeOwner, setStoreOwner ] = useState(false)
  //Only login user should be able to create a store
  const userLogin = useSelector((state) => state.userLogin);
- const { userInfo } = userLogin;
+  const { userInfo } = userLogin;
   console.log(userInfo)
+ 
   
   const history = useHistory()
 
@@ -41,8 +42,7 @@ const [storeOwner, setStoreOwner ] = useState(false)
   }
   
   if (userInfo && userInfo.isSeller === true) {
-    //window.location = "/userstore"
-    history.push('/userstore')
+    window.location = "/userstore"
   }
 
  const dispatch = useDispatch();
@@ -106,7 +106,7 @@ useEffect(() => {
            creatorName,
            creatorEmail,
            creatorPhone,
-           creatorImage
+           creatorImage,
          )
        );
     }
@@ -217,7 +217,7 @@ dispatch(getUserStore());
           )}
           <div>
             <label />
-            <button className="primary" type="submit">
+            <button style={{marginBottom:"5px"}} className="primary" type="submit">
               Create
             </button>
           </div>

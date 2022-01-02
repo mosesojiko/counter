@@ -43,7 +43,7 @@ function StoreDetailsPage(props) {
             }
         }
         fetchProduct()
-    },[store])
+    },[storeId])
     
     return (
         <div>

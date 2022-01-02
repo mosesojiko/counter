@@ -68,7 +68,7 @@ function OrderHistoryPage(props) {
                 },
             };
 
-            const { data } = await axios.put("/api/v1/order/delivered", { id }, config);
+             await axios.put("/api/v1/order/delivered", { id }, config);
             setSuccessUpdate(true)
         } catch (error) {
             setErrorUpdate(true)
@@ -85,7 +85,7 @@ function OrderHistoryPage(props) {
     //delivered items
     const productDelivered = async (id) => {
         try {
-            const { data } = await axios.put("/api/v1/product/isdelivered", { id });
+             await axios.put("/api/v1/product/isdelivered", { id });
             setSuccessProduct(true)
         } catch (error) {
             console.log(error)
@@ -103,7 +103,7 @@ function OrderHistoryPage(props) {
                     Authorization: `Bearer ${userInfo.token}`,
                 },
             };
-            const { data } = await axios.post('/api/v1/reject', { name, email, phone, orderId, complain }, config)
+             await axios.post('/api/v1/reject', { name, email, phone, orderId, complain }, config)
             setComplainLoading(false)
             setComplainSuccess(true)
         } catch (error) {
@@ -114,11 +114,25 @@ function OrderHistoryPage(props) {
     
     return (
         <div>
-            <h1 style={{ textAlign: "center" }}> Order Items</h1>
-            <div style={{marginBottom:"10px"}}><Button onClick={handleOpen} variant="contained" color="error" size="large">
+            {
+                orders && orders.length === 0 ? (<div style={{ backgroundColor: "#f5f5f5", padding: "10px", marginBottom: "10px" }}>
+                    <h1 style={{ textAlign: "center" }}> Order Items</h1>
+                    <p>You have not placed any order. When you buy from someone, all your orders will be listed here.</p>
+                </div>) : (<>
+                        <div style={{backgroundColor:"#f5f5f5", padding:"10px", marginBottom:"10px"}}>
+                <h1 style={{ textAlign: "center" }}> Order Items</h1>
+                <h4>Important</h4>
+                <p>Click on the <q>Details button</q> if you want to view your order.
+                When you recieve your item(s), let Mosganda know by clicking the <q>Confirm Delivery</q> button.</p>
+                <p>If you recieved a different thing from what you ordered and paid for, click on the <q>Customer Complain Form</q>, briefly describe your complain and Mosganda will pick it up.</p>
+                <p>Want to chat with the seller, get the seller name from the order details. Go to <q>Chat</q> and search the name to start chatting.</p>
+                <Button sx={{margin:2}} onClick={handleOpen} variant="contained" color="error" size="large">
                 Customer Complain Form
             </Button>
-                {/* <Button onClick={handleOpen}>Open modal</Button> */}
+            </div>
+            
+            <div style={{marginBottom:"10px"}}>
+                
       <Modal
         open={open}
         onClose={handleClose}
@@ -220,7 +234,7 @@ function OrderHistoryPage(props) {
                 error && <MessageBox variant="danger">Error loading orders</MessageBox>
             }
             
-                    
+            
                                    
             {
                 orders?.map((order) => (
@@ -247,19 +261,22 @@ function OrderHistoryPage(props) {
                                 <td>{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
                                 <td>{order.deliveredAt ? order.deliveredAt.substring(0, 10) : "No"}</td>
                                 <td>
-                                    <button type="button" className="small"
+                                    <Button variant="contained" size="small"
                                         onClick={() => { props.history.push(`/order/${order._id}`) }}>
                                         Details
-                                    </button>
+                                    </Button>
                                 </td>
                                 <td>
-                                    <button type="button" className="small"
+                                        {
+                                            order.isDelivered ?"Recieved":
+                                                (<Button variant="contained" color="success" size="small"
                                         onClick={() => {
                                             deliveredOrder(order._id)
-                                            successUpdate ? order.orderItems.map((item) => productDelivered(item.product)) : <></>
+                                          order.orderItems.map((item) => productDelivered(item.product))
                                         }}>
                                         Confirm Delivered
-                                    </button>
+                                    </Button>)
+                                    }
                                 </td>
                             </tr>
                     
@@ -272,6 +289,11 @@ function OrderHistoryPage(props) {
                     </div>
                     ))
             }
+                </>)
+            }
+            
+                
+                        
         </div>
     )
 }

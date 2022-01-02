@@ -1,0 +1,27 @@
+
+.feedback-form {
+    border-right: 1px solid gray;
+}
+.feedback {
+    display: flex;
+    margin-top: 0px;
+    margin-bottom: 0;
+    width: "100%";
+    padding-bottom: 10px;
+    padding-right: 15px;
+}
+.feedback > input {
+    flex: 0.9;
+}
+.feedback > button {
+    flex: 0.1
+}
+.feedback-content{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin: "5px"
+}
+.feedback-content > p {
+    margin: 5px;
+}

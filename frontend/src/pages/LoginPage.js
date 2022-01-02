@@ -25,7 +25,7 @@ function LoginPage(props) {
     }
     //keep track of changes to userInfo
     useEffect(() => {
-        if(userInfo) {
+      if (userInfo) {
             props.history.push(redirect);
         }
     },[props.history, redirect, userInfo])

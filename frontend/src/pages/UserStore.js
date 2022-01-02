@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
@@ -11,14 +11,21 @@ import {
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import Button from "@mui/material/Button";
+import { useHistory } from 'react-router-dom'
 
 
 function UserStore() {
+  const [copyStoreLink, setCopyStoreLink] = useState('');
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   //console.log(userInfo);
 
+  const history = useHistory()
+  if (!userInfo.isSeller) {
+      history.push('/')
+    
+  }
   //get userstore from redux store
   const userStoreDetails = useSelector((state) => state.userStoreDetails);
   const { loading, error, userStore } = userStoreDetails;
@@ -119,6 +126,17 @@ function UserStore() {
     }, 2000);
   }
 
+  
+
+  //copy store link
+  const copyLink = async url => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopyStoreLink('Copied!');
+    } catch (err) {
+      setCopyStoreLink('Failed to copy!');
+    }
+  };
   return (
     <div>
       <div className="row around">
@@ -149,12 +167,16 @@ function UserStore() {
         {error && <MessageBox variant="danger">Failed. Please, kindly logout and login again to access your store.</MessageBox>}
         <div>
           <h4>
-            <Link to="/createproduct">
-              {/* <button className="primary">Add items for sale</button> */}
+             {/* <Link to="/createproduct">
               <Button variant="contained" color="success" size="large">
                 Add Items For Sale
               </Button>
-            </Link>
+            </Link>  */}
+            <Button variant="contained" onClick={() => copyLink(`localhost:3000/store/${userStore._id}`)}>
+     Click to copy your store url
+     </Button>
+  
+  {copyStoreLink}
           </h4>
         </div>
       </div>
@@ -162,14 +184,14 @@ function UserStore() {
         <div className="col-1">
           <div className="profile-card">
             <div className="row around">
-              <div>
+              <div className="prof">
                 <h3>
                   <span className="name-description">Seller Name:</span>{" "}
                   {userInfo.name}
                 </h3>
                 <img
                   className="img medium"
-                  src={userStore && userStore.creatorImage}
+                  src={userStore && userStore.creatorImage? userStore.creatorImage: '/images/default-img1.png'}
                   alt="profile"
                 />
               </div>
@@ -333,6 +355,7 @@ function UserStore() {
             Product removed from product page successfully.
           </MessageBox>
         )}
+        
       </div>
 
       <div className="row center">
@@ -353,7 +376,7 @@ function UserStore() {
               <div className="card-body">
                 <Link to={`/product/${product._id}`}>
                   <h2>{product.name}</h2>
-                  {product.isSold && <h3 className="sold">Item Sold</h3>}
+                  {product.isPaid && <h3 className="sold">Item Sold</h3>}
                 </Link>
                 <div className="price">#{product.price}</div>
 
@@ -383,20 +406,27 @@ function UserStore() {
                       </Button>
                     )}
                   </p>
-                  <p>
+                  {
+                    !product.isPaid &&
+                    <p>
                     <Link to={`/update/${product._id}`}>
                       <Button variant="contained" color="secondary" size="small">
                         Edit
                       </Button>
                     </Link>
                   </p>
-                  <p>
+                  }
+                  {
+                    !product.isPaid &&
+                    <p>
                     <Link to={`/delete/${product._id}`}>
                       <Button variant="contained" color="error" size="small">
                         Delete
                       </Button>
                     </Link>
                   </p>
+                  }
+                  
                 </div>
               </div>
             </div>

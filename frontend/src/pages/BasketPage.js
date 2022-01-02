@@ -43,9 +43,14 @@ function BasketPage(props) {
        
     }
     return (
-      <div className="row top">
+      <div style={{backgroundColor:"#f5f5f5", padding:"10px"}} className="row top">
         <div className="col-2">
-          <h1>Shopping Basket</h1>
+          <h1 style={{textAlign:"center"}}>Shopping Basket</h1>
+          <Link to="/">
+              <Button variant="contained" color="success" size="small">
+                Back to homepage
+              </Button>
+            </Link>
           {!proceed && (
             <p className="danger">
               Sorry, we discourage buying from more than one store/seller at a

@@ -241,8 +241,10 @@ img.medium {
   border-radius: 20px;
   margin: 5px;
 }
-.profile-card > img {
+.prof > img {
   border-radius: 50%;
+  max-width: 290px;
+  max-height: 100pxpx;
 }
 p.title {
   color: grey;
@@ -382,7 +384,7 @@ p.title {
 .table {
   width: 100%;
   border-collapse: collapse;
-  overflow-x: scroll;
+  overflow: scroll;
 }
 
 .table tbody tr:nth-of-type(odd) {
@@ -461,10 +463,6 @@ p.title {
   justify-content: space-around;
 }
 
-.widthdrawal-steps {
-  background-color: #f8f8f8;
-  padding: 5px;
-}
 .login {
   width: 300px;
   background-color: #f8f8f8;

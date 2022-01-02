@@ -27,7 +27,7 @@ export const createWidthdrawReducer = (state = {}, action) => {
 
 
 //reducer for history of widthdrawals
-export const getWidthdrwalsReducer = (state = { widthdraws: []}, action) =>{
+export const getWidthdrawalsReducer = (state = { widthdraws: []}, action) =>{
     switch(action.type) {
         case GET_WIDTHDRAWAL_REQUEST:
             return { loading: true };

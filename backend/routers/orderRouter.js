@@ -13,7 +13,7 @@ orderRouter.get('/mine', isAuth, expressAsyncHandler(async(req, res)=>{
     res.json(orders)
 }))
 
-
+/
 //get customer orders
 // orderRouter.get('/customerorders', isAuth, expressAsyncHandler( async(req, res) =>{
 //     const customerorders = await Order.find({email: req.body.userEmail});

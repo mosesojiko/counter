@@ -15,7 +15,7 @@ function HomePage() {
   const { loading, error, products } = getProducts;
   //console.log(products)
    useEffect(()=>{
-      dispatch(getAllProducts())
+     dispatch(getAllProducts())
    }, [dispatch] )
     return (
       <div>
@@ -31,8 +31,15 @@ function HomePage() {
 
             <h4>
               <Link to="/guide">
-                <Button variant="contained" color="success">
-                  Guide
+                <Button variant="contained" size="large">
+                  FAQ(s)
+                </Button>
+              </Link>
+            </h4>
+            <h4>
+              <Link to="/feedback">
+                <Button variant="contained" color="secondary" size="large">
+                  Feedbacks
                 </Button>
               </Link>
             </h4>

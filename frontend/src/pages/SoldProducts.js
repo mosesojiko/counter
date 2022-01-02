@@ -2,28 +2,51 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { getSoldProducts } from '../actions/productActions';
 import { createWidthdraw } from '../actions/widthdrawActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { CREATE_WIDTHDRAW_RESET } from '../constants/widthdrawConstants';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+//import axios from 'axios';
+//import Stack from '@mui/material/Stack';
+//import Alert from '@mui/material/Alert';
+import './SoldProducts.css'
 
-function SoldProducts() {
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+function SoldProducts(props) {
 
     const [ accountName, setAccountName ] = useState('')
     const [accountNumber, setAccountNumber ] = useState(0)
     const [ bank, setBank ] = useState('')
     const [ amount, setAmount ] = useState(0)
     const [ email, setEmail ] = useState('')
-    const [ phone, setPhone ] = useState('')
-    //const [totalAmount, setTotalAmount ] = useState(0)
+  const [phone, setPhone] = useState('')
+  const [productId, setProductId ] = useState('')
+console.log(productId)
+
+   
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log(userInfo);
+ 
 
-  //get ordered products from redux store
+  //get sold products from redux store
   const productSold = useSelector((state) => state.productSold);
   const { loading, error, soldProducts } = productSold
   console.log(soldProducts);
@@ -32,8 +55,9 @@ function SoldProducts() {
   const widthdrawal = useSelector((state) => state.widthdrawal);
   const { loading: loadDraw, error: errorDraw, success } = widthdrawal
 
-  const solo = soldProducts
-  console.log(solo)
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
 const dispatch = useDispatch();
 
@@ -42,101 +66,155 @@ useEffect(() =>{
     dispatch(getSoldProducts())
 },[dispatch])
 
-  const handleSubmit = () => {
-      dispatch(createWidthdraw(accountName, accountNumber, bank, amount, email, phone));
+  const handleWidthdraw = () => {
+      dispatch(createWidthdraw(accountName, accountNumber, bank, amount, email, phone, productId));
       dispatch({type: CREATE_WIDTHDRAW_RESET})
   }
 
+  if (success) {
+    setTimeout(() => {
+      window.location='/soldproducts'
+    },3000)
+  }
+  
     return (
       <div>
-        <div className="row top">
-          <div className="col-1 widthdrawal-steps">
-            <h3>
-              Total Amount: <strong>#</strong>
-            </h3>
-          </div>
-          <div>
-            <div className="col-2 widthdrawal-steps">
-              <h3>Widthdrawal Steps</h3>
+        
+        <div className='widthdrawal-steps'>
+          <h1 style={{ textAlign: "center" }}>Sold Items and Payouts</h1>
+            <h3>Widthdrawal Steps</h3>
               <ul>
                 <li>Get your product delivered to your customer.</li>
-                <li>Click on the payout button to payout the product</li>
-                <li>Fill the widthdrawal form and submit.</li>
+                <li>Click on the payme button to payout the product</li>
+              <li>Fill the widthdrawal form and submit.</li>
+              <li>Make sure your name corresponds with the name on your bank verification number.</li>
                 <li>Get paid within 48 hours.</li>
-              </ul>
-            </div>
+            </ul>
+            <h3 style={{ textAlign: "center" }}>Sold Items</h3>
           </div>
-        </div>
+          
         <div>
-          <form className="form" onSubmit={handleSubmit}>
-            <div>
-              <h1>Widthdrawal Form</h1>
-            </div>
-            {loadDraw && <LoadingBox></LoadingBox>}
-            {errorDraw && <MessageBox variant="danger">{errorDraw}</MessageBox>}
-            {success && (
-              <MessageBox variant="success">
-                Widthdraw request submitted.
-              </MessageBox>
-            )}
-            <div>
-              <label htmlFor="accountname">Account Name</label>
-              <input
-                type="text"
-                id="acoountname"
-                onChange={(e) => setAccountName(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="accountnumber">Account Number</label>
-              <input
-                type="text"
-                id="accountnumber"
-                onChange={(e) => setAccountNumber(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="bank">Bank Name</label>
-              <input
-                type="text"
-                id="bank"
-                onChange={(e) => setBank(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="amount">Amount</label>
-              <input
-                type="text"
-                id="amount"
-                onChange={(e) => setAmount(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input
-                type="text"
-                id="email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="phone">Phone</label>
-              <input
-                type="text"
-                id="phone"
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            <div>
-              <label />
-              <button className="primary" type="submit">
-                Widthdraw
-              </button>
-            </div>
-          </form>
+          
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+                Widthdrawal Form
+              </Typography>
+              <form>
+                <Box>
+                  <label htmlFor='accountName'>Account Name</label>
+                  <input style={{marginLeft:"3px"}} type="text" id="accountName" placeholder='Account Name' required
+                    onChange ={(e) =>setAccountName(e.target.value)}
+                  />
+                </Box>
+                <Box>
+                  <label htmlFor='accountNumber'>Account Number</label>
+                  <input style={{marginLeft:"3px"}} type="text" id="accountNumber" placeholder='Account Number' required
+                    onChange ={(e) =>setAccountNumber(e.target.value)}
+                  />
+                </Box>
+                <Box>
+                  <label htmlFor='bank'>Bank</label>
+                  <input style={{marginLeft:"3px"}} type="text" id="bank" placeholder='Bank Name' required
+                    onChange ={(e) =>setBank(e.target.value)}
+                  />
+                </Box>
+                {
+                  loadDraw && <LoadingBox></LoadingBox>
+                }
+                {
+                  errorDraw && <MessageBox variant="danger">Failed</MessageBox>
+                }
+                {
+                  success && <MessageBox variant="success">successful</MessageBox>
+                }
+                <Button sx={{textAlign:"center",m:2}} onClick ={handleWidthdraw} variant="contained" color="success">Submit</Button>
+              </form>
+          <Button sx={{textAlign:"center",m:2}} onClick ={handleClose} variant="contained" color="error">Close</Button>
+        </Box>
+      </Modal>
         </div>
-        <h3>Sold Items</h3>
-        {loading ? (
+        {
+          soldProducts && soldProducts.length === 0 ? (<p style={{ backgroundColor: "#f5f5f5", textAlign: "center",height:"50px",padding:"20px" }}>There are no sold items at the moment.</p>) : (<>
+            {
+          loading && <LoadingBox></LoadingBox>
+        }
+        {
+          error && <MessageBox variant="danger">Error</MessageBox>
+        }
+        {
+          soldProducts?.map((product) => (
+              <div key={product._id} className='soldProducts'>
+                <div className='soldProduct-items'>
+                  <h4>Product Information</h4>
+                <p style={{display:"flex"}}><img
+                        className="small"
+                        src={product.image}
+                        alt={product.name}
+                /><Button sx={{m:1}} variant="contained" size="small"
+                          onClick={() => { props.history.push(`/product/${product._id}`) }}>
+                          View product
+                </Button></p>
+                <p>Product Id: {product._id}</p>
+                  <p>Product Name: <b>{product.name}</b>, Price: <b>{product.price}</b></p>
+                  <p>Description: <b>{ product.description}</b></p>
+                </div>
+                <div className='soldProduct-items'>
+                  <h4>Buyer Information</h4>
+                <p>Buyer Name: <b>{product.buyerName}</b>, Buyer Phone: <b>{product.buyerPhone}</b>, Buyer Email: <b>{product.buyerEmail}</b></p>
+                <p>Buyer Address: { product.buyerAddress}</p>
+                </div>
+                <table className='table'>
+                  <thead>
+                    <tr>
+                      <th>Amount</th>
+                      <th>Paid</th>
+                      <th>Date</th>
+                      <th>Delivered</th>
+                      <th>Date</th>
+                      <th>Payout</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{product.price}</td>
+                      <td>{product.isPaid ? "Paid" : "No"}</td>
+                      <td>{product.isPaid
+                              ? product.isPaidAt.substring(0, 10)
+                        : "No"}</td>
+                      <td>{product.isDelivered ? "Delivered" : "No"}</td>
+                      <td>{product.isDelivered
+                              ? product.isDeliveredAt.substring(0, 10)
+                        : "No"}</td>
+                      <td>{product.isSettled ? "Paid Out" : "No"}</td>
+                      <td>{product.isSettledAt? product.isSettledAt.substring(0,10) : "No"}</td>
+                      
+                    </tr>
+                  </tbody>
+                </table>
+                <Button sx={{ m: 2 }} variant="contained" size="large" onClick={() => {
+                  setAmount(product.price)
+                  setProductId(product._id)
+                  setEmail(userInfo.email)
+                  setPhone(userInfo.phone)
+                  handleOpen()
+                }}>Pay Me</Button>
+              </div>
+            
+          ))
+        }
+          </>)
+        }
+        
+        
+        
+          {/* {loading ? (
           <LoadingBox></LoadingBox>
         ) : error ? (
           <MessageBox variant="danger"></MessageBox>
@@ -147,7 +225,7 @@ useEffect(() =>{
                 product?.buyerName && (
                   <div key={product._id} className="card">
                     <Link to={`/product/${product._id}`}>
-                      {/* image size should be 680px by 830px */}
+                      
                       <img
                         className="medium"
                         src={product.image}
@@ -192,7 +270,7 @@ useEffect(() =>{
                 )
             )}
           </div>
-        )}
+        )}   */}
       </div>
     );
 }

@@ -11,7 +11,7 @@ const { isAuth } = require('../utils/isAuth.js');
 
 //get all stores that are posted
 storeRouter.get('/', expressAsyncHandler( async(req, res) =>{
-    const stores = await Mosgandastore.find({isPosted: true});
+    const stores = await Mosgandastore.find({isPosted: true}).sort({ updatedAt: -1 });
     if(!stores) {
        return res.status(404).json({message:"No store has been posted here."})
     }
@@ -33,11 +33,6 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
     const { name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage } =
         req.body;
 
-    //check if user has created store before
-    const storeOwner = await Mosgandastore.findOne({ user: req.user._id });
-    if (storeOwner) {
-        return res.json({message: "You have created a store already."})
-    } else {
         const store = new Mosgandastore({
           name,
           address,
@@ -68,10 +63,8 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
           creatorEmail: createdStore.creatorEmail,
           creatorPhone: createdStore.creatorPhone,
           creatorImage: createdStore.creatorImage,
-          user: req.user._id,
+            user: req.user._id,
         });
-  
-    }
         
 }))
 

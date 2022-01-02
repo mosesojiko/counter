@@ -21,13 +21,18 @@ function CustomerOrders() {
 
   useEffect(() =>{
     dispatch(getOrderedProducts())
-  },[dispatch])
+  },[dispatch, userInfo])
 
                 
     return (
-        <div>
-            <h1 style={{textAlign:"center"}}>Customer orders</h1>
+        <div style={{backgroundColor:"#f5f5f5"}}>
+            <h1 style={{ textAlign: "center" }}>Customer orders</h1>
             {
+                orderedProducts && orderedProducts.length === 0 ? (<p style={{padding:"20px"}}>
+                    This is where you see orders placed by your customer that they have not paid-for. Orders that are paid-for will not be displayed here. Such orders are displayed in Sold-Products page.
+                </p>) :
+                    (<>
+                        {
                 loading? <LoadingBox></LoadingBox>:
                 error? <MessageBox variant ="danger"></MessageBox>:
                 <div className ="row center">
@@ -61,6 +66,9 @@ function CustomerOrders() {
                     }
                 </div>
             }
+                    </>)
+            }
+            
           </div>  
     )
 }

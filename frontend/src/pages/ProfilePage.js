@@ -118,7 +118,7 @@ function ProfilePage(props) {
                     </div>
                     <div>
                         <lable htmlFor="address">Address</lable>
-                        <input type ="text" id ="address" placeholder="Enter address"
+                        <input type ="text" id ="address" placeholder="House no, street, town/city,,LGA, state, country "
                         value ={address} onChange = {(e) =>setAddress(e.target.value)}>
                         </input>
                     </div>
@@ -131,7 +131,7 @@ function ProfilePage(props) {
                         </input>
                     </div>
                     <div>
-                        <p>{userInfo.image? "Change photo":"Add your photo"}</p>
+                        <p>{userInfo.image? "Change photo?":"Add your photo"}</p>
                         <FileBase64 type ="file" multiple={false}  
                         onDone = {({base64}) => setImage(base64)}
                         />

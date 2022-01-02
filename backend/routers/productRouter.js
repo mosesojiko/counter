@@ -15,7 +15,6 @@ productRouter.post(
       name,
       price,
       category,
-      numberInStore,
       image,
       countInStock,
       brand,
@@ -35,7 +34,6 @@ productRouter.post(
       name,
       price,
       category,
-      numberInStore,
       image,
       countInStock,
       brand,
@@ -51,17 +49,12 @@ productRouter.post(
       storeCountry,
       user: req.user._id,
     });
-    // const uniqueNumber = await Product.findOne({numberInStore: req.body.numberInStore});
-    // if(uniqueNumber){
-    //    return res.status(400).json({message: "Number in store already exist. Two product cannot have the same number in store."})
-
-    // }
+    
     const createProduct = await product.save();
     res.json({
       _id: createProduct._id,
       name: createProduct.name,
       category: createProduct.category,
-      numberInStore: createProduct.numberInStore,
       image: createProduct.image,
       description: createProduct.description,
       countInStock: createProduct.countInStock,
@@ -115,14 +108,10 @@ productRouter.get(
 
 //find paid/sold items
 productRouter.get('/soldproducts', isAuth, expressAsyncHandler(async(req, res) => {
-  const soldItems = await Product.find({user: req.user._id});
+  const soldItems = await Product.find({user: req.user._id, isPaid:true}).sort({ updatedAt: -1 });
   if(soldItems){
-      const displaySold = soldItems.map((item) =>{
-        if(item.isSold===true && item.isPaid === true){
-          return item
-        }
-      })
-      return res.json(displaySold)
+      
+      return res.json(soldItems)
     
   }else{
     return res.status(404).json({message: "There are no sold products at the moment"})
@@ -132,16 +121,10 @@ productRouter.get('/soldproducts', isAuth, expressAsyncHandler(async(req, res) =
 
 //find ordered items
 productRouter.get('/orderedproducts', isAuth, expressAsyncHandler(async(req, res) => {
-  const orderedItems = await Product.find({user: req.user._id});
+  const orderedItems = await Product.find({user: req.user._id, isOrdered:true, isPaid:false}).sort({ updatedAt: -1 });
   if(orderedItems){
-      const displayOrders = orderedItems.map((item) =>{
-        if(item.isOrdered===true && item.isPaid === false){
-          return item
-        }else {
-          return ''
-        }
-      })
-      return res.json(displayOrders)
+      
+      return res.json(orderedItems)
     
   }else{
     return res.status(404).json({message: "There are no ordered products at the moment"})
@@ -153,14 +136,14 @@ productRouter.get(
     "/user",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const userProducts = await Product.find({ user: req.user._id });
+    const userProducts = await Product.find({ user: req.user._id, isPaid:false }).sort({ updatedAt: -1 });
     res.json(userProducts);
   })
 );
 
 //get user products for non logged in user
 productRouter.get('/nonuser/:id', expressAsyncHandler(async (req, res) => {
-  const nonuserProducts = await Product.find({ productStoreId: req.params.id });
+  const nonuserProducts = await Product.find({ productStoreId: req.params.id }).sort({ updatedAt: -1 });
   if (nonuserProducts) {
     res.json(nonuserProducts)
   }
@@ -170,7 +153,7 @@ productRouter.get('/nonuser/:id', expressAsyncHandler(async (req, res) => {
 productRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const products = await Product.find({isPosted: true});
+    const products = await Product.find({isPosted: true, isPaid: false}).sort({ updatedAt: -1 });
     res.json(products);
   })
 );
@@ -200,8 +183,6 @@ productRouter.put(
       (product.name = req.body.name || product.name),
       (product.price = req.body.price || product.price),
         (product.category = req.body.category || product.category),
-        (product.numberInStore =
-          req.body.numberInStore || product.numberInStore),
         (product.image = req.body.image || product.image),
         (product.description = req.body.description || product.description),
         (product.countInStock = req.body.countInStock || product.countInStock),
@@ -279,9 +260,10 @@ productRouter.put('/paidproducts', expressAsyncHandler( async(req, res) => {
   const product = await Product.findById(req.body.id);
   if(product) {
     product.isPaid = true;
-    product.isSold = true
+    product.isPosted = false;
     product.isPaidAt = Date.now()
     product.buyerEmail = req.body.buyerEmail
+    product.orderId = req.body.orderId
   }
   const paidProduct = await product.save();
   res.json(paidProduct);
@@ -297,5 +279,7 @@ productRouter.put('/isdelivered', expressAsyncHandler( async(req, res) => {
   const deliveredProduct = await product.save();
   res.json(deliveredProduct);
 }))
+
+
 
 module.exports = productRouter;

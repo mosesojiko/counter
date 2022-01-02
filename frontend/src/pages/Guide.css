@@ -1,0 +1,17 @@
+
+.guide-ul {
+    padding-left: 15px;
+}
+
+.guide-ul > li {
+    list-style-type: disc;
+}
+.guide-h2 {
+    color: blue;
+    padding: 0;
+    margin: 0;
+
+}
+q {
+    font-weight: bold;
+}

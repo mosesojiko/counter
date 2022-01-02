@@ -1,3 +1,6 @@
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+
 //if its the same sender that is logged in, return 33 margin otherwise return 0 margin
 export const isSameSenderMargin = (messages, m, i, userId) => {
   // console.log(i === messages.length - 1);
@@ -46,12 +49,35 @@ export const isSameUser = (messages, m, i) => {
   return i > 0 && messages[i - 1].sender._id === m.sender._id;
 };
 
+//display the sender name
 export const getSender = (loggedUser, users) => {
   return users[0]._id === loggedUser._id ? users[1].name : users[0].name;
 };
 
+//display everything about the sender
 export const getSenderFull = (loggedUser, users) => {
   return users[0]._id === loggedUser._id ? users[1] : users[0];
 };
 
-
+//display both the image and name of the sender
+export const getSenderImage = (loggedUser, users) => {
+  return users[0]._id === loggedUser._id ? <Box sx={{display:"flex", alignItems:"center"}}><Avatar
+                  sx={{ 
+                  mr:1,
+                    width: "20px",
+                  height: "20px",
+                  cursor:"pointer"
+                  }}
+                  name={users[1].name}
+                  src={users[1].image}
+  />{users[1].name}</Box> : <Box sx={{display:"flex", alignItems:"center"}}><Avatar
+                  sx={{
+                  mr:1,
+                    width: "20px",
+                  height: "20px",
+                  cursor:"pointer"
+                  }}
+                  name={users[0].name}
+                  src={users[0].image}
+  />{users[0].name}</Box> ;
+}

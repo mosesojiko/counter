@@ -48,8 +48,7 @@ function RegisterPage(props) {
           <div>
             <h1>Create Account</h1>
           </div>
-          {loading && <LoadingBox></LoadingBox>}
-          {error && <MessageBox variant="danger">{error}</MessageBox>}
+          
           <div>
             <label htmlFor="name">Name</label>
             <input
@@ -117,6 +116,8 @@ function RegisterPage(props) {
               onDone={({ base64 }) => setImage(base64)}
             />
           </div>
+          {loading && <LoadingBox></LoadingBox>}
+          {error && <MessageBox variant="danger">Failed to register, try again later.</MessageBox>}
           <div>
             <label />
             <button type="submit" className="primary">

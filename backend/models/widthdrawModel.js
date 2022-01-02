@@ -10,6 +10,7 @@ const widthdrawSchema = new mongoose.Schema(
     email: { type: String, required: true },
     isPaid: { type: Boolean, default: false },
     isPaidAt: { type: Boolean, default: false },
+    productId: {type: String, required: true},
     requestedAt: { type: Date },
     phone: { type: String },
     user: {

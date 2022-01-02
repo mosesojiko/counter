@@ -2,16 +2,16 @@ import Axios from 'axios';
 import { CREATE_WIDTHDRAW_FAIL, CREATE_WIDTHDRAW_REQUEST, CREATE_WIDTHDRAW_SUCCESS, GET_WIDTHDRAWAL_FAIL, GET_WIDTHDRAWAL_REQUEST, GET_WIDTHDRAWAL_SUCCESS } from "../constants/widthdrawConstants"
 
 //create a widthdraw
-export const createWidthdraw = (accountName, accountNumber, bank, amount, email, phone) => async(dispatch, getState) =>{
+export const createWidthdraw = (accountName, accountNumber, bank, amount, email, phone, productId) => async(dispatch, getState) =>{
     dispatch({
         type: CREATE_WIDTHDRAW_REQUEST,
-        payload: {accountName, accountNumber, bank, amount, email, phone}
+        payload: {accountName, accountNumber, bank, amount, email, phone, productId}
     })
     // get userInfo from redux store
     const { userLogin: { userInfo }, } = getState()
 
     try {
-        const { data } = await Axios.post('/api/v1/widthdraw/create', {accountName, accountNumber, bank, amount, email, phone}, {
+        const { data } = await Axios.post('/api/v1/widthdraw/create', {accountName, accountNumber, bank, amount, email, phone, productId}, {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }
@@ -38,7 +38,7 @@ export const getWidthdrawals = () =>async(dispatch, getState) =>{
 //get userInfo
     const { userLogin: { userInfo }} = getState();
     try {
-        const { data } = await Axios.get('/api/v1/widthdraw/findwidthdrawals', {
+        const { data } = await Axios.get('/api/v1/widthdraw/mywidthdrawals', {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }

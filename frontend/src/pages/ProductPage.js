@@ -34,7 +34,8 @@ function ProductPage(props) {
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
-          <div>
+              <div style={{backgroundColor:"#f5f5f5", padding:"10px"}}>
+                <h1 style={{textAlign:"center"}}>Product Detail</h1>
             <Link to="/">
               <Button variant="contained" color="success" size="small">
                 Back to homepage
@@ -83,12 +84,18 @@ function ProductPage(props) {
                 </ul>
               </div>
               <div className="col-1">
-                <div className="card card-body">
+                    {
+                      product.isPaid ? (<div>
+                        <h4>Buyer Information</h4>
+                <p>Buyer Name: <b>{product.buyerName}</b>, Buyer Phone: <b>{product.buyerPhone}</b>, Buyer Email: <b>{product.buyerEmail}</b></p>
+                <p>Buyer Address: { product.buyerAddress}</p>
+                      </div>) :
+                        (<div className="card card-body">
                   <ul>
                     <li>
                       <div className="row">
                         <div>Price</div>
-                        <div className="price">#{product.price}</div>
+                        <div className="price"><b>#{product.price}</b></div>
                       </div>
                     </li>
                     <li>
@@ -139,7 +146,8 @@ function ProductPage(props) {
                       </>
                     )}
                   </ul>
-                </div>
+                </div>)
+                }
               </div>
             </div>
           </div>

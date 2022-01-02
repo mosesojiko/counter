@@ -1,0 +1,16 @@
+.widthdrawal-steps {
+  padding: 10px 20px;
+  background-color: #f3f3f3;
+  
+}
+.soldProducts {
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+  border: 2px solid #000080;
+  margin: 5px;
+  width: "100%";
+}
+.soldProduct-items > p{
+  margin: 0;
+  padding: 2px;
+}

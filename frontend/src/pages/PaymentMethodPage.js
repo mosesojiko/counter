@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { savePaymentMethod } from '../actions/basketActions';
 import CheckoutSteps from '../components/CheckoutSteps';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
 
 function PaymentMethodPage(props) {
     //user should only see this screen if he has entered shipping info else be redirected to shipping
@@ -12,14 +14,21 @@ function PaymentMethodPage(props) {
         props.history.push('/shipping');
     }
 
-    const [paymentMethod, setPaymentMethod ] = useState('Paystack');
+    const [paymentMethod, setPaymentMethod] = useState('Paystack');
+    const [errorPaymentMethod, setErrorPaymentMethod ] = useState(false)
     const dispatch = useDispatch();
 
     //submitHandler function
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(savePaymentMethod(paymentMethod));
-        console.log(paymentMethod);
+        if (paymentMethod === "payU" || paymentMethod === "eNaira") {
+            setErrorPaymentMethod(true);
+            setPaymentMethod("Paystack")
+            return
+        } else {
+            dispatch(savePaymentMethod(paymentMethod));
+        }
+        
         //redirect the user to finally place the order
         props.history.push('/placeorder');
     }
@@ -55,6 +64,12 @@ function PaymentMethodPage(props) {
                         <label htmlFor ="eNaira">eNaira</label>
                     </div>
                 </div>
+                {
+            errorPaymentMethod && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="error" onClose={() => setErrorPaymentMethod(false)}>Please, use Paystack. We are yet to integrate PayU and eNaira.</Alert>
+      
+            </Stack>
+                }
                 <div>
                     <button className = "primary" type="submit">Continue</button>
                 </div>

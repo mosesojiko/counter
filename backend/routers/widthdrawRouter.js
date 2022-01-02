@@ -15,7 +15,9 @@ widthdrawRouter.post('/create', isAuth, expressAsyncHandler( async(req, res) => 
         amount: req.body.amount,
         email: req.body.email,
         phone: req.body.phone,
-        requestedAt: Date.now()
+        productId: req.body.productId,
+        requestedAt: Date.now(),
+        user: req.user._id
     })
     const createWidthdraw = await widthdraw.save();
     res.json(createWidthdraw)
@@ -23,10 +25,16 @@ widthdrawRouter.post('/create', isAuth, expressAsyncHandler( async(req, res) => 
 
 
 //router to get history of widthdrawals
-widthdrawRouter.get('/findwidthdrawals', isAuth, expressAsyncHandler(async(req, res)=>{
-    const widths = await Widthdraw.find({user: req.user._id});
-    res.json(widths)
+widthdrawRouter.get('/mywidthdrawals', isAuth, expressAsyncHandler(async(req, res)=>{
+    const myWidthdrawals = await Widthdraw.find({user: req.user._id});
+    if (myWidthdrawals) {
+        res.json(myWidthdrawals)
+    }
 }))
 
+// widthdrawRouter.get('/', isAuth, expressAsyncHandler(async (req, res) => {
+//     const w = await Widthdraw.find({user:req.user._id})
+//     res.json(w)
+// }))
 
 module.exports = widthdrawRouter

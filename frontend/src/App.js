@@ -21,7 +21,6 @@ import UserStore from './pages/UserStore';
 import EditStore from './pages/EditStore';
 import UpdateProduct from './pages/UpdateProduct';
 import DeleteProduct from './pages/DeleteProduct';
-import CustomerOrders from './pages/CustomerOrders';
 import SoldProducts from './pages/SoldProducts';
 import WidthdrawHistory from './pages/WidthdrawHistory';
 import Chats from './pages/Chats';
@@ -30,6 +29,8 @@ import axios from 'axios';
 import {useEffect, useState } from 'react';
 import Guide from './pages/Guide';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import CustomerOrders from './pages/CustomerOrders';
+import Feedback from './pages/Feedback';
 
 
 
@@ -127,11 +128,11 @@ function App() {
                     <li>
                       <Link to="/orderhistory">My Orders</Link>
                     </li>
-                    <li>
+                     <li>
                       {userInfo.isSeller && (
                         <Link to="/orderedproducts">Customer Orders</Link>
                       )}
-                    </li>
+                    </li> 
                     <li>
                       {userInfo.isSeller && (
                         <Link to="/soldproducts">Sold Items</Link>
@@ -142,6 +143,7 @@ function App() {
                         <Link to="/findwidthdrawals">Widthdraws</Link>
                       )}
                     </li>
+                    
                     <li>
                       <Link to="#logout" onClick={logoutHandler}>
                         {" "}
@@ -157,11 +159,12 @@ function App() {
           </div>
         </header>
         <main>
+          <Route path="/feedback" component={ Feedback }></Route>
           <Route path="/guide" component={Guide}></Route>
           <Route path="/chats" component={Chats}></Route>
           <Route path="/findwidthdrawals" component={WidthdrawHistory}></Route>
           <Route path="/soldproducts" component={SoldProducts}></Route>
-          <Route path="/orderedproducts" component={CustomerOrders}></Route>
+         <Route path="/orderedproducts" component={CustomerOrders}></Route> 
           <Route path="/delete/:id" component={DeleteProduct}></Route>
           <Route path="/update/:id" component={UpdateProduct}></Route>
           <Route path="/editstore" component={EditStore}></Route>

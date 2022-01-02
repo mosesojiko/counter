@@ -16,7 +16,6 @@ function CreateProductPage(props) {
   const [name, setName ] = useState('')
   const [ price, setPrice ] = useState(0);
   const [ category, setCategory ] = useState('')
-  const [numberInStore, setNumberInStore] = useState(0)
   const [ image, setImage ] = useState('');
   const [ countInStock, setCountInStock ] = useState(1);
   const [ brand, setBrand ] = useState('');
@@ -37,11 +36,11 @@ function CreateProductPage(props) {
     //get access to userInfo
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
-     console.log(userInfo)
+  
 
      const userStoreDetails = useSelector(state => state.userStoreDetails);
     const { userStore } = userStoreDetails
-    console.log(userStore)
+ 
 
     //get access to createStore from redux store
     const productCreate = useSelector((state) => state.productCreate)
@@ -85,7 +84,7 @@ useEffect(() => {
  
   const submitHandler = (e) =>{
     e.preventDefault();
-    dispatch(createProduct(name, price, category, numberInStore, image, countInStock, brand, description, sellerName, sellerEmail, sellerId, sellerPhone, productStoreId, storeName, storeAddress, storeCity, storeCountry,{ ...userStore}));
+    dispatch(createProduct(name, price, category, image, countInStock, brand, description, sellerName, sellerEmail, sellerId, sellerPhone, productStoreId, storeName, storeAddress, storeCity, storeCountry,{ ...userStore}));
   
   }
   if (success) {
@@ -109,14 +108,16 @@ useEffect(() => {
                 </Button></Link>
             </h4>
           </div>
-          <div>
+          <div style={{backgroundColor:"#f5f5f5", padding:"5px"}}>
+            <p>Let your product and price speak the true nature of your product otherwise, your customer will reject it by filling the rejection form upon delivery.</p>
             {/* <h4>
               <Link to="/createstore">Create-Store</Link>
             </h4> */}
           </div>
         </div>
-
+        
         <form className="form" onSubmit={submitHandler}>
+          
           <div>
             {/*<pre>{JSON.stringify(imageUrl, null, '\t')}</pre> */}
             <h1>Create Product</h1>
@@ -147,15 +148,6 @@ useEffect(() => {
               id="category"
               placeholder="Electronics"
               onChange={(e) => setCategory(e.target.value)}
-            ></input>
-          </div>
-          <div>
-            <lable htmlFor="numberInStore">Number in store</lable>
-            <input
-              type="text"
-              id="numberInStore"
-              placeholder="Unique code e.g 1234"
-              onChange={(e) => setNumberInStore(e.target.value)}
             ></input>
           </div>
           <div>

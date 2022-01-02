@@ -12,7 +12,8 @@ const storeRouter = require('./routers/storeRouter.js');
 const widthdrawRouter = require('./routers/widthdrawRouter.js')
 const chatRouter = require('./routers/chatRouter.js');
 const messageRouter = require('./routers/messageRouter.js');
-const rejectionRouter = require('./routers/rejectionRouter.js')
+const rejectionRouter = require('./routers/rejectionRouter.js');
+const feedbackRouter = require('./routers/feedbackRouter.js');
 
 dotenv.config();
 const app = express();
@@ -26,7 +27,7 @@ const app = express();
 //     console.log("Connected to local db")
 // })
 //connect to db
-mongoose.connect(process.env.MONGODB_CONNECT,{ useNewUrlParser: true, useUnifiedTopology: true },()=>{
+mongoose.connect(process.env.CONNECT_TO_DB,{ useNewUrlParser: true, useUnifiedTopology: true },()=>{
     console.log('connected to db')
 })
 
@@ -55,6 +56,7 @@ app.use('/api/v1/widthdraw', widthdrawRouter);
 app.use('/api/v1/chat', chatRouter);
 app.use('/api/v1/message', messageRouter)
 app.use('/api/v1/reject', rejectionRouter)
+app.use('/api/v1/feedback', feedbackRouter)
 
 // //api for paypay
 // app.get('/api/v1/config/paypal', (req, res) =>{

@@ -41,8 +41,8 @@ const history = useHistory()
     //for total price
     
     //service charge
-    const service = 0.02 * basket.itemsPrice
-    basket.totalPrice = basket.itemsPrice + basket.shippingPrice + service // + basket.taxPrice
+    //const service = 0.02 * basket.itemsPrice
+    basket.totalPrice = basket.itemsPrice + basket.shippingPrice //+ service  + basket.taxPrice
 //console.log(basket)
 //console.log(basket.basketItems)
 //console.log(buyerName)
@@ -131,8 +131,8 @@ useEffect(() =>{
                                                 <h4>Store Information</h4>
                                                 <p>Name: {item.storeName}, {item.storeId}</p>
                                                 <p>Address: {item.storeAddress}, {item.storeCity}, {item.storeCountry}.</p>
-                                                <h4>Store Owner</h4>
-                                                <p>Name: {item.sellerName} Email: {item.sellerEmail} Phone: {item.sellerPhone}</p>
+                                                <h4>Store-Owner/seller</h4>
+                                                <p>Name: <strong>{item.sellerName}</strong>, Email: {item.sellerEmail} Phone: {item.sellerPhone}</p>
                                             </div>
                                             
                                             <div>
@@ -167,8 +167,8 @@ useEffect(() =>{
                             <li>
                                 <div className = "row">
                                     <div>Service</div>
-                                    <div>#{0.02 * basket.itemsPrice.toFixed(2)}</div>
-                                    {/* <div>#{basket.shippingPrice.toFixed(2)}</div> */}
+                                    {/* <div>#{0.02 * basket.itemsPrice.toFixed(2)}</div> */}
+                                     <div>#{basket.shippingPrice.toFixed(2)}</div> 
                                 </div>
                             </li>
                             {

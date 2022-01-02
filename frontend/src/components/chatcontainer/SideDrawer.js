@@ -113,6 +113,7 @@ function SideDrawer() {
       setLoadingChat(false);
       setSelectedChat(data)
       //onClose() //close the popover after we click on it
+      handlePopClose()
     } catch (error) {
       setAccessChatError(true)
     }
