@@ -35,11 +35,13 @@ function Guide() {
                 <p>Every business today wants to have its presence online to increase its sales, and generate more income. This means that business owners will need a website for their business. But many small and medium businesses cannot afford the cost of building and maintaining a website. Mosganda solves this problem by creating a platform that allows a seller to create an online store, where he can interact with his/her customers and make sales.</p>
                 <h4>What can I do on Mosganda?</h4>
                 <ul className='guide-ul'>
-                  <li>Create your online store fully controlled by you.</li>
+                <li>Create your online store fully controlled by you.</li>
+                <li>Sell your goods and services.</li>
+                <li>Buy goods from the comfort of your home.</li>
                   <li>A great place to start your new business online.</li>
                   <li>Connect with customers and establish effective communication through our chat feature. One can chat privately with customers or create business groups with Mosganda chat. </li>
                   <li>Find stores around you with ease, and save the stress of working along the streets looking for what to buy.</li>
-                  <li>Buy goods from the comfort of your home and lots more.</li>
+                  
               </ul>
               <h4>Do I need a designer to create my store?</h4>
               <p>No, you do not need a designer or programmer to create your store on Mosganda. The online store has been created already. What you will do, is to fill in the information about your store. </p>

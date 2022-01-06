@@ -38,9 +38,21 @@ header {
   grid-area:  header;
   background-color: #011628;
 }
+@media screen and (max-width: 600px) {
+  header {
+    height: 80px;
+  }
+}
+
 main {
   grid-area: main;
   padding: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  main {
+    margin-top: 50px;
+  }
 }
 footer {
   grid-area: footer;

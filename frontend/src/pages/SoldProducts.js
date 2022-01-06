@@ -160,7 +160,7 @@ useEffect(() =>{
                           onClick={() => { props.history.push(`/product/${product._id}`) }}>
                           View product
                 </Button></p>
-                <p>Product Id: {product._id}</p>
+                <p>Product Id: <strong>{product._id}</strong></p>
                   <p>Product Name: <b>{product.name}</b>, Price: <b>{product.price}</b></p>
                   <p>Description: <b>{ product.description}</b></p>
                 </div>
