@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const mongoose = require('mongoose');
 
-const widthdrawSchema = new mongoose.Schema(
+const withdrawSchema = new mongoose.Schema(
   {
     accountName: { type: String, required: true },
     accountNumber: { type: Number, required: true },
@@ -9,7 +9,7 @@ const widthdrawSchema = new mongoose.Schema(
     amount: { type: Number, required: true },
     email: { type: String, required: true },
     isPaid: { type: Boolean, default: false },
-    isPaidAt: { type: Boolean, default: false },
+    isPaidAt: { type: Date },
     productId: {type: String, required: true},
     requestedAt: { type: Date },
     phone: { type: String },
@@ -23,6 +23,6 @@ const widthdrawSchema = new mongoose.Schema(
   }
 );
 
-const Widthdraw = mongoose.model('Widthdraw', widthdrawSchema)
+const Withdraw = mongoose.model('Withdraw', withdrawSchema)
 // eslint-disable-next-line no-undef
-module.exports = Widthdraw;
+module.exports = Withdraw;

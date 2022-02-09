@@ -4,11 +4,14 @@ import { Link } from 'react-router-dom';
 import { login } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+//import { GoogleLogin } from 'react-google-login';
 
 function LoginPage(props) {
     const [ email, setEmail ] = useState('');
     const [password, setPassword] = useState('');
-    const [show, setShow ] = useState()
+  const [show, setShow] = useState()
+  
+  //const clientId = "947788433833-1p9dkgdr6r3edb7qss6k8quuifiu00ih.apps.googleusercontent.com"
 
     const redirect = props.location.search? props.location.search.split('=')[1] : '/';
 
@@ -28,7 +31,24 @@ function LoginPage(props) {
       if (userInfo) {
             props.history.push(redirect);
         }
-    },[props.history, redirect, userInfo])
+    }, [props.history, redirect, userInfo])
+  
+  
+  
+
+//   const handleLogin = async googleData => {
+//   const res = await fetch("/api/v1/user/auth/google", {
+//       method: "POST",
+//       body: JSON.stringify({
+//       token: googleData.tokenId
+//     }),
+//     headers: {
+//       "Content-Type": "application/json"
+//     }
+//   })
+//   const data = await res.json()
+//   // store returned user somehow
+// }
     return (
       <div className='login'>
         <form className="form" onSubmit={handleSummit}>
@@ -77,16 +97,34 @@ function LoginPage(props) {
               Login
             </button>
           </div>
-          <div>
-            <label />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+                <Link to="/forgotpassword" style={{fontSize:"12px", color:"blue"}}>
+                forgot password?
+              </Link>
+
+              </div>
+            <div>
+              <label />
             <div style={{marginBottom: "10px"}}>
               New user?{" "}
               <Link to={`/register?redirect=${redirect}`}>
                 Create an account
               </Link>
+              </div>
             </div>
           </div>
         </form>
+        {/* <div>
+            <GoogleLogin
+    clientId={clientId}
+    buttonText="Log in with Google"
+    onSuccess={handleLogin}
+    onFailure={handleLogin}
+            cookiePolicy={'http://localhost:3000'}
+            isSignedIn={true}
+/>
+            </div> */}
       </div>
     );
 }

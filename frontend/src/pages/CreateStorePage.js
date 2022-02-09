@@ -13,6 +13,12 @@ import { CREATE_STORE_RESET } from '../constants/storeConstants';
 import Button from "@mui/material/Button";
 import { useHistory } from 'react-router-dom'
 
+//for select
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 
 function CreateStore(props) {
   const [name, setName] = useState("");
@@ -20,6 +26,7 @@ function CreateStore(props) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
+  const [ category, setCategory ] = useState('')
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [creatorId, setCreatorId] = useState("");
@@ -27,11 +34,13 @@ function CreateStore(props) {
   const [creatorEmail, setCreatorEmail] = useState("");
   const [creatorPhone, setCreatorPhone] = useState("");
   const [creatorImage, setCreatorImage] = useState("");
-const [storeOwner, setStoreOwner ] = useState(false)
+  const [storeOwner, setStoreOwner] = useState(false)
+  const [deliveryCapacity, setDeliveryCapacity] = useState('')
+  
  //Only login user should be able to create a store
  const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log(userInfo)
+
  
   
   const history = useHistory()
@@ -97,11 +106,13 @@ useEffect(() => {
          createStore(
            name,
            address,
+           category,
            city,
            state,
            country,
            description,
            image,
+           deliveryCapacity,
            creatorId,
            creatorName,
            creatorEmail,
@@ -127,7 +138,7 @@ dispatch(getUserStore());
     props.history.push('/userstore')
     }, 5000)
   }
-  
+  console.log(deliveryCapacity)
     return (
       <div>
         <Link to="/stores">
@@ -152,6 +163,7 @@ dispatch(getUserStore());
               id="name"
               placeholder="Enter store name"
               onChange={(e) => setName(e.target.value)}
+              required
             ></input>
           </div>
           <div>
@@ -161,7 +173,41 @@ dispatch(getUserStore());
               id="address"
               placeholder="Enter address"
               onChange={(e) => setAddress(e.target.value)}
+              required
             ></input>
+          </div>
+          <div>
+            <lable htmlFor="category">Store Category</lable>
+            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={category}
+          onChange={(e) =>setCategory(e.target.value)}
+        >
+          <MenuItem value="">
+            <em>None</em>
+                </MenuItem>
+                <MenuItem value="supermarket">Supermarket</MenuItem>
+                <MenuItem value="men">Men's Fashion</MenuItem>
+                <MenuItem value="women">Women's Fashion</MenuItem>
+                 <MenuItem value="menandwomen">Fashion (Men and Women)</MenuItem>
+                <MenuItem value="phone">Phone and Accessories</MenuItem>
+                <MenuItem value="computing">Computing</MenuItem>
+                <MenuItem value="health">Health and Beauty</MenuItem>
+                <MenuItem value="baby">Baby Products</MenuItem>
+                <MenuItem value="furniture">Furniture</MenuItem>
+                <MenuItem value="automobile">Automobile</MenuItem>
+                <MenuItem value="gaming">Gaming</MenuItem>
+                <MenuItem value="food">Food</MenuItem>
+                <MenuItem value="drinks">Drinks (Beer, wine, water, etc)</MenuItem>
+                <MenuItem value="household">household (Kitchen equipment)</MenuItem>
+                <MenuItem value="groceries">Groceries</MenuItem>
+                <MenuItem value="pharmacy">Pharmacy (drugs)</MenuItem>
+                <MenuItem value="others">Others</MenuItem>
+        </Select>
+      </FormControl>
           </div>
           <div>
             <lable htmlFor="city">City/Towm</lable>
@@ -170,6 +216,7 @@ dispatch(getUserStore());
               id="city"
               placeholder="Enter city/towm"
               onChange={(e) => setCity(e.target.value)}
+              required
             ></input>
           </div>
           <div>
@@ -179,6 +226,7 @@ dispatch(getUserStore());
               id="state"
               placeholder="Delta State"
               onChange={(e) => setState(e.target.value)}
+              required
             ></input>
           </div>
           <div>
@@ -197,6 +245,7 @@ dispatch(getUserStore());
               id="description"
               placeholder="Enter store description"
               onChange={(e) => setDescription(e.target.value)}
+              required
             ></input>
           </div>
 
@@ -215,6 +264,16 @@ dispatch(getUserStore());
               Store created successfully.
             </MessageBox>
           )}
+          <div>
+            <label htmlFor="deliveryCapacity">Delivery of goods</label>
+    <select id="deliveryCapacity" value={deliveryCapacity} onChange={(e) => setDeliveryCapacity(e.target.value)}>
+              <option value="">Select</option>
+              <option value="Within-the-same-city">Same town/city only</option>
+    <option value="Within-the-same-state">Same State</option>
+    <option value="nation-wide">Nation wide</option>
+                
+  </select>
+          </div>
           <div>
             <label />
             <button style={{marginBottom:"5px"}} className="primary" type="submit">

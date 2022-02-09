@@ -13,6 +13,7 @@ import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
 
 function OrderPage(props) {
+    //const { data } = await Axios.get('https://mosganda-backend.herokuapp.com/api/v1/config/paystack');
     const orderId = props.match.params.id;
     //const publicKey = "pk_test_863b631d2a66390b101d9b0be373f958bad8ac59"
     //const amount = 1000000 // Remember, set in kobo!
@@ -31,6 +32,7 @@ function OrderPage(props) {
      //get order details from redux store
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
+    console.log(order)
 
     //get the orderPay from redux store
     const orderPay = useSelector(state => state.orderPay);
@@ -103,7 +105,7 @@ function OrderPage(props) {
 
           //update paid products
         order.orderItems.map((x) => {
-            return dispatch(paidProduct({id: x.product, buyerEmail:email, orderId:orderId }))
+            return dispatch(paidProduct({id: x.product, buyerEmail:email, orderId:orderId, deliveryCost: x.deliveryCost, service: x.service }))
         });
       }
 
@@ -149,7 +151,13 @@ function OrderPage(props) {
                                  (<MessageBox variant="danger">Not Paid</MessageBox>)
                                  }
                             </div>
-                        </li>
+                                </li>
+                                <li>
+                                    <div className='card card-body'>
+                                        <h2>Delivery</h2>
+                                        <p>Fee: #{ order.deliveryFee}</p>
+                                    </div>
+                                </li>
                         <li>
                             <div className ="card card-body">
                                 <h2>Order Items</h2>
@@ -199,8 +207,14 @@ function OrderPage(props) {
                             </li>
                             <li>
                                 <div className = "row">
-                                    <div>Shipping fee</div>
-                                    <div>#{order.shippingPrice.toFixed(2)}</div>
+                                    <div>Delivery fee</div>
+                                    <div>#{order.deliveryFee.toFixed(2)}</div>
+                                </div>
+                                    </li>
+                                    <li>
+                                <div className = "row">
+                                    <div>Service</div>
+                                    <div>#{order.buyerService.toFixed(2)}</div>
                                 </div>
                             </li>
                             

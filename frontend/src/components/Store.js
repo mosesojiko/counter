@@ -2,6 +2,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Button from "@mui/material/Button";
+import PreviewIcon from '@mui/icons-material/Preview';
 
 function Store(props) {
     const { store } = props
@@ -22,7 +23,8 @@ function Store(props) {
                 <div className='card-body-span'>
                     <span>
                         <Link to ={`/store/${store._id}`}>
-                        <Button variant="contained" color="success" size="small">
+                            <Button variant="contained" color="success" size="small">
+                                <PreviewIcon />
                         View store
                         </Button>
                     </Link>

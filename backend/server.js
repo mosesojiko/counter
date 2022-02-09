@@ -9,15 +9,21 @@ const userRouter  = require('./routers/userRouter.js');
 const productRouter = require('./routers/productRouter.js');
 const orderRouter = require('./routers/orderRouter.js');
 const storeRouter = require('./routers/storeRouter.js');
-const widthdrawRouter = require('./routers/widthdrawRouter.js')
+const withdrawRouter = require('./routers/withdrawRouter.js')
 const chatRouter = require('./routers/chatRouter.js');
 const messageRouter = require('./routers/messageRouter.js');
 const rejectionRouter = require('./routers/rejectionRouter.js');
 const feedbackRouter = require('./routers/feedbackRouter.js');
+const newsletterRouter = require('./routers/newsLetter.js')
+const videoRouter = require('./routers/videoRouter')
 
 dotenv.config();
 const app = express();
 
+//oAuth clientId: 655829965252-02p71b38pecc20bgnfntr0m5hr9hq2og.apps.googleusercontent.com
+//client secret: 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
+// access token: "ya29.A0ARrdaM-h6zOnrlElP9d7FHlSxOLIgBWRLIBSmKkFJSyO6mpWO7-fXK9Nv4hia1Kt0UFERjEN82xFa668a_aMNnjUTe-RCtm90ish1wJeZRTkoagC40K1PgshthBd2EhtfR2SQRDlHY1FGwcre9W1khmrlfBh"
+//refresh token: "1//04ANstkH3lK9zCgYIARAAGAQSNwF-L9IrYQ8wqQO4mxaT2QZhgxnquCh-5UH81EJJeGy0WWRG3K5w7GtVzg30ECD1CfyumVag7hU"
 
 //Connect to mongoDb
 // mongoose.connect(process.env.MONGODB_CONNECT,{
@@ -27,7 +33,7 @@ const app = express();
 //     console.log("Connected to local db")
 // })
 //connect to db
-mongoose.connect(process.env.CONNECT_TO_DB,{ useNewUrlParser: true, useUnifiedTopology: true },()=>{
+mongoose.connect(process.env.MONGODB_CONNECT,{ useNewUrlParser: true, useUnifiedTopology: true },()=>{
     console.log('connected to db')
 })
 
@@ -52,11 +58,13 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/order', orderRouter)
 app.use('/api/v1/store', storeRouter)
-app.use('/api/v1/widthdraw', widthdrawRouter);
+app.use('/api/v1/withdraw', withdrawRouter);
 app.use('/api/v1/chat', chatRouter);
 app.use('/api/v1/message', messageRouter)
 app.use('/api/v1/reject', rejectionRouter)
 app.use('/api/v1/feedback', feedbackRouter)
+app.use('/api/v1/newsletter', newsletterRouter)
+app.use('/api/v1/video', videoRouter)
 
 // //api for paypay
 // app.get('/api/v1/config/paypal', (req, res) =>{
@@ -68,6 +76,11 @@ app.use('/api/v1/feedback', feedbackRouter)
 app.get('/api/v1/config/paystack', (req, res) =>{
     // eslint-disable-next-line no-undef
     res.json(process.env.PAYSTACK_PUBLIC_KEY) //sb stands for sandbox
+})
+
+//api for google cloud platform
+app.get('/api/v1/clientid', (req, res) => {
+    res.json(process.env.GOOGLE_CLIENT_ID)
 })
 
 app.get('/', (req, res)=>{
@@ -93,65 +106,65 @@ app.use((err, req, res, next) =>{
     next()
 })
 const port = process.env.PORT || 5000
-// app.listen(port, () => {
-//     console.log(`Serve as http://localhost:${port}`)
-// })
-
-//making use of socket
-const server = app.listen(port, () => {
+app.listen(port, () => {
     console.log(`Serve as http://localhost:${port}`)
 })
 
-const io = require('socket.io')(server, {
-    pingTimeout: 60000, //goes off after waiting for 60 second if user didn't send message
-    cors: {
-        origin: "http://localhost:3000",
-    }
-})
+// //making use of socket
+// const server = app.listen(port, () => {
+//     console.log(`Serve as http://localhost:${port}`)
+// })
 
- //create a connection
-io.on('connection', (socket) => {
-    console.log('connected to socket io');
-    //everytime a user opens the app, he should be connected to his own socket
-    socket.on('setup', (userData) => { 
-        socket.join(userData._id);//to be replaced by userInfo from frontend
-        //create a room for that user
-        console.log(userData._id)
-        socket.emit('connected')
-    })
+// const io = require('socket.io')(server, {
+//     pingTimeout: 60000, //goes off after waiting for 60 second if user didn't send message
+//     cors: {
+//         origin: "http://localhost:3000",
+//     }
+// })
 
-//     //joining a chat, the room will be the chat id in the frontend
-    socket.on('join chat', (room) => {
-        socket.join(room)
-        console.log(`User join room ${room}`)
-    })
+//  //create a connection
+// io.on('connection', (socket) => {
+//     console.log('connected to socket io');
+//     //everytime a user opens the app, he should be connected to his own socket
+//     socket.on('setup', (userData) => { 
+//         socket.join(userData._id);//to be replaced by userInfo from frontend
+//         //create a room for that user
+//         console.log(userData._id)
+//         socket.emit('connected')
+//     })
 
-    //socket for typing
-    //when inside a room, emit this typing event
-    socket.on('typing', (room) => socket.in(room).emit('typing'));
+// //     //joining a chat, the room will be the chat id in the frontend
+//     socket.on('join chat', (room) => {
+//         socket.join(room)
+//         console.log(`User join room ${room}`)
+//     })
 
-    //do the same for stop typing
-    socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+//     //socket for typing
+//     //when inside a room, emit this typing event
+//     socket.on('typing', (room) => socket.in(room).emit('typing'));
 
-//     //track new message
-    socket.on('new message', (newMessageRecieved) => {
-        //check the chat that the message belongs to
-        var chat = newMessageRecieved.chat;
-        if(!chat.users) return console.log("chat.users not defined")
-        //if there are users, send the message only to the other users, not the sender
-        chat.users.forEach((user) => {
-            if (user._id == newMessageRecieved.sender._id) return // i am not to recieve it
-            socket.in(user._id).emit("message recieved", newMessageRecieved)
-            //we will check which user the newMessageRecieved object belongs to in the frontend
-        })
-    })
+//     //do the same for stop typing
+//     socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
-    //off the socket
-    socket.off("setup", () => {
-        console.log("User disconnected")
-        socket.leave(userData._id)
-    })
- })
+// //     //track new message
+//     socket.on('new message', (newMessageRecieved) => {
+//         //check the chat that the message belongs to
+//         var chat = newMessageRecieved.chat;
+//         if(!chat.users) return console.log("chat.users not defined")
+//         //if there are users, send the message only to the other users, not the sender
+//         chat.users.forEach((user) => {
+//             if (user._id == newMessageRecieved.sender._id) return // i am not to recieve it
+//             socket.in(user._id).emit("message recieved", newMessageRecieved)
+//             //we will check which user the newMessageRecieved object belongs to in the frontend
+//         })
+//     })
+
+//     //off the socket
+//     socket.off("setup", () => {
+//         console.log("User disconnected")
+//         socket.leave(userData._id)
+//     })
+//  })
 
 
   

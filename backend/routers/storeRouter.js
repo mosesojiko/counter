@@ -7,11 +7,38 @@ const Mosgandastore = require('../models/storeModel.js');
 //const Product = require('../models/productModel.js');
 //const User = require("../models/userModel.js");
 const { isAuth } = require('../utils/isAuth.js');
+const { isAdmin } = require('../utils/isAdmin.js');
 
 
 //get all stores that are posted
 storeRouter.get('/', expressAsyncHandler( async(req, res) =>{
     const stores = await Mosgandastore.find({isPosted: true}).sort({ updatedAt: -1 });
+    if(!stores) {
+       return res.status(404).json({message:"No store has been posted here."})
+    }
+    res.json(stores);
+}))
+
+
+//search for stores by name or category
+storeRouter.get('/search', expressAsyncHandler(async (req, res) => {
+    const searchStore = await Mosgandastore.find(
+        {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { category: { $regex: req.query.search, $options: "i" } },
+      ],
+      isPosted:true
+      }
+      );
+  if (searchStore) {
+    res.json(searchStore)
+  }
+}))
+
+//get all stores for admin
+storeRouter.get('/admin', isAuth, isAdmin, expressAsyncHandler( async(req, res) =>{
+    const stores = await Mosgandastore.find({}).sort({ updatedAt: -1 });
     if(!stores) {
        return res.status(404).json({message:"No store has been posted here."})
     }
@@ -30,17 +57,19 @@ storeRouter.get('/userstore', isAuth, expressAsyncHandler(async(req, res)=>{
 
 //create a store 
 storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>{
-    const { name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage } =
+    const { name, address, category, city, state, country, description, deliveryCapacity, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage } =
         req.body;
 
         const store = new Mosgandastore({
           name,
-          address,
+            address,
+          category,
           city,
           state,
           country,
           description,
-          image,
+            image,
+          deliveryCapacity,
           creatorId,
           creatorName,
           creatorEmail,
@@ -52,12 +81,14 @@ storeRouter.post('/createstore', isAuth, expressAsyncHandler( async(req, res) =>
         res.json({
           _id: createdStore._id,
           name: createdStore.name,
-          address: createdStore.address,
+            address: createdStore.address,
+          category: createdStore.category,
           city: createdStore.city,
           state: createdStore.state,
           country: createdStore.country,
           description: createdStore.description,
-          image: createdStore.image,
+            image: createdStore.image,
+          deliveryCapacity: createdStore.deliveryCapacity,
           creatorId: createdStore.creatorId,
           creatorName: createdStore.creatorName,
           creatorEmail: createdStore.creatorEmail,
@@ -91,11 +122,13 @@ storeRouter.put('/editstore', isAuth, expressAsyncHandler( async(req, res) => {
     if(store) {
         store.name = req.body.name || store.name;
         store.address = req.body.address || store.address;
+        store.category = req.body.category || store.category;
         store.city = req.body.city || store.city;
         store.state = req.body.state || store.state;
         store.country = req.body.country || store.country;
         store.description = req.body.description || store.description;
         store.image = req.body.image || store.image;
+         store.deliveryCapacity = req.body.deliveryCapacity || store.deliveryCapacity;
         store.creatorId = req.body.creatorId || store.creatorId,
         store.creatorName = req.body.creatorName || store.creatorName,
         store.creatorEmail = req.body.creatorEmail || store.creatorEmail,

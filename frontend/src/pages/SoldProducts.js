@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 //import { Link } from 'react-router-dom';
 import { getSoldProducts } from '../actions/productActions';
-import { createWidthdraw } from '../actions/widthdrawActions';
+import { createWithdraw } from '../actions/withdrawActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { CREATE_WIDTHDRAW_RESET } from '../constants/widthdrawConstants';
+import { CREATE_WITHDRAW_RESET } from '../constants/withdrawConstants';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -37,7 +37,9 @@ function SoldProducts(props) {
     const [ amount, setAmount ] = useState(0)
     const [ email, setEmail ] = useState('')
   const [phone, setPhone] = useState('')
-  const [productId, setProductId ] = useState('')
+  const [productId, setProductId] = useState('')
+  const [amountToPay, setAmountToPay] = useState()
+  const [serviceCharge, setServiceCharge] = useState()
 console.log(productId)
 
    
@@ -52,8 +54,8 @@ console.log(productId)
   console.log(soldProducts);
 
   //get widthdrawal from redux store
-  const widthdrawal = useSelector((state) => state.widthdrawal);
-  const { loading: loadDraw, error: errorDraw, success } = widthdrawal
+  const withdrawal = useSelector((state) => state.withdrawal);
+  const { loading: loadDraw, error: errorDraw, success } = withdrawal
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -66,9 +68,9 @@ useEffect(() =>{
     dispatch(getSoldProducts())
 },[dispatch])
 
-  const handleWidthdraw = () => {
-      dispatch(createWidthdraw(accountName, accountNumber, bank, amount, email, phone, productId));
-      dispatch({type: CREATE_WIDTHDRAW_RESET})
+  const handleWithdraw = () => {
+      dispatch(createWithdraw(accountName, accountNumber, bank, amount, email, phone, productId));
+      dispatch({type: CREATE_WITHDRAW_RESET})
   }
 
   if (success) {
@@ -78,11 +80,11 @@ useEffect(() =>{
   }
   
     return (
-      <div>
+      <div style={{maxWidth:"100%"}}>
         
-        <div className='widthdrawal-steps'>
+        <div className='withdrawal-steps'>
           <h1 style={{ textAlign: "center" }}>Sold Items and Payouts</h1>
-            <h3>Widthdrawal Steps</h3>
+            <h3>Withdrawal Steps</h3>
               <ul>
                 <li>Get your product delivered to your customer.</li>
                 <li>Click on the payme button to payout the product</li>
@@ -103,8 +105,11 @@ useEffect(() =>{
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-                Widthdrawal Form
+                Withdrawal Form
               </Typography>
+              <Box>
+                You will recieve {amountToPay} - service {serviceCharge} = #{amountToPay-serviceCharge}
+              </Box>
               <form>
                 <Box>
                   <label htmlFor='accountName'>Account Name</label>
@@ -133,7 +138,7 @@ useEffect(() =>{
                 {
                   success && <MessageBox variant="success">successful</MessageBox>
                 }
-                <Button sx={{textAlign:"center",m:2}} onClick ={handleWidthdraw} variant="contained" color="success">Submit</Button>
+                <Button sx={{textAlign:"center",m:2}} onClick ={handleWithdraw} variant="contained" color="success">Submit</Button>
               </form>
           <Button sx={{textAlign:"center",m:2}} onClick ={handleClose} variant="contained" color="error">Close</Button>
         </Box>
@@ -176,7 +181,8 @@ useEffect(() =>{
                       <th>Paid</th>
                       <th>Date</th>
                       <th>Delivered</th>
-                      <th>Date</th>
+                    <th>Date</th>
+                    <th>D-fee</th>
                       <th>Payout</th>
                       <th>Date</th>
                     </tr>
@@ -191,20 +197,29 @@ useEffect(() =>{
                       <td>{product.isDelivered ? "Delivered" : "No"}</td>
                       <td>{product.isDelivered
                               ? product.isDeliveredAt.substring(0, 10)
-                        : "No"}</td>
+                      : "No"}</td>
+                    <td>{ product.deliveryCost}</td>
                       <td>{product.isSettled ? "Paid Out" : "No"}</td>
                       <td>{product.isSettledAt? product.isSettledAt.substring(0,10) : "No"}</td>
                       
                     </tr>
                   </tbody>
-                </table>
-                <Button sx={{ m: 2 }} variant="contained" size="large" onClick={() => {
-                  setAmount(product.price)
+              </table>
+              {
+                product.isSettled? `Paid out by Mosganda`: <p>Total Amount payable: Price (#{product.price}) + delivery fee (#{product.deliveryCost}) = #{product.price + product.deliveryCost }</p>
+              }
+              {
+                !product.isSettled &&
+                 <Button sx={{ m: 2 }} variant="contained" size="large" onClick={() => {
+                setAmount(product.price)
+                setAmountToPay(product.price + product.deliveryCost)
+                setServiceCharge(product.service)
                   setProductId(product._id)
                   setEmail(userInfo.email)
                   setPhone(userInfo.phone)
                   handleOpen()
                 }}>Pay Me</Button>
+               }
               </div>
             
           ))

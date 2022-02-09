@@ -3,6 +3,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 //import Rating from "./Rating";
 import Button from "@mui/material/Button";
+import DetailsIcon from '@mui/icons-material/Details';
+import PreviewIcon from '@mui/icons-material/Preview';
+import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 
 function Product(props) {
   const { product, showStoreButton} = props;
@@ -29,7 +32,8 @@ function Product(props) {
         <div className="card-body-span">
           <span>
             <Link to={`/basket/${product._id}?qty=${qty}`}>
-              <Button variant="contained" color="success" size="small">
+              <Button variant="contained" color="secondary" size="small">
+                <AddShoppingCartOutlinedIcon />
                 Buy
               </Button>
             </Link>
@@ -37,6 +41,7 @@ function Product(props) {
           <span>
             <Link to={`/product/${product._id}`}>
               <Button variant="contained" color="success" size="small">
+                <DetailsIcon />
                 Detail
               </Button>
             </Link>
@@ -45,12 +50,14 @@ function Product(props) {
             showStoreButton === true ? 
               (<span>
               <Link to={`/store/${product.productStoreId}`}>
-                <Button variant="contained" color="success" size="small">
-                  View-store
+                  <Button variant="contained" color="success" size="small">
+                    <PreviewIcon />
+                  Store
                 </Button>
               </Link>
-            </span>):""
-            }
+              </span>) : ""
+          }
+          
         </div>
 
         {/* <Rating rating={product.rating} numReviews={product.numReviews} /> */}

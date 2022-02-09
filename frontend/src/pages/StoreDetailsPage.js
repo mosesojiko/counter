@@ -8,6 +8,8 @@ import { getSingleStore } from '../actions/storeActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import Product from '../components/Product';
+import { Link } from "react-router-dom"
+import Button from "@mui/material/Button";
 
 function StoreDetailsPage(props) {
     const dispatch = useDispatch();
@@ -91,14 +93,28 @@ function StoreDetailsPage(props) {
                                    <p>City/Town: <strong>{store.singleStore.city} </strong></p>
                                    <p>State: <strong>{store.singleStore.state}</strong></p>
                                    <p>Country: <strong>{store.singleStore.country}</strong></p>
-                                   <p>Description: <strong>{store.singleStore.description}</strong></p>
+                                            <p>Description: <strong>{store.singleStore.description}</strong></p>
+                                            <p>
+                Delivery: <strong>{store.singleStore.deliveryCapacity}</strong>
+              </p>
                                    
                            </div>
                        </div>
                        </div>
                        
                    </div>
-               <div>
+                            <div style={{backgroundColor:"#f5f5f5", padding:"10px"}}>
+                                <div>
+                            <p>
+                      To chat with me (the store owner), click on {" "}
+                      <Link to='/chats'>
+                        <Button variant="contained" color="primary" size="small">
+                      Chat
+                    </Button>
+                      </Link>
+                      . In the chat page, click on <b>Search user</b>, type in my name i.e <b>{store.singleStore.creatorName}</b> and click <b>Go</b>. Click on my name (chat handle) in the search result and send me message.
+                    </p>
+                          </div>
                    <h2 className="store-name">Checkout list of my items below for your shopping pleasure.</h2>
                </div>
                             <div className="row center">

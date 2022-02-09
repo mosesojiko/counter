@@ -19,22 +19,25 @@ function ShippingAddressPage(props) {
     const [ fullName, setFullName ] = useState(shippingAddress.fullName);
     const [ address, setAddress ] = useState(shippingAddress.address);
     const [ city, setCity ] = useState(shippingAddress.city);
-    const [ LGA, setLGA ] = useState(shippingAddress.LGA);
+    const [ landmark, setLandmark ] = useState(shippingAddress.landmark);
     const [ state, setState ] = useState(shippingAddress.state);
     const [ country, setCountry ] = useState(shippingAddress.country);
-    const [ phone, setPhone ] = useState(shippingAddress.phone);
-
+    const [phone, setPhone] = useState(shippingAddress.phone);
+    
+    
+    
     const dispatch = useDispatch();
     //function to handle submit
     const handleSummit = (e) => {
         e.preventDefault();
-        dispatch(saveShippingAddress({fullName, address, city, LGA, state, country, phone}));
+            
+        dispatch(saveShippingAddress({fullName, address, city, landmark, state, country, phone}));
 
         //redirect the user to payment
         props.history.push('/payment');
     }
     return (
-        <div>
+        <div style={{maxwidth:"100%"}}>
             <CheckoutSteps step1 step2></CheckoutSteps>
             <form className = "form" onSubmit = { handleSummit }>
             <div>
@@ -46,7 +49,7 @@ function ShippingAddressPage(props) {
                     value = {fullName} onChange = { (e) =>setFullName(e.target.value)} required></input>
                 </div>
                 <div>
-                    <label htmlFor = "address">Address</label>
+                    <label htmlFor = "address">Address (point of collection)</label>
                     <input type="text" id="address" placeholder="Enter address" 
                     value = {address} onChange = { (e) =>setAddress(e.target.value)} required></input>
                 </div>
@@ -56,9 +59,9 @@ function ShippingAddressPage(props) {
                     value = {city} onChange = { (e) =>setCity(e.target.value)} required></input>
                 </div>
                 <div>
-                    <label htmlFor = "LGA">Local Govt. Area</label>
-                    <input type="text" id="LGA" placeholder="Local govt of residence." 
-                    value = {LGA} onChange = { (e) =>setLGA(e.target.value)} required></input>
+                    <label htmlFor = "landmark">Nearest landmark</label>
+                    <input type="text" id="landmark" placeholder="Agofure park" 
+                    value = {landmark} onChange = { (e) =>setLandmark(e.target.value)} required></input>
                 </div>
                 <div>
                     <label htmlFor = "state">State</label>

@@ -25,10 +25,12 @@ function ProductPage(props) {
     //function to handle add to basket button
     const addToBasketHandler = () => {
         props.history.push(`/basket/${productId}?qty=${qty}`)
-    }
+  }
+  
 
+  
     return (
-      <div>
+      <div style={{backgroundColor:"#f5f5f5", padding:"10px"}}>
         {loading ? (
           <LoadingBox></LoadingBox>
         ) : error ? (
@@ -49,8 +51,9 @@ function ProductPage(props) {
                     <Button variant="contained" color="success" size="small">
                       View-store
                     </Button>
-                  </p>
-                </Link>
+                      </p>
+                    </Link>
+                    
               </div>
               <div className="col-1">
                 <ul>
@@ -80,6 +83,9 @@ function ProductPage(props) {
                       </li>
                       <li>
                     Seller-Name: <strong>{product.sellerName}</strong>
+                      </li>
+                      <li>
+                    Delivery: <strong>{product.deliveryCapacity}</strong>
                   </li>
                 </ul>
               </div>
@@ -88,7 +94,16 @@ function ProductPage(props) {
                       product.isPaid ? (<div>
                         <h4>Buyer Information</h4>
                 <p>Buyer Name: <b>{product.buyerName}</b>, Buyer Phone: <b>{product.buyerPhone}</b>, Buyer Email: <b>{product.buyerEmail}</b></p>
-                <p>Buyer Address: { product.buyerAddress}</p>
+                        <p>Buyer Address: {product.buyerAddress}</p>
+                        
+                        <h4>Status</h4>
+                        <p>Paid For?: <strong>{product.isPaid ? `Paid by ${product.buyerName}` : "Not yet paid"}</strong></p>
+                        <p>Delivered?: <strong>{product.isDelivered ? `Delivered at ${product.isDeliveredAt.substring(0, 10)}` : "Not delivered."}</strong></p>
+                        <p>Settled?: <strong>{product.isSettled ? `Settled at ${product.isSettledAt.substring(0, 10)}` : "Not yet settled."}</strong></p>
+                        <p><Button variant="contained" size="small"
+                                        onClick={() => { props.history.push(`/order/${product.orderId}`) }}>
+                                        View Order
+                                    </Button></p>
                       </div>) :
                         (<div className="card card-body">
                   <ul>
@@ -142,16 +157,34 @@ function ProductPage(props) {
                             {" "}
                             Add to shopping basket
                           </button>
-                        </li>
+                                </li>
+                                
                       </>
                     )}
-                  </ul>
+                          </ul>
+                          
                 </div>)
                 }
-              </div>
+                  </div>
+                  {
+                    !product.isPaid &&
+                    <div>
+                            <p>
+                      To chat with the seller, click on {" "}
+                      <Link to='/chats'>
+                        <Button variant="contained" color="primary" size="small">
+                      Chat
+                    </Button>
+                      </Link>
+                      . In the chat page, click on <b>Search user</b>, type in the seller's name as follows: <b>{product.sellerName}</b> and click <b>Go</b>. In the search result, Click on the seller's name (chat handle) and send message.
+                    </p>
+                          </div>
+                  }
             </div>
           </div>
         )}
+
+        
       </div>
     );
   }

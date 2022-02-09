@@ -5,6 +5,7 @@ const rejectionRouter = express.Router();
 
 const Reject = require('../models/rejectionModel.js');
 const { isAuth } = require('../utils/isAuth.js');
+const { isAdmin } = require('../utils/isAdmin.js');
 
 //create a rejection 
 rejectionRouter.post('/', isAuth, expressAsyncHandler( async(req, res) => {
@@ -22,8 +23,8 @@ rejectionRouter.post('/', isAuth, expressAsyncHandler( async(req, res) => {
 
 
 //router to get list of rejection
-rejectionRouter.get('/', isAuth, expressAsyncHandler(async(req, res)=>{
-    const rejects = await Reject.find({});
+rejectionRouter.get('/', isAuth, isAdmin, expressAsyncHandler(async(req, res)=>{
+    const rejects = await Reject.find({}).sort({ updatedAt: -1 });
     if (rejects) {
          res.json(rejects)
      }

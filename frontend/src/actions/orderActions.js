@@ -24,7 +24,7 @@ export const createOrder = (order, sellerEmail) => async (dispatch, getState) =>
     try {
         // get userInfo from redux store
         const { userLogin: { userInfo }, } = getState() //getState returns the whole redux store
-        const { data } = await Axios.post('/api/v1/order', order, {
+        const { data } = await Axios.post('/api/v1/order',  order, {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }

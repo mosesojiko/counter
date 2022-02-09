@@ -8,13 +8,17 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
     isSeller: { type: Boolean, default: false },
+    terms: { type: String },
     phone: { type: String },
     address: { type: String },
+    isBanned: { type: Boolean, default: false },
+    isActive: {type: Boolean, default: true},
     image: {
       type: String,
       default:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYmlp9JDeNMaFZzw9S3G1dVztGqF_2vq9nA&usqp=CAU",
     },
+    picture: {type: String},
     storeDetails: {
       name: { type: String },
       address: { type: String },

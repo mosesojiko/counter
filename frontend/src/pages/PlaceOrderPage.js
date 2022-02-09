@@ -15,7 +15,8 @@ function PlaceOrderPage(props) {
     const dispatch = useDispatch();
     const [buyerName, setBuyerName ] = useState('')
     const [buyerAddress, setBuyerAddress ] = useState('')
-    const [buyerPhone, setBuyerPhone ] = useState('')
+    const [buyerPhone, setBuyerPhone] = useState('')
+    
    
 const history = useHistory()
     //get cart from redux store
@@ -39,13 +40,52 @@ const history = useHistory()
     //using it for tax
     //basket.taxPrice = toPrice(0.15 * basket.itemsPrice);
     //for total price
+
+    //delivery logic
+    const deliveryFee = basket.basketItems.map((item) => {
+      
+        if (item.storeCity === basket.shippingAddress.city && item.storeState === basket.shippingAddress.state) {
+            item.deliveryCost = Number(item.sameCity)
+        return  item.sameCity
+        } else if (item.storeCity !== basket.shippingAddress.city && item.storeState === basket.shippingAddress.state) {
+            item.deliveryCost = Number(item.sameState)
+            return  item.sameState
+        } else if (item.storeCity !== basket.shippingAddress.city && item.storeState !== basket.shippingAddress.state) {
+            item.deliveryCost = Number(item.nationWide)
+            return item.nationWide 
+        } 
+    }).reduce((a, b) => a + b, 0)
     
-    //service charge
-    //const service = 0.02 * basket.itemsPrice
-    basket.totalPrice = basket.itemsPrice + basket.shippingPrice //+ service  + basket.taxPrice
-//console.log(basket)
-//console.log(basket.basketItems)
-//console.log(buyerName)
+    //service charge for seller
+    //const service = basket.itemsPrice <= 2000? 50: basket.itemsPrice > 2000 && basket.itemsPrice <= 5000? 100: basket.itemsPrice > 5000 && basket.itemsPrice <= 10000? 200: basket.itemsPrice > 10000? (0.015 * basket.itemsPrice) + 100:0
+    const service = basket.basketItems.map((ser) => {
+        if (ser.price <= 2000) {
+            ser.service = 50
+            return 50
+        } else if (ser.price > 2000 && ser.price <= 5000) {
+            ser.service = 100
+            return 100
+        } else if ((ser.price > 5000 && ser.price <= 10000)) {
+            ser.service = 200
+            return 200
+        } else if (ser.price > 10000) {
+            ser.service = (0.015 * basket.itemsPrice) + 100
+            return (0.015 * basket.itemsPrice) + 100
+        }
+    })
+
+    //service for buyer
+    const buyerService = basket.itemsPrice <= 3000? 50: basket.itemsPrice > 3000 && basket.itemsPrice <= 10000? 100: basket.itemsPrice > 10000 && basket.itemsPrice <= 20000? 150: basket.itemsPrice > 20000 && basket.itemsPrice <= 40000? 200 : basket.itemsPrice > 40000? 300 : 0
+    //const totalService = service.reduce((a, b) => a + b, 0)
+    
+
+    basket.totalPrice = basket.itemsPrice + basket.shippingPrice + Number(buyerService) + Number(deliveryFee) //+ basket.taxPrice
+    basket.deliveryFee = Number(deliveryFee)
+    basket.buyerService = Number(buyerService)
+console.log(basket)
+    console.log(basket.basketItems)
+   console.log(service)
+
 useEffect(() =>{
     if(basket) {
         setBuyerName(basket.shippingAddress.fullName);
@@ -55,16 +95,6 @@ useEffect(() =>{
 },[basket])
 
 
-
-//get sellerEmail id
-// const sellerEmail = basket.basketItems.map((x) => {
-//     return x.sellerEmail
-// })[0]
-// console.log(sellerEmail)
-
-    //edit product 
-    
-   
     
     //function for placeOrderHandler
 
@@ -73,7 +103,7 @@ useEffect(() =>{
         dispatch(createOrder({...basket, orderItems: basket.basketItems}));
         //update ordered product
         basket.basketItems.map((x) => {
-            return dispatch(orderedProduct({id: x.product,buyerName,buyerPhone,buyerAddress }))
+            return dispatch(orderedProduct({id: x.product,buyerName,buyerPhone,buyerAddress, service }))
         });
     }
 
@@ -113,6 +143,12 @@ useEffect(() =>{
                                 <h2>Payment</h2>
                                 <p> <strong>Method:</strong> { basket.paymentMethod } 
                                 </p>
+                            </div>
+                        </li>
+                        <li>
+                            <div className='card card-body'>
+                                <h2>Delivery</h2>
+                                <p>Amount: <strong>#{ deliveryFee}</strong></p>
                             </div>
                         </li>
                         <li>
@@ -165,10 +201,16 @@ useEffect(() =>{
                                 </div>
                             </li>
                             <li>
+                                <div className='row'>
+                                    <div>Delivery</div>
+                                    <div>#{ deliveryFee}</div>
+                                </div>
+                            </li>
+                            <li>
                                 <div className = "row">
                                     <div>Service</div>
-                                    {/* <div>#{0.02 * basket.itemsPrice.toFixed(2)}</div> */}
-                                     <div>#{basket.shippingPrice.toFixed(2)}</div> 
+                                    <div>#{buyerService}</div>
+                                     {/* <div>#{basket.shippingPrice.toFixed(2)}</div>  */}
                                 </div>
                             </li>
                             {

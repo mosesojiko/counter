@@ -4,13 +4,16 @@ import { Link } from 'react-router-dom'
 import { addToBasket, removeFromBasket } from '../actions/basketActions';
 import MessageBox from '../components/MessageBox';
 import Button from "@mui/material/Button";
+ import Stack from '@mui/material/Stack';
+ import Alert from '@mui/material/Alert';
 
 function BasketPage(props) {
     const productId = props.match.params.id;
     //finding the qty
     const qty = props.location.search? Number(props.location.search.split('=')[1]) : 1
 
-    const [proceed, setProceed ] = useState(true)
+  const [proceed, setProceed] = useState(true)
+  
     //get basket from redux store
     const basket = useSelector((state) => state.basket);
     const { basketItems } = basket;
@@ -51,12 +54,13 @@ function BasketPage(props) {
                 Back to homepage
               </Button>
             </Link>
-          {!proceed && (
-            <p className="danger">
-              Sorry, we discourage buying from more than one store/seller at a
+          {!proceed && (         
+            <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert sx={{fontSize:"15px"}} severity="error" onClose={() => setProceed(true)}>Sorry, we discourage buying from more than one store/seller at a
               time. You can buy all your items from one store or order them
-              seperately. Thanks.
-            </p>
+              seperately. Thanks.</Alert>
+            </Stack>
+                
           )}
           {basketItems.length === 0 ? (
             <MessageBox>
@@ -82,8 +86,9 @@ function BasketPage(props) {
                         Location: {item.storeCity}, {item.storeCountry}
                       </p>
                       <p>
-                        Seller-name: {item.sellerName}
+                        Seller-name: <strong>{item.sellerName}</strong>
                       </p>
+                      <p>Delivery: {item.deliveryCapacity }</p>
                       <p><Link to={`/store/${item.storeId}`}>
                         
                           <Button

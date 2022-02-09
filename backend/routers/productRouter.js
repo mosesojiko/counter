@@ -5,6 +5,7 @@ const productRouter = express.Router();
 
 const Product = require("../models/productModel.js");
 const { isAuth } = require("../utils/isAuth.js");
+const { isAdmin } = require('../utils/isAdmin.js');
 
 //create a product
 productRouter.post(
@@ -19,6 +20,10 @@ productRouter.post(
       countInStock,
       brand,
       description,
+      free,
+      sameCity,
+      sameState,
+      nationWide,
       sellerName,
       sellerEmail,
       sellerId,
@@ -27,7 +32,9 @@ productRouter.post(
       storeName,
       storeAddress,
       storeCity,
+      storeState,
       storeCountry,
+      deliveryCapacity
     } = req.body;
 
     const product = new Product({
@@ -38,6 +45,10 @@ productRouter.post(
       countInStock,
       brand,
       description,
+      free,
+      sameCity,
+      sameState,
+      nationWide,
       sellerName,
       sellerEmail,
       sellerId,
@@ -46,7 +57,9 @@ productRouter.post(
       storeName,
       storeAddress,
       storeCity,
+      storeState,
       storeCountry,
+      deliveryCapacity,
       user: req.user._id,
     });
     
@@ -59,19 +72,53 @@ productRouter.post(
       description: createProduct.description,
       countInStock: createProduct.countInStock,
       brand: createProduct.brand,
+      free: createProduct.free,
+      sameCity: createProduct.sameCity,
+      sameState: createProduct.sameState,
+      nationWide: createProduct.nationWide,
       sellerName: createProduct.sellerName,
       sellerEmail: createProduct.sellerEmail,
       sellerId: createProduct.sellerId,
       sellerPhone: createProduct.sellerPhone,
       productStoreId: createProduct.productStoreId,
+      deliveryCapacity:createProduct.deliveryCapacity,
       storeName,
       storeAddress,
       storeCity,
+      storeState,
       storeCountry,
       user: req.user._id,
     });
   })
 );
+
+
+
+//search for products by name
+// productRouter.get('/search', expressAsyncHandler(async (req, res) => {
+//   const searchProduct = await Product.find({name: { $regex: req.query.search, $options: "i" }, isPaid:false});
+//   if (searchProduct) {
+//     res.json(searchProduct)
+//   }
+// }))
+
+//search for products by name
+productRouter.get('/search', expressAsyncHandler(async (req, res) => {
+  const searchProduct = await Product.find(
+    {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { category: { $regex: req.query.search, $options: "i" } },
+      ],
+      isPaid:false
+      }
+  );
+  if (searchProduct) {
+    res.json(searchProduct)
+  }
+}))
+
+
 
 //get product for update
 productRouter.get(
@@ -149,12 +196,27 @@ productRouter.get('/nonuser/:id', expressAsyncHandler(async (req, res) => {
   }
 }))
 
+
+
 //get all products
 productRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     const products = await Product.find({isPosted: true, isPaid: false}).sort({ updatedAt: -1 });
     res.json(products);
+  })
+);
+
+
+
+//get all products for admin
+productRouter.get(
+  "/admin", isAuth, isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const products = await Product.find({}).sort({ updatedAt: -1 });
+    if (products) {
+      res.json(products);
+   }
   })
 );
 
@@ -187,6 +249,10 @@ productRouter.put(
         (product.description = req.body.description || product.description),
         (product.countInStock = req.body.countInStock || product.countInStock),
         (product.brand = req.body.brand || product.brand),
+        (product.free = req.body.free || product.free),
+        (product.sameCity = req.body.sameCity || product.sameCity),
+        (product.sameState = req.body.sameState || product.sameState),
+        (product.nationWide = req.body.nationWide || product.nationWide),
         (product.sellerName = req.body.sellerName || product.sellerName),
         (product.sellerEmail = req.body.sellerEmail || product.sellerEmail),
         (product.sellerId = req.body.sellerId || product.sellerId),
@@ -195,7 +261,9 @@ productRouter.put(
         (product.storeName = req.body.storeName || product.storeName),
         (product.storeAddress = req.body.storeAddress || product.storeAddress),
         (product.storeCity = req.body.storeCity || product.storeCity),
+        (product.storeState = req.body.storeState || product.storeState),
         (product.storeCountry = req.body.storeCountry || product.storeCountry),
+        (product.deliveryCapacity = req.body.deliveryCapacity || product.deliveryCapacity),
         (user = req.user._id);
     }
 
@@ -264,6 +332,8 @@ productRouter.put('/paidproducts', expressAsyncHandler( async(req, res) => {
     product.isPaidAt = Date.now()
     product.buyerEmail = req.body.buyerEmail
     product.orderId = req.body.orderId
+    product.deliveryCost = req.body.deliveryCost;
+    product.service = req.body.service;
   }
   const paidProduct = await product.save();
   res.json(paidProduct);
@@ -279,6 +349,19 @@ productRouter.put('/isdelivered', expressAsyncHandler( async(req, res) => {
   const deliveredProduct = await product.save();
   res.json(deliveredProduct);
 }))
+
+//update a product when it is settled
+productRouter.put('/issettled', expressAsyncHandler( async(req, res) => {
+  const product = await Product.findById(req.body.id);
+  if(product) {
+    product.isSettled = true;
+    product.isSettledAt = Date.now()
+  }
+  const settledProduct = await product.save();
+  res.json(settledProduct);
+}))
+
+
 
 
 

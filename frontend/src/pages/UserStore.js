@@ -12,6 +12,12 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import Button from "@mui/material/Button";
 import { useHistory } from 'react-router-dom'
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import FlightOutlinedIcon from '@mui/icons-material/FlightOutlined';
+import UndoIcon from '@mui/icons-material/Undo';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 
 function UserStore() {
@@ -46,6 +52,7 @@ function UserStore() {
         dispatch(getUserProducts());
   }, [dispatch]);
 
+  //console.log(userStore)
   
   //get editPost from redux store
   const postedStore = useSelector((state) => state.postedStore);
@@ -141,7 +148,7 @@ function UserStore() {
     <div>
       <div className="row around">
         <div className="home-header">
-          <h4>
+          <h4 className="userstore-header-item">
             <Link to="/stores">
               <Button variant="contained" color="success" size="small">
                 Stores
@@ -155,10 +162,38 @@ function UserStore() {
               </Button>
             </Link>
           </h4>
-          <h4>
+          <h4 className="userstore-header-item">
             <Link to="/">
               <Button variant="contained" color="success" size="small">
                 Products
+              </Button>
+            </Link>
+          </h4>
+          <h4 className="userstore-header-item">
+            <Link to="/orderhistory">
+              <Button variant="contained" color="success" size="small">
+                my Orders
+              </Button>
+            </Link>
+          </h4>
+          <h4 className="userstore-header-item">
+            <Link to="/orderedproducts">
+              <Button variant="contained" color="success" size="small">
+                CustomerOrders
+              </Button>
+            </Link>
+          </h4>
+           <h4>
+            <Link to="/soldproducts">
+              <Button variant="contained" color="success" size="small">
+                Sold Items
+              </Button>
+            </Link>
+          </h4>
+          <h4>
+            <Link to="/findwidthdrawals">
+              <Button variant="contained" color="success" size="small">
+                Withdraws
               </Button>
             </Link>
           </h4>
@@ -173,7 +208,8 @@ function UserStore() {
               </Button>
             </Link>  */}
             <Button variant="contained" onClick={() => copyLink(`localhost:3000/store/${userStore._id}`)}>
-     Click to copy your store url
+              Click to copy your store url
+              <ContentCopyIcon />
      </Button>
   
   {copyStoreLink}
@@ -268,10 +304,14 @@ function UserStore() {
                 Description:{" "}
                 <strong>{userStore && userStore.description}</strong>
               </p>
+              <p>
+                Delivery: <strong>{userStore && userStore.deliveryCapacity}</strong>
+              </p>
               <div className="store-utils">
                 <p>
                   <Link to="/editstore">
                     <Button variant="contained" color="secondary" size="small">
+                      <ModeEditOutlineOutlinedIcon />
                       Edit
                     </Button>
                   </Link>
@@ -285,7 +325,9 @@ function UserStore() {
                       size="small"
                       onClick={handleUnpost}
                     >
+                    
                       Unpost
+                      <UndoIcon />
                     </Button>
                   ) : (
                     <Button
@@ -293,7 +335,8 @@ function UserStore() {
                       color="success"
                       size="small"
                       onClick={handlePost}
-                    >
+                      >
+                        <FlightOutlinedIcon />
                       Post
                     </Button>
                   )}
@@ -328,13 +371,23 @@ function UserStore() {
 
       <div></div>
       <div>
-        <div className="add-item">
+        <div className="add-item row around">
+          <div>
           <Link to="/createproduct">
             {/* <button className="primary">Add items for sale</button> */}
             <Button variant="contained" color="success" size="large">
-                Add Items For Sale
+              Add Items For Sale
+              <AddCircleOutlineIcon />
               </Button>
           </Link>
+          </div>
+          <div>
+          <Link to="/services">
+            <Button variant="contained" color="primary" size="large">
+              Service Charges
+              </Button>
+          </Link>
+          </div>
         </div>
 
         {loadPostProduct && <LoadingBox></LoadingBox>}
@@ -391,7 +444,9 @@ function UserStore() {
                           dispatch(unPostedProduct({ id: product._id }))
                         }
                       >
+                        
                         Unpost
+                        <UndoIcon />
                       </Button>
                     ) : (
                       <Button
@@ -401,7 +456,8 @@ function UserStore() {
                         onClick={() =>
                           dispatch(editPostedProduct({ id: product._id }))
                         }
-                      >
+                        >
+                          <FlightOutlinedIcon />
                         Post
                       </Button>
                     )}
@@ -410,7 +466,8 @@ function UserStore() {
                     !product.isPaid &&
                     <p>
                     <Link to={`/update/${product._id}`}>
-                      <Button variant="contained" color="secondary" size="small">
+                          <Button variant="contained" color="secondary" size="small">
+                            <ModeEditOutlineOutlinedIcon />
                         Edit
                       </Button>
                     </Link>
@@ -420,7 +477,8 @@ function UserStore() {
                     !product.isPaid &&
                     <p>
                     <Link to={`/delete/${product._id}`}>
-                      <Button variant="contained" color="error" size="small">
+                          <Button variant="contained" color="error" size="small">
+                           <DeleteOutlineIcon />
                         Delete
                       </Button>
                     </Link>

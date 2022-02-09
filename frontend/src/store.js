@@ -7,7 +7,7 @@ import { createOrderReducer, orderDetailsReducer, orderMineListReducer, orderPay
 import { createProductReducer, editPostedProductReducer, findProductForUpdateReducer, getAllProductReducer, getOrderedProductsReducer, getProductDetailsReducers, getSoldProductsReducer, getUserProductsReducer, orderedProductReducer, paidProductReducer, unPostedProductReducer, updateUserProductReducer } from './reducers/productReducers';
 import { createStoreReducer, editPostedStoreReducer, editStoreReducers, getAllStoresReducer, getSingleStoreReducers, getUserStoreReducers, unPostedStoreReducer } from './reducers/storeReducers';
 import { updateUserCreateStoreReducer, userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducer';
-import { createWidthdrawReducer, getWidthdrawalsReducer } from './reducers/widthdrawReducer';
+import { createWithdrawReducer, getWithdrawalsReducer } from './reducers/withdrawReducer';
 
 
 const initialState = {
@@ -53,8 +53,8 @@ const reducer = combineReducers({
     customerOrders: getOrderedProductsReducer,
     productPaid: paidProductReducer,
     productSold: getSoldProductsReducer,
-    widthdrawal: createWidthdrawReducer,
-    myWidthdraws: getWidthdrawalsReducer,
+    withdrawal: createWithdrawReducer,
+    myWithdraws: getWithdrawalsReducer,
     chatCreate: createChatReducer,
     getMyChats: getChatsReducer,
     messageCreate: createMessageReducer,

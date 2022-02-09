@@ -24,15 +24,15 @@ import {
 } from '../constants/storeConstants';
 
 //create a store 
-export const createStore = (name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage) => async (dispatch, getState) => {
+export const createStore = (name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage) => async (dispatch, getState) => {
     dispatch({
         type: CREATE_STORE_REQUEST,
-        payload: {name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone,creatorImage}
+        payload: {name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone,creatorImage}
     })
     try {
         // get userInfo from redux store
         const { userLogin: { userInfo }, } = getState() //getState returns the whole redux store
-        const { data } = await Axios.post('/api/v1/store/createstore', {name, address, city, state, country, description, image, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage},{
+        const { data } = await Axios.post('/api/v1/store/createstore', {name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage},{
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }

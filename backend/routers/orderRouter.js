@@ -3,6 +3,7 @@ const express = require('express');
 const expressAsyncHandler = require('express-async-handler');
 const Order = require('../models/orderModel.js');
 const { isAuth } = require('../utils/isAuth.js');
+const { isAdmin } = require('../utils/isAdmin.js');
 
 
 const orderRouter = express.Router();
@@ -13,16 +14,14 @@ orderRouter.get('/mine', isAuth, expressAsyncHandler(async(req, res)=>{
     res.json(orders)
 }))
 
+orderRouter.get('/admin', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+    const orders = await Order.find({}).sort({ updatedAt: -1 })
+    if (orders) {
+        res.json(orders)
+    }
+}))
 
-//get customer orders
-// orderRouter.get('/customerorders', isAuth, expressAsyncHandler( async(req, res) =>{
-//     const customerorders = await Order.find({email: req.body.userEmail});
-//     if(customerorders) {
-//       res.json(customerorders);
-//     }else{
-//         res.json({message: "Order not found."})
-//     }
-// }))
+
 
 //update order after delivery
 orderRouter.put('/delivered', isAuth, expressAsyncHandler(async (req, res) => {
@@ -47,6 +46,8 @@ orderRouter.post('/', isAuth, expressAsyncHandler( async(req, res) =>{
             orderItems: req.body.orderItems,
             shippingAddress: req.body.shippingAddress,
             paymentMethod: req.body.paymentMethod,
+            deliveryFee: req.body.deliveryFee,
+            buyerService: req.body.buyerService,
             itemsPrice: req.body.itemsPrice,
             shippingPrice: req.body.shippingPrice,
             totalPrice: req.body.totalPrice,
