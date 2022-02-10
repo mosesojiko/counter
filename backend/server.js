@@ -20,10 +20,7 @@ const videoRouter = require('./routers/videoRouter')
 dotenv.config();
 const app = express();
 
-//oAuth clientId: 655829965252-02p71b38pecc20bgnfntr0m5hr9hq2og.apps.googleusercontent.com
-//client secret: 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
-// access token: "ya29.A0ARrdaM-h6zOnrlElP9d7FHlSxOLIgBWRLIBSmKkFJSyO6mpWO7-fXK9Nv4hia1Kt0UFERjEN82xFa668a_aMNnjUTe-RCtm90ish1wJeZRTkoagC40K1PgshthBd2EhtfR2SQRDlHY1FGwcre9W1khmrlfBh"
-//refresh token: "1//04ANstkH3lK9zCgYIARAAGAQSNwF-L9IrYQ8wqQO4mxaT2QZhgxnquCh-5UH81EJJeGy0WWRG3K5w7GtVzg30ECD1CfyumVag7hU"
+
 
 //Connect to mongoDb
 // mongoose.connect(process.env.MONGODB_CONNECT,{
