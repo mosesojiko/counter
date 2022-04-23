@@ -14,7 +14,8 @@ const chatRouter = require('./routers/chatRouter.js');
 const messageRouter = require('./routers/messageRouter.js');
 const rejectionRouter = require('./routers/rejectionRouter.js');
 const feedbackRouter = require('./routers/feedbackRouter.js');
-const newsletterRouter = require('./routers/newsletterRouter.js')
+const newsletterRouter = require('./routers/newsLetter.js')
+const videoRouter = require('./routers/videoRouter')
 
 dotenv.config();
 const app = express();
@@ -32,7 +33,7 @@ mongoose.connect(process.env.MONGODB_CONNECT,{ useNewUrlParser: true, useUnified
     console.log('connected to db')
 })
 
-//backend address: https://mosganda-backend.herokuapp.com/
+
 
 //express middlewares
 app.use(cors());
@@ -46,9 +47,6 @@ app.use(
     parameterLimit: 50000,
   })
 );
-
-// var distDir = __dirname + "/dist/";
-//  app.use(express.static(distDir));
 //for file uploads
 app.use('/uploads', express.static('uploads'))
 
@@ -62,6 +60,13 @@ app.use('/api/v1/message', messageRouter)
 app.use('/api/v1/reject', rejectionRouter)
 app.use('/api/v1/feedback', feedbackRouter)
 app.use('/api/v1/newsletter', newsletterRouter)
+app.use('/api/v1/video', videoRouter)
+
+// //api for paypay
+// app.get('/api/v1/config/paypal', (req, res) =>{
+//     // eslint-disable-next-line no-undef
+//     res.send(process.env.PAYPAL_CLIENT_ID || 'sb') //sb stands for sandbox
+// })
 
 //api for paystack key
 app.get('/api/v1/config/paystack', (req, res) =>{
@@ -69,15 +74,26 @@ app.get('/api/v1/config/paystack', (req, res) =>{
     res.json(process.env.PAYSTACK_PUBLIC_KEY) //sb stands for sandbox
 })
 
+//api for google cloud platform
+app.get('/api/v1/clientid', (req, res) => {
+    res.json(process.env.GOOGLE_CLIENT_ID)
+})
+
 app.get('/', (req, res)=>{
     res.send("Server is ready");
 })
 
-// app.get('/', expressAsyncHandler(async (req, res) => {
+// //chat apis
+// app.get('/api/v1/chat', (req, res) => {
+//     res.json(chats)
+// })
 
-//     const products = await Product.find({isPosted: true, isPaid: false}).sort({ updatedAt: -1 });
-//     res.json(products);
-// }))
+// app.get('/api/v1/chat/:id', (req, res) => {
+//     //console.log(req.params.id)
+//     const singleChat = chats.find(x => x._id === req.params.id);
+//     res.json(singleChat)
+// })
+
 //to show errors
 app.use((err, req, res, next) =>{
     res.status(500).json({
@@ -85,12 +101,12 @@ app.use((err, req, res, next) =>{
     })
     next()
 })
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 5000
 app.listen(port, () => {
     console.log(`Serve as http://localhost:${port}`)
 })
 
-//making use of socket
+// //making use of socket
 // const server = app.listen(port, () => {
 //     console.log(`Serve as http://localhost:${port}`)
 // })
