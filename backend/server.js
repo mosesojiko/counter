@@ -14,16 +14,11 @@ const chatRouter = require('./routers/chatRouter.js');
 const messageRouter = require('./routers/messageRouter.js');
 const rejectionRouter = require('./routers/rejectionRouter.js');
 const feedbackRouter = require('./routers/feedbackRouter.js');
-const newsletterRouter = require('./routers/newsLetter.js')
-const videoRouter = require('./routers/videoRouter')
+const newsletterRouter = require('./routers/newsletterRouter.js')
 
 dotenv.config();
 const app = express();
 
-//oAuth clientId: 655829965252-02p71b38pecc20bgnfntr0m5hr9hq2og.apps.googleusercontent.com
-//client secret: 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
-// access token: "ya29.A0ARrdaM-h6zOnrlElP9d7FHlSxOLIgBWRLIBSmKkFJSyO6mpWO7-fXK9Nv4hia1Kt0UFERjEN82xFa668a_aMNnjUTe-RCtm90ish1wJeZRTkoagC40K1PgshthBd2EhtfR2SQRDlHY1FGwcre9W1khmrlfBh"
-//refresh token: "1//04ANstkH3lK9zCgYIARAAGAQSNwF-L9IrYQ8wqQO4mxaT2QZhgxnquCh-5UH81EJJeGy0WWRG3K5w7GtVzg30ECD1CfyumVag7hU"
 
 //Connect to mongoDb
 // mongoose.connect(process.env.MONGODB_CONNECT,{
@@ -37,7 +32,7 @@ mongoose.connect(process.env.MONGODB_CONNECT,{ useNewUrlParser: true, useUnified
     console.log('connected to db')
 })
 
-
+//backend address: https://mosganda-backend.herokuapp.com/
 
 //express middlewares
 app.use(cors());
@@ -51,6 +46,9 @@ app.use(
     parameterLimit: 50000,
   })
 );
+
+// var distDir = __dirname + "/dist/";
+//  app.use(express.static(distDir));
 //for file uploads
 app.use('/uploads', express.static('uploads'))
 
@@ -64,13 +62,6 @@ app.use('/api/v1/message', messageRouter)
 app.use('/api/v1/reject', rejectionRouter)
 app.use('/api/v1/feedback', feedbackRouter)
 app.use('/api/v1/newsletter', newsletterRouter)
-app.use('/api/v1/video', videoRouter)
-
-// //api for paypay
-// app.get('/api/v1/config/paypal', (req, res) =>{
-//     // eslint-disable-next-line no-undef
-//     res.send(process.env.PAYPAL_CLIENT_ID || 'sb') //sb stands for sandbox
-// })
 
 //api for paystack key
 app.get('/api/v1/config/paystack', (req, res) =>{
@@ -78,26 +69,15 @@ app.get('/api/v1/config/paystack', (req, res) =>{
     res.json(process.env.PAYSTACK_PUBLIC_KEY) //sb stands for sandbox
 })
 
-//api for google cloud platform
-app.get('/api/v1/clientid', (req, res) => {
-    res.json(process.env.GOOGLE_CLIENT_ID)
-})
-
 app.get('/', (req, res)=>{
     res.send("Server is ready");
 })
 
-// //chat apis
-// app.get('/api/v1/chat', (req, res) => {
-//     res.json(chats)
-// })
+// app.get('/', expressAsyncHandler(async (req, res) => {
 
-// app.get('/api/v1/chat/:id', (req, res) => {
-//     //console.log(req.params.id)
-//     const singleChat = chats.find(x => x._id === req.params.id);
-//     res.json(singleChat)
-// })
-
+//     const products = await Product.find({isPosted: true, isPaid: false}).sort({ updatedAt: -1 });
+//     res.json(products);
+// }))
 //to show errors
 app.use((err, req, res, next) =>{
     res.status(500).json({
@@ -105,12 +85,12 @@ app.use((err, req, res, next) =>{
     })
     next()
 })
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 4000
 app.listen(port, () => {
     console.log(`Serve as http://localhost:${port}`)
 })
 
-// //making use of socket
+//making use of socket
 // const server = app.listen(port, () => {
 //     console.log(`Serve as http://localhost:${port}`)
 // })

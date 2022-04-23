@@ -4,14 +4,17 @@ import { Link } from 'react-router-dom';
 import { login } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-//import { GoogleLogin } from 'react-google-login';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
 
 function LoginPage(props) {
     const [ email, setEmail ] = useState('');
     const [password, setPassword] = useState('');
   const [show, setShow] = useState()
   
-  //const clientId = "947788433833-1p9dkgdr6r3edb7qss6k8quuifiu00ih.apps.googleusercontent.com"
+
 
     const redirect = props.location.search? props.location.search.split('=')[1] : '/';
 
@@ -22,7 +25,7 @@ function LoginPage(props) {
     const dispatch = useDispatch();
 
     //function to submit the form
-    const handleSummit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(login(email, password))
     }
@@ -34,24 +37,68 @@ function LoginPage(props) {
     }, [props.history, redirect, userInfo])
   
   
-  
-
-//   const handleLogin = async googleData => {
-//   const res = await fetch("/api/v1/user/auth/google", {
-//       method: "POST",
-//       body: JSON.stringify({
-//       token: googleData.tokenId
-//     }),
-//     headers: {
-//       "Content-Type": "application/json"
-//     }
-//   })
-//   const data = await res.json()
-//   // store returned user somehow
-// }
     return (
-      <div className='login'>
-        <form className="form" onSubmit={handleSummit}>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <div className='login'>
+            <h1 style={{ textAlign: "center" }}>Login</h1>
+            <div className='register-items'>
+            <label htmlFor="email">Email</label>
+              <input
+                className='login-input'
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            </div>
+            
+            <div>
+              <div className='login-forgot-password-container'>
+                <label htmlFor="password">Password </label>
+              <Link to="/forgotpassword" style={{fontSize:"14px", color:"blue"}}>
+                forgot password?
+              </Link>
+              </div>
+            <div className="login-password">
+                <input
+                  className='login-input-password'
+                type={show ? "test" : "password"}
+                id="password"
+                placeholder="Enter your password"
+                required
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button type="button" className='login-view-button' onClick={() => setShow(!show)}>
+                {show ? (
+                  <VisibilityOffIcon />
+                ) : (
+                  <VisibilityIcon />
+                )}
+              </button>
+            </div>
+            </div>
+            
+            <button type="submit" class="register-button">Login</button>
+            <div class="signin">
+            <p>New user? <Link to="/register">Create Account</Link>.</p>
+            </div>
+            {loading && <LoadingBox></LoadingBox>}
+            {error && <MessageBox variant="danger">{error}</MessageBox>}
+            
+          </div>
+          
+        </form>
+
+
+
+
+
+
+
+
+        {/* <form className="form" onSubmit={handleSummit}>
           <div>
             <h1>Login</h1>
           </div>
@@ -67,13 +114,11 @@ function LoginPage(props) {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          {/* <div>
-                    <label htmlFor = "password">Password</label>
-                    <input type = "password" id ="password" placeholder ="Enter your password" required
-                    onChange = { (e) => setPassword(e.target.value)} />
-                </div> */}
+          
           <div>
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Password <Link to="/forgotpassword" style={{fontSize:"14px", color:"blue"}}>
+                forgot password?
+              </Link></label>
             <div className="register-password">
               <input
                 type={show ? "test" : "password"}
@@ -98,12 +143,7 @@ function LoginPage(props) {
             </button>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>
-                <Link to="/forgotpassword" style={{fontSize:"12px", color:"blue"}}>
-                forgot password?
-              </Link>
-
-              </div>
+            
             <div>
               <label />
             <div style={{marginBottom: "10px"}}>
@@ -115,16 +155,7 @@ function LoginPage(props) {
             </div>
           </div>
         </form>
-        {/* <div>
-            <GoogleLogin
-    clientId={clientId}
-    buttonText="Log in with Google"
-    onSuccess={handleLogin}
-    onFailure={handleLogin}
-            cookiePolicy={'http://localhost:3000'}
-            isSignedIn={true}
-/>
-            </div> */}
+         */}
       </div>
     );
 }

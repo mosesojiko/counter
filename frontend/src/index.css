@@ -411,6 +411,7 @@ p.title {
   width: 100%;
   border-collapse: collapse;
   overflow: scroll;
+  max-width: 100%;
 }
 
 .table tbody tr:nth-of-type(odd) {
@@ -577,4 +578,16 @@ footer {
 }
 .ojiko > div {
   margin: 10px;
+}
+.close-store {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 95vw;
+  height: 90vh;
+  padding: 20px;
+  background-color: #023c3f;
+  color: #fff;
+  max-width: 100%;
 }

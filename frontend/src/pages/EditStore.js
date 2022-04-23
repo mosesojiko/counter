@@ -102,28 +102,39 @@ function EditStore() {
     }
     return (
         <div>
-            <form className ="form" onSubmit={submitHandler}>
-                <div>
-                    <h1>Edit Store</h1>
-                </div>
-                {
-                    loading? <LoadingBox></LoadingBox>:
-                    error? <MessageBox variant="danger">Could not load page</MessageBox>:
-                    <>
-                    
-                    <div>
-                    <label htmlFor="name">Store name</label>
-                    <input type="text" id="name" placeholder="Enter store name"
-                    value={name} onChange ={(e) => setName(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="address">Store address</label>
-                    <input type="text" id="address" placeholder="no. 20 Deco road, Warri."
-                    value ={address} onChange ={(e) => setAddress(e.target.value)}
-                    />
-                                </div>
-                                <div>
+
+        <form className="register" onSubmit={submitHandler}>
+          <div>
+          <div>
+            {/*<pre>{JSON.stringify(imageUrl, null, '\t')}</pre> */}
+            <h2 style={{textAlign:"center"}}>Edit Store</h2>
+          </div>
+
+          <div className='register-items'>
+            <lable htmlFor="name">Store Name</lable>
+              <input
+                className='register-input'
+              type="text"
+              id="name"
+                placeholder="Enter store name"
+                value ={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            ></input>
+          </div>
+          <div className='register-items'>
+            <lable htmlFor="address">Address</lable>
+              <input
+                className='register-input'
+              type="text"
+              id="address"
+                placeholder="Enter address"
+                value ={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+            ></input>
+          </div>
+          <div className='register-items'>
             <lable htmlFor="category">Store Category</lable>
             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
         <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
@@ -135,14 +146,15 @@ function EditStore() {
         >
           <MenuItem value="">
             <em>None</em>
-          </MenuItem>
+                </MenuItem>
+                <MenuItem value="supermarket">Supermarket</MenuItem>
                 <MenuItem value="men">Men's Fashion</MenuItem>
                 <MenuItem value="women">Women's Fashion</MenuItem>
                  <MenuItem value="menandwomen">Fashion (Men and Women)</MenuItem>
-          <MenuItem value="phone">Phone and Accessories</MenuItem>
+                <MenuItem value="phone">Phone and Accessories</MenuItem>
                 <MenuItem value="computing">Computing</MenuItem>
                 <MenuItem value="health">Health and Beauty</MenuItem>
-                <MenuItem value="babyproducts">Baby Products</MenuItem>
+                <MenuItem value="baby">Baby Products</MenuItem>
                 <MenuItem value="furniture">Furniture</MenuItem>
                 <MenuItem value="automobile">Automobile</MenuItem>
                 <MenuItem value="gaming">Gaming</MenuItem>
@@ -155,39 +167,66 @@ function EditStore() {
         </Select>
       </FormControl>
           </div>
-                <div>
-                    <label htmlFor="city">City/Town</label>
-                    <input type="text" id="city" placeholder="Warri"
-                    value = {city} onChange ={(e) => setCity(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="state">State</label>
-                    <input type="text" id="state" placeholder="Delta State"
-                    value = {state} onChange ={(e) => setState(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="country">Country</label>
-                    <input type="text" id="country" placeholder="Nigeria"
-                    value = {country} onChange ={(e) => setCountry(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="description">Description</label>
-                    <input type="text" id="description" placeholder="We sell all types of books."
-                    value = {description} onChange ={(e) => setDescription(e.target.value)}
-                    />
-                </div>
-                <div>
-                        <p>{userStore.image? "Change Image?" :"Image of your store"}</p>
-                        <FileBase64 type ="file" multiple={false}  
-                        value={image} onDone = {({base64}) => setImage(base64)}
-                        />
-                                </div>
-                                <div>
-            <label htmlFor="deliveryCapacity">Delivery of goods</label>
-    <select id="deliveryCapacity" value={deliveryCapacity} onChange={(e) => setDeliveryCapacity(e.target.value)}>
+          <div className='register-items'>
+            <lable htmlFor="city">City/Towm</lable>
+              <input
+                className='register-input'
+              type="text"
+              id="city"
+                placeholder="Enter city/towm"
+                value ={city}
+              onChange={(e) => setCity(e.target.value)}
+              required
+            ></input>
+          </div>
+          <div className='register-items'>
+            <lable htmlFor="state">State</lable>
+              <input
+                className='register-input'
+              type="text"
+              id="state"
+                placeholder="Delta State"
+                value={state}
+              onChange={(e) => setState(e.target.value)}
+              required
+            ></input>
+          </div>
+          <div className='register-items'>
+            <lable htmlFor="city">Country</lable>
+              <input
+                className='register-input'
+              type="text"
+              id="country"
+                placeholder="Nigeria"
+                value={country}
+              onChange={(e) => setCountry(e.target.value)}
+            ></input>
+          </div>
+          <div className='register-items'>
+            <lable htmlFor="description">Description</lable>
+              <input
+                className='register-input'
+              type="text"
+              id="description"
+                placeholder="Enter store description"
+                value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            ></input>
+          </div>
+
+          <div>
+            <p>Image of your store front</p>
+            <FileBase64
+              type="file"
+              multiple={false}
+              onDone={({ base64 }) => setImage(base64)}
+            />
+          </div>
+          
+          <div className='register-items' style={{marginTop:"5px"}}>
+            <label htmlFor="deliveryCapacity">Delivery capacity</label>
+    <select className='register-input' id="deliveryCapacity" value={deliveryCapacity} onChange={(e) => setDeliveryCapacity(e.target.value)}>
               <option value="">Select</option>
               <option value="Within-the-same-city">Same town/city only</option>
     <option value="Within-the-same-state">Same State</option>
@@ -195,7 +234,14 @@ function EditStore() {
                 
   </select>
           </div>
-                                {
+          <div>
+            <label />
+            <button  className="register-button" type="submit">
+              Edit
+            </button>
+            </div>
+          </div>
+           {
                         loadingEdit && <LoadingBox></LoadingBox>
                     }
                     {
@@ -204,18 +250,8 @@ function EditStore() {
                     {
                         successEdit && <MessageBox variant ="success">Store Updated Successfully.</MessageBox>
                     }
-                <div>
-                    <label />
-                        {/* <button className ="primary" type ="submit">Edit store</button> */}
-                        <Button sx={{mb:2}} type="submit" variant="contained" color="success" size="large">
-                        Edit Store
-                        </Button>
-                </div>
+        </form>
 
-                    </>
-                }
-                
-            </form>
         </div>
     )
 }

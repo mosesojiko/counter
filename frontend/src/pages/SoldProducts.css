@@ -1,16 +1,40 @@
-.withdrawal-steps {
-  padding: 10px 20px;
-  background-color: #f3f3f3;
-  
+
+
+.withdrawal-information{
+    display:flex;
+    width: 100%;
+    margin-bottom: 50px;
 }
-.soldProducts {
-  padding: 10px 20px;
-  background-color: #f5f5f5;
-  border: 2px solid #000080;
-  margin: 5px;
-  width: "100%";
+.withdrawal-information-one {
+    margin: 5px;
+    text-align: center;
+    width: 50%;
+    
 }
-.soldProduct-items > p{
-  margin: 0;
-  padding: 2px;
+
+.withdrawal-information-two {
+    width: 50%;
+    background-color: #f5f5f5;
+    padding: 10px;
+}
+.withdrawal-information-two > ul{
+    width: 100%;
+}
+.withdrawal-information-two > ul > li {
+    max-width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    .withdrawal-information {
+        display: flex;
+        flex-direction: column;
+    }
+    .withdrawal-information-one {
+        width: 100%;
+        max-width: 100%;
+    }
+    .withdrawal-information-two {
+        width: 100%;
+        max-width: 100%;
+    }
 }

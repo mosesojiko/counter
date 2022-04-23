@@ -9,6 +9,10 @@ import {
     ORDER_MINE_LIST_FAIL,
     ORDER_MINE_LIST_REQUEST,
     ORDER_MINE_LIST_SUCCESS,
+    ORDER_NOTIFICATION_FAIL,
+    ORDER_NOTIFICATION_REQUEST,
+    ORDER_NOTIFICATION_RESET,
+    ORDER_NOTIFICATION_SUCCESS,
     ORDER_PAY_FAIL,
     ORDER_PAY_REQUEST,
     ORDER_PAY_RESET,
@@ -102,4 +106,26 @@ export const orderMineListReducer = (state = { orders: []}, action) =>{
     }
 }
 
+
+//order notification reducer
+export const orderNotificationReducer = (state = {}, action) => {
+    switch(action.type) {
+        case ORDER_NOTIFICATION_REQUEST:
+            return {
+                loading: true
+            };
+        case ORDER_NOTIFICATION_SUCCESS:
+            return {
+                loading: false, success: true
+            };
+        case ORDER_NOTIFICATION_FAIL:
+            return {
+                loading: false, error: action.payload
+            };
+        case ORDER_NOTIFICATION_RESET:
+            return {};
+        default:
+            return state;
+    }
+}
 

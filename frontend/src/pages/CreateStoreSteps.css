@@ -1,0 +1,79 @@
+.createstoresteps {
+    margin-top: 0px;
+    margin-left: -10px;
+    padding: 10px;
+    background-color: #fff;
+    max-width: 100%;
+}
+
+.createstoresteps-header {
+    text-align: center;
+    margin: 30px;
+    padding: 5px;
+}
+
+.createstoresteps-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 5px;
+    border-bottom: 5px solid blue;
+    align-items: center;
+}
+@media screen and (max-width:600px) {
+    .sellonmosganda-container {
+        margin-bottom: 50px;
+    }
+}
+
+.createstoresteps-option {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+.createstoresteps-option a {
+    font-weight: bolder;
+    font-size: 18px;
+}
+
+@media screen and (max-width:600px) {
+    .createstoresteps-option {
+    border-left: none;
+    padding: 5px;
+}
+}
+
+ .sellonmosganda {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+} 
+
+.sellonmosganda-container {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* width: 25%; */
+}
+
+.gray {
+    color: gray;
+    text-align: center;
+    max-width: 400px;
+    padding:2px;
+}
+@media screen and (max-width: 600px) {
+    .createstoresteps {
+        padding: 2px;
+        max-width: 90%;
+    }
+    .gray {
+        max-width: 300px;
+        padding: 2px;
+    }
+}

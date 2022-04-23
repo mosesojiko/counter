@@ -18,14 +18,34 @@ import UndoIcon from '@mui/icons-material/Undo';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import axios from "axios"
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
 
+
+import Box from '@mui/material/Box'
+import Modal from '@mui/material/Modal';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 function UserStore() {
   const [copyStoreLink, setCopyStoreLink] = useState('');
   //get login user details from store
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  //console.log(userInfo);
+  console.log(userInfo);
 
   const history = useHistory()
   if (!userInfo.isSeller) {
@@ -35,7 +55,7 @@ function UserStore() {
   //get userstore from redux store
   const userStoreDetails = useSelector((state) => state.userStoreDetails);
   const { loading, error, userStore } = userStoreDetails;
- 
+ console.log(userStore)
 
   //get user products from redux store
   const userproducts = useSelector((state) => state.userproducts);
@@ -144,53 +164,156 @@ function UserStore() {
       setCopyStoreLink('Failed to copy!');
     }
   };
+
+  //edit product when store is lock
+  const handleLockProducts = () => {
+    return userProducts.map((x) => {
+      return dispatch(unPostedProduct({ id: x._id }))
+    })
+  }
+
+  
+
+//modal to close store
+  const [open, setOpen] = React.useState(false);
+  const [toBeOpened, setToBeOpened] = useState('')
+  const [loadCloseStore, setLoadCloseStore] = useState(false)
+  const [errorCloseStore, setErrorCloseStore] = useState(false)
+  const [successCloseStore, setSuccessCloseStore] = useState(false)
+  
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  
+  const handleCloseStore = async (e) => {
+    e.preventDefault()
+    try {
+      setLoadCloseStore(true)
+      const { data } = await axios.put(`/api/v1/store/closestore`, {toBeOpened}, {
+        headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+      })
+      setLoadCloseStore(false)
+      setSuccessCloseStore(true)
+
+      //call handleLock products function
+      handleLockProducts()
+
+    } catch (error) {
+      setErrorCloseStore(true)
+      setLoadCloseStore(false)
+    }
+  }
+
+  //open store for business activities
+  const [loadOpenStore, setLoadOpenStore] = useState(false)
+  const [errorOpenStore, setErrorOpenStore] = useState(false)
+  const [successOpenStore, setSuccessOpenStore] = useState(false)
+
+  const handleOpenStore = async () => {
+   
+    try {
+      setLoadOpenStore(true);
+       await axios.put(`/api/v1/store/openstore`,{id:userStore._id}, {
+        headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+      })
+      setLoadOpenStore(false)
+      setSuccessOpenStore(true)
+      
+    } catch (error) {
+
+      setErrorOpenStore(true)
+      setLoadOpenStore(false)
+    }
+  }
+
+  if (successOpenStore) {
+    setTimeout(() => {
+      window.location ="/userstore"
+    }, 2000);
+  }
+
+
+
   return (
-    <div>
-      <div className="row around">
-        <div className="home-header">
-          <h4 className="userstore-header-item">
+        
+          <div>
+            
+
+      {
+        userStore && userStore.isClosed === true ?
+        (<div className='close-store'>
+          <h1>Business Activities Closed.</h1>
+          <p>To be opened: </p>
+            <h3>{ userStore && userStore.toBeOpened }</h3>
+            <button onClick={handleOpenStore}>Open</button>
+            {
+              loadOpenStore && <LoadingBox></LoadingBox>
+            }
+            
+            {
+              successOpenStore && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setSuccessOpenStore(false)}>Store opened successfully.</Alert>
+      
+            </Stack>
+            }
+            {
+              errorOpenStore && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="error" onClose={() => setErrorOpenStore(false)}>Failed to open store.</Alert>
+      
+            </Stack>
+            }
+          </div>) :
+          (
+            <div>
+            <div className="row around userstore-header-container">
+        <div className="userstore-header">
+          <h4 className="userstore-header-item userstore-header-spacing">
             <Link to="/stores">
-              <Button variant="contained" color="success" size="small">
+              <Button variant="contained" color="success" size="small" onClick={handleOpenStore}>
                 Stores
               </Button>
             </Link>
           </h4>
-          <h4>
+          <h4 className="userstore-header-spacing">
             <Link to="/guide">
               <Button variant="contained" color="success" size="small">
                 Guide
               </Button>
             </Link>
           </h4>
-          <h4 className="userstore-header-item">
+          <h4 className="userstore-header-item userstore-header-spacing">
             <Link to="/">
               <Button variant="contained" color="success" size="small">
                 Products
               </Button>
             </Link>
           </h4>
-          <h4 className="userstore-header-item">
+          <h4 className="userstore-header-item userstore-header-spacing">
             <Link to="/orderhistory">
               <Button variant="contained" color="success" size="small">
                 my Orders
               </Button>
             </Link>
           </h4>
-          <h4 className="userstore-header-item">
+          <h4 className="userstore-header-item userstore-header-spacing">
             <Link to="/orderedproducts">
               <Button variant="contained" color="success" size="small">
                 CustomerOrders
               </Button>
             </Link>
           </h4>
-           <h4>
+           <h4 className="userstore-header-spacing">
             <Link to="/soldproducts">
               <Button variant="contained" color="success" size="small">
                 Sold Items
               </Button>
             </Link>
           </h4>
-          <h4>
+          <h4 className="userstore-header-spacing">
             <Link to="/findwidthdrawals">
               <Button variant="contained" color="success" size="small">
                 Withdraws
@@ -200,6 +323,11 @@ function UserStore() {
         </div>
         {loading && <LoadingBox></LoadingBox>}
         {error && <MessageBox variant="danger">Failed. Please, kindly logout and login again to access your store.</MessageBox>}
+        <div className="userstore-header-spacing">
+          <Button variant="contained" color="error" size="small" onClick={handleOpen}>
+                lock store
+              </Button>
+        </div>
         <div>
           <h4>
              {/* <Link to="/createproduct">
@@ -219,55 +347,45 @@ function UserStore() {
       <div className="row top bottom">
         <div className="col-1">
           <div className="profile-card">
-            <div className="row around">
-              <div className="prof">
-                <h3>
+            <div>
+              
+                <h3 className="profile-header">
                   <span className="name-description">Seller Name:</span>{" "}
                   {userInfo.name}
-                </h3>
-                <img
-                  className="img medium"
-                  src={userStore && userStore.creatorImage? userStore.creatorImage: '/images/default-img1.png'}
-                  alt="profile"
-                />
-              </div>
+                        </h3>  
+                                    
+             
               <div>
-                <div>
+                        <div className="row around">
+                          <div>
+                             <img
+                  className="profile-img"
+                  src= {userInfo.image}
+                  alt="profile"
+                /> 
+                          </div>
                   <div className="contact">
                     <p>
                       <span>
-                        <i class="fa fa-phone-square" aria-hidden="true"></i>
+                        <PhoneIcon />
                       </span>{" "}
                       {userStore && userStore.creatorPhone}
                     </p>
                     <p>
                       <span>
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <EmailIcon />
                       </span>
                       {userStore && userStore.creatorEmail}
                     </p>
                   </div>
                 </div>
-                {/* <div className="profile-links">
-                 
-                  <Link to="#">
-                    <i class="fa fa-twitter"></i>
-                  </Link>
-                  <Link to="#">
-                    <i class="fa fa-linkedin"></i>
-                  </Link>
-                  <Link to="#">
-                    <i class="fa fa-facebook"></i>
-                  </Link>
-                </div> */}
+                
               </div>
             </div>
             <div>
               <Link to="/profile">
                  <button className="profile-button">Edit profile</button> 
-                {/* <Button variant="contained" color="success" size="large">
-                Edit Profile
-              </Button> */}
+               
               </Link>
             </div>
           </div>
@@ -286,7 +404,7 @@ function UserStore() {
               />
             </div>
             <div className="description">
-              <h2>Store Details</h2>
+              <h3>Store Details</h3>
               <p>
                 Business Address:{" "}
                 <strong>{userStore && userStore.address}</strong>
@@ -381,12 +499,13 @@ function UserStore() {
               </Button>
           </Link>
           </div>
-          <div>
-          <Link to="/services">
-            <Button variant="contained" color="primary" size="large">
+                  <div>
+                    
+           <Link to="/services">
+            <Button sx={{marginTop: "3px"}} variant="contained" color="primary" size="large">
               Service Charges
               </Button>
-          </Link>
+          </Link> 
           </div>
         </div>
 
@@ -411,7 +530,7 @@ function UserStore() {
         
       </div>
 
-      <div className="row center">
+      <div style={{backgroundColor:"white"}} className="row center">
         {loadingProduct && <LoadingBox></LoadingBox>}
         {errorProduct && (
           <MessageBox variant="danger">Failed to load items. Check your network and try again.</MessageBox>
@@ -490,7 +609,59 @@ function UserStore() {
             </div>
           ))}
       </div>
-    </div>
+
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <form onSubmit={handleCloseStore}>
+            <h4>Opening Date</h4>
+            {
+              loadCloseStore && <LoadingBox></LoadingBox>
+                  }
+                 
+            
+            {
+              errorCloseStore && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="error" onClose={() => setErrorCloseStore(false)}>Failed to lock store.</Alert>
+      
+            </Stack>
+                  }
+                  
+            
+            {
+              successCloseStore && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setSuccessCloseStore(false)}>Store locked successfully.</Alert>
+      
+            </Stack>
+                  }
+                  
+            
+            <label htmlFor="tobeopened">Date</label>
+            <input type="text" id="tobeopened" placeholder="Monday 24th July, 2022."
+              onChange={(e) => setToBeOpened(e.target.value)} required
+            />
+            <button style={{color:"green", margin:"3px"}} type="submit">Lock store</button>
+          </form>
+          <Button sx={{margin:"5px"}} variant="contained" color="error" size="small" onClick={handleClose}>
+                           
+                        Close
+                      </Button>
+        </Box>
+      </Modal>
+
+
+</div>
+          )
+      }
+
+
+        </div>
+     
   );
 }
 

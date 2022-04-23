@@ -25,8 +25,8 @@ function CustomerOrders() {
 
                 
     return (
-        <div style={{backgroundColor:"#f5f5f5"}}>
-            <h1 style={{ textAlign: "center" }}>Customer orders</h1>
+        <div style={{backgroundColor:"white"}}>
+            <h3 style={{ textAlign: "center",padding:"10px" }}>Customer orders</h3>
             {
                 orderedProducts && orderedProducts.length === 0 ? (<p style={{padding:"20px"}}>
                     This is where you see orders placed by your customer that they have not paid-for. Orders that are paid-for will not be displayed here. Such orders are displayed in Sold-Products page.
@@ -49,7 +49,7 @@ function CustomerOrders() {
                                 </Link>
                                 <div className ="card-body">
                                 <Link to={`/product/${product._id}`}>
-                                <h2>Product Name: {product.name}</h2>
+                                <h3>Product Name: {product.name}</h3>
                                 </Link>
                                 <div className="price">Price: <strong>#{product.price}</strong></div>
                                 <div>

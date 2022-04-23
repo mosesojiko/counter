@@ -18,31 +18,34 @@ function Product(props) {
       </Link>
       <div className="card-body">
         <Link to={`/product/${product._id}`}>
-          <h2 style={{ textAlign: "center" }}>{product.name}</h2>
-          {/* {product.isSold && <h3 className="sold">Item Sold</h3>} */}
+          <h4 style={{ textAlign: "center" }}>{product.name}</h4>
+         
         </Link>
         <div className="card-body-items">
-          <div className="price">
-            <h3>#{product.price}</h3>
-          </div>
-          <div>
+            <h4>#{product.price}</h4>
+          
             <p>{product.storeCity}</p>
-          </div>
+          
         </div>
         <div className="card-body-span">
           <span>
             <Link to={`/basket/${product._id}?qty=${qty}`}>
               <Button variant="contained" color="secondary" size="small">
-                <AddShoppingCartOutlinedIcon />
-                Buy
+                <span className="card-body-span-items">
+                  <AddShoppingCartOutlinedIcon />
+                  <span>Buy</span>
+                </span>
+                
               </Button>
             </Link>
           </span>
           <span>
             <Link to={`/product/${product._id}`}>
               <Button variant="contained" color="success" size="small">
-                <DetailsIcon />
-                Detail
+                <span className="card-body-span-items">
+                   <DetailsIcon />
+                  <span>Detail</span>
+                </span>
               </Button>
             </Link>
           </span>
@@ -51,8 +54,10 @@ function Product(props) {
               (<span>
               <Link to={`/store/${product.productStoreId}`}>
                   <Button variant="contained" color="success" size="small">
-                    <PreviewIcon />
-                  Store
+                    <span className="card-body-span-items">
+                   <PreviewIcon />
+                  <span>Store</span>
+                </span>
                 </Button>
               </Link>
               </span>) : ""

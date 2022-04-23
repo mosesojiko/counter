@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { PaystackButton } from 'react-paystack'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
-import { detailsOrder, payOrder } from '../actions/orderActions';
+import { detailsOrder, orderNotification, payOrder } from '../actions/orderActions';
 import { paidProduct } from '../actions/productActions';
 
 import LoadingBox from '../components/LoadingBox';
@@ -13,7 +13,6 @@ import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
 
 function OrderPage(props) {
-    //const { data } = await Axios.get('https://mosganda-backend.herokuapp.com/api/v1/config/paystack');
     const orderId = props.match.params.id;
     //const publicKey = "pk_test_863b631d2a66390b101d9b0be373f958bad8ac59"
     //const amount = 1000000 // Remember, set in kobo!
@@ -25,9 +24,9 @@ function OrderPage(props) {
     
 
     //get login user details from store
-//   const userLogin = useSelector((state) => state.userLogin);
-//   const { userInfo } = userLogin;
-//   console.log(userInfo);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+   //console.log(userInfo);
 
      //get order details from redux store
     const orderDetails = useSelector(state => state.orderDetails);
@@ -41,7 +40,11 @@ function OrderPage(props) {
 
     //get productPaid from redux store
     const productPaid = useSelector((state) => state.productPaid);
-    const {loading: loadingPaid, error: errorPaid } = productPaid
+    const { loading: loadingPaid, error: errorPaid } = productPaid
+    
+    //get orderNotify from state
+    const orderNotify = useSelector((state) => state.orderNotify);
+    const {error: errorNotify, success: successNotify} = orderNotify
 
     const dispatch = useDispatch();
 
@@ -107,22 +110,25 @@ function OrderPage(props) {
         order.orderItems.map((x) => {
             return dispatch(paidProduct({id: x.product, buyerEmail:email, orderId:orderId, deliveryCost: x.deliveryCost, service: x.service }))
         });
+          
+           //notify buyer
+        dispatch(orderNotification(orderId))
       }
 
     return loading? (<LoadingBox></LoadingBox>):
     error? (<MessageBox variant="danger">{error}</MessageBox>):
     (
-        <div>
-            <h1>Order {order._id} </h1>
+        <div style={{backgroundColor:"white"}}>
+            <h3 style={{padding:"10px", maxWidth:"90%"}}>Order {order._id} </h3>
             <div className = "row top">
                 <div className = "col-2">
                     <ul>
                         <li>
                             <div className ="card card-body">
-                                <h2>Shipping/Buyer Information</h2>
+                                <h3>Shipping/Buyer Information</h3>
                                 <p> <strong>Name:</strong> { order.shippingAddress.fullName }, <strong>Phone:</strong> { order.shippingAddress.phone } <br />
                                 <strong>Address:</strong> { order.shippingAddress.address },
-                                { order.shippingAddress.city }, { order.shippingAddress.LGA }, 
+                                { order.shippingAddress.city }, 
                                  { order.shippingAddress.state }, { order.shippingAddress.country }
                                 </p>
 
@@ -142,7 +148,7 @@ function OrderPage(props) {
                         </li>
                         <li>
                             <div className ="card card-body">
-                                <h2>Payment</h2>
+                                <h3>Payment</h3>
                                 <p> <strong>Method:</strong> { order.paymentMethod } 
                                 </p>
 
@@ -154,13 +160,13 @@ function OrderPage(props) {
                                 </li>
                                 <li>
                                     <div className='card card-body'>
-                                        <h2>Delivery</h2>
+                                        <h3>Delivery</h3>
                                         <p>Fee: #{ order.deliveryFee}</p>
                                     </div>
                                 </li>
                         <li>
                             <div className ="card card-body">
-                                <h2>Order Items</h2>
+                                <h3>Order Items</h3>
                                 <ul>
                             {
                                 order.orderItems.map((item) =>(
@@ -175,7 +181,7 @@ function OrderPage(props) {
                                                 <p>Name: <strong>{item.storeName}</strong>, {item.storeId}</p>
                                                 <p>Address: <strong>{item.storeAddress}, {item.storeCity}, {item.storeCountry}.</strong></p>
                                                 <h4>Store Owner</h4>
-                                                <p>Name: <strong>{item.sellerName}</strong> Email: <strong>{item.sellerEmail}</strong> Phone: <strong>{item.sellerPhone}</strong></p>
+                                                <p>Name: <strong>{item.sellerName}</strong> Phone: <strong>{item.sellerPhone}</strong></p>
                                             </div>
                                             
                                             <div>
@@ -197,7 +203,7 @@ function OrderPage(props) {
                     <div className ="card card-body">
                         <ul>
                             <li>
-                                <h2>Order Summary</h2>
+                                <h3>Order Summary</h3>
                             </li>
                             <li>
                                 <div className = "row">
@@ -229,7 +235,7 @@ function OrderPage(props) {
                             (<li>
                                 <div className="form"> 
                                     
-                                <div>
+                                <div className='register-items'>
                                 <h4>Receipt Form</h4>
                                   <label htmlFor="name">Name</label>
                                   <input
@@ -239,7 +245,7 @@ function OrderPage(props) {
                             />
                                 </div>
                                 
-                                <div>
+                                <div className='register-items'>
                                   <label htmlFor="email">Email</label>
                                   <input
                               type="text"
@@ -247,7 +253,7 @@ function OrderPage(props) {
                               onChange={(e) => setEmail(e.target.value)}
                             />
                                 </div>
-                                <div>
+                                <div className='register-items' style={{marginBottom:"5px"}}>
                                   <label htmlFor="phone">Phone</label>
                                   <input
                               type="text"
@@ -273,7 +279,13 @@ function OrderPage(props) {
                                 }
                                 {
                                     loadingPaid && <LoadingBox></LoadingBox>
-                                }
+                                            }
+                                         {
+                                    errorNotify && (<MessageBox variant="danger">{errorNotify}</MessageBox>)
+                                            }
+                                            {
+                                    successNotify && (<MessageBox variant="danger">{successNotify}</MessageBox>)
+                                            } 
                            </li>)
                              }
                         </ul>

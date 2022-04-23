@@ -10,13 +10,20 @@ import MessageBox from '../components/MessageBox';
 import Product from '../components/Product';
 import { Link } from "react-router-dom"
 import Button from "@mui/material/Button";
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
+
 
 function StoreDetailsPage(props) {
     const dispatch = useDispatch();
-    const storeId = props.match.params.id
+    const storeId = props.match.params.id;
+   
     const [loadProduct, setLoadProduct] = useState(false);
     const [errorProduct, setErrorProduct ] = useState('')
-    const [products, setProducts ] = useState([])
+  const [products, setProducts] = useState([])
+  //const [loading, setLoading] = useState(false)
+  //const [error, setError] = useState(false)
+  //const [stores, setStores] = useState()
     //const [email, setEmail] = useState('');
     
 
@@ -24,13 +31,17 @@ function StoreDetailsPage(props) {
     const storeDetails = useSelector((state) =>state.storeDetails);
     const { loading, error, store } = storeDetails;
     console.log(store)
-    
+  
+  
     
     useEffect(() => {
         dispatch(getSingleStore(storeId));
 
     }, [dispatch, storeId])
+  
+ 
 
+    
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -45,50 +56,81 @@ function StoreDetailsPage(props) {
             }
         }
         fetchProduct()
-    },[storeId])
+    }, [storeId])
+    //console.log(products)
+ 
+  
     
     return (
         <div>
-               {
+            {
                    loading? (<LoadingBox></LoadingBox>):
                    error? (<MessageBox variant="danger">{error}</MessageBox>):
-                   <>
-                   <div className="row top bottom">
-                   <div className="col-1">
-                           <div className ="profile-card">
-                               <div className="row around">
-                                   
-                                   <div>
-                                       <h3>Store owner</h3>
-                                   <img className="img medium" src ={store.singleStore.creatorImage} alt="profile" />
-                                   </div>
-                                   <div>
-                                       <div>
-                                           <h2>Name: {store.singleStore.creatorName} </h2>
-                                           <div className="contact">
-                                               <p><span><i class="fa fa-phone-square" aria-hidden="true"></i></span> {store.singleStore.creatorPhone}</p>
-                                               <p><span><i class="fa fa-envelope" aria-hidden="true"></i></span>{store.singleStore.creatorEmail}</p>
-                                           </div>
-                                       </div>
-                                    {/* <div className="profile-links">
-                                    <Link to="#"><i class="fa fa-instagram"></i></Link> 
-                                    <Link to="#"><i class="fa fa-twitter"></i></Link>  
-                                    <Link to="#"><i class="fa fa-linkedin"></i></Link>  
-                                    <Link to="#"><i class="fa fa-facebook"></i></Link>
-                                    </div> */}
-                                   </div>
-                               </div>
-                               
-                           </div>
-                       </div>
+                        <>
+                            {
+                                store.singleStore.isClosed?
+                                (<div className='close-store' style={{maxWidth:"100%"}}>
+          <h1>Business Activities Closed.</h1>
+          <p>To be opened: </p>
+                                    <h3>{store.singleStore.toBeOpened}</h3>
+                                    </div>) :
+                                    (
+                                        <div>
+                                            <div className="row top bottom">
+                    <div className="col-1">
+          <div className="profile-card">
+            <div>
+              
+                <h3 className="profile-header">
+                  <span className="name-description">Seller Name:</span>{" "}
+                  {store.singleStore.creatorName}
+                        </h3>  
+                                    
+             
+              <div>
+                        <div className="row around">
+                          <div>
+                             <img
+                  className="profile-img"
+                  src= {store.singleStore.creatorImage}
+                  alt="profile"
+                /> 
+                          </div>
+                  <div className="contact">
+                    <p>
+                      <span>
+                        <PhoneIcon />
+                      </span>{" "}
+                      {store.singleStore.creatorPhone}
+                    </p>
+                    <p>
+                      <span>
+                        <EmailIcon />
+                      </span>
+                      {store.singleStore.creatorEmail}
+                      </p>
+                      <p><Link to='/chats'>
+                        <Button variant="contained" color="primary" size="small">
+                      Chat
+                    </Button>
+                      </Link></p>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            
+          </div>
+        </div>
+                   
                        <div className="col-2">
-                       <div className="row around">
+                       <div className="row around nonuser-col2">
                            <div className="store-image">
-                           <h1 className="store-name">Store Name: <strong>{store.singleStore.name}</strong> </h1>
+                           <h3 className="store-name"><span className="name-description">Store Name:</span>{" "} <strong>{store.singleStore.name}</strong> </h3>
                            <img className="img large" src ={store.singleStore.image} alt="store" />
                            </div>
                            <div className="description">
-                                   <h2>Store Details</h2>
+                                   <h3>Store Details</h3>
                                    <p>Business Address: <strong>{store.singleStore.address}</strong></p>
                                    <p>City/Town: <strong>{store.singleStore.city} </strong></p>
                                    <p>State: <strong>{store.singleStore.state}</strong></p>
@@ -96,26 +138,17 @@ function StoreDetailsPage(props) {
                                             <p>Description: <strong>{store.singleStore.description}</strong></p>
                                             <p>
                 Delivery: <strong>{store.singleStore.deliveryCapacity}</strong>
-              </p>
+                                            </p>
+                                            
                                    
                            </div>
                        </div>
                        </div>
                        
                    </div>
-                            <div style={{backgroundColor:"#f5f5f5", padding:"10px"}}>
-                                <div>
-                            <p>
-                      To chat with me (the store owner), click on {" "}
-                      <Link to='/chats'>
-                        <Button variant="contained" color="primary" size="small">
-                      Chat
-                    </Button>
-                      </Link>
-                      . In the chat page, click on <b>Search user</b>, type in my name i.e <b>{store.singleStore.creatorName}</b> and click <b>Go</b>. Click on my name (chat handle) in the search result and send me message.
-                    </p>
-                          </div>
-                   <h2 className="store-name">Checkout list of my items below for your shopping pleasure.</h2>
+                            <div style={{backgroundColor:"white", padding:"10px"}}>
+                                
+                   <h3 style={{textAlign:"center"}}>Checkout list of our items below, for your shopping pleasure.</h3>
                </div>
                             <div className="row center">
                                 {loadProduct && <LoadingBox></LoadingBox>}
@@ -126,10 +159,18 @@ function StoreDetailsPage(props) {
                        ))
                    }
 
-               </div>
+                            </div>
+                                        </div>
+                                    )
+                            }
+                   
+                            
            </>
-               }
-        </div>
+            }
+            
+            
+                        </div>
+                    
     )
 }
 

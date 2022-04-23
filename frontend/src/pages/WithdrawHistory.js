@@ -46,50 +46,36 @@ function WithdrawHistory(props) {
 
     // },[])
     return (
-        <div style={{backgroundColor:"#f5f5f5"}}>
-            <h1 style={{ textAlign: "center" }}> Widthdrawal History</h1>
+        <div style={{backgroundColor:"white"}}>
+            <h3 style={{ textAlign: "center", marginBottom:"50px", paddingTop:"10px" }}> Withdrawal History</h3>
             {
-                withdraws && withdraws.length === 0 ? (<p style={{ backgroundColor: "#f5f5f5", textAlign: "center", height: "50px", padding: "20px" }}>You have not made any widthdrawal.</p>) : (<>
+                withdraws?.length === 0 ? (<p style={{ backgroundColor: "#f5f5f5", textAlign: "center", height: "50px", padding: "10px" }}>You have not made any withdrawal.</p>) : (<>
                     <div style={{textAlign:"center"}}>
                 {
                 loading && <LoadingBox></LoadingBox>
             }
                  { error && <MessageBox variant="danger">Failed to load withdrawals.</MessageBox>}
                 
-            </div>
-                    <table className ="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>DATE</th>
-                                <th>AMOUNT</th>
-                                <th>PAID</th>
-                                <th>Item</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                withdraws?.map((width) =>(
-                                    <tr key = {width._id}>
-                                        <td>{width._id}</td>
-                                        {/* get only the date part, and leave the time*/}
-                                        <td>{width.requestedAt.substring(0, 10)}</td>
-                                        <td>{width.amount.toFixed(2)}</td>
-                                        <td>{width.isPaid ? width.isPaidAt.substring(0, 10) : "Pending"}</td>
-                                        <td><Button sx={{m:1}} variant="contained" size="small"
+                    </div>
+                    <div className='row center'>
+                        {
+                            withdraws?.map((width) => (
+                        <div className='withdraw-history' key={width._id}>
+                                    <p>Id: { width._id} <Button sx={{m:1}} variant="contained" size="small"
                           onClick={() => { props.history.push(`/product/${width.productId}`) }}>
                           View
-                </Button></td>
-                                        
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
+                                    </Button></p>
+                                    <p>Date: {width.requestedAt.substring(0, 10)}</p>
+                                    <p>Amount: {width.amount.toFixed(2)}</p>
+                                    <p>Paid Date: {width.isPaid ? width.isPaidAt.substring(0, 10) : "Pending"}</p>
+                        </div>
+                            ))
+                        }
+                    </div>
+                     
                 </>)
             }
-            
+             
                 
             
         </div>

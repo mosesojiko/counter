@@ -136,54 +136,54 @@ useEffect(() => {
           </div>
         </div>
         
-
-        <div style={{backgroundColor:"#f5f5f5", padding:"10px"}} className='row center'>
-          <div>
-            <p style={{maxWidth:"100%"}}>Let your product and price speak the true nature of your product otherwise, your customer will reject it by filling the rejection form upon delivery.</p>
-            <p style={{maxWidth:"100%"}}>Please, note that if you are not offering free delivery for the item/product, you are to fill in the fee to send the item/product to the buyer, in the <strong>Your delivery fee</strong> section of the form below.</p>
-          </div>
-
-          <div>
-            <form style={{width:"350px"}} className="form" onSubmit={submitHandler}>
-          
-          <div style={{margin:"0 2px"}}>
-            {/*<pre>{JSON.stringify(imageUrl, null, '\t')}</pre> */}
-            <h1 style={{margin:"0 2px"}}>Create Product</h1>
-          </div>
-
-          <div style={{margin:"0 2px"}}>
-            <lable htmlFor="name" style={{margin:"0 2px"}}>Product Name</lable>
-            <input
+        
+        <div style={{ backgroundColor: "#fff", padding: "10px", maxWidth:"100%"}}>
+          <div style={{padding:"5px"}}>
+              <h2 style={{textAlign:"center"}}>Create Product</h2>
+            <p style={{ maxWidth: "90%" }}>Do not fake the price of your item/product in other to avoid rejection. </p>
+            <p style={{maxWidth:"90%"}}> We will only charge you 3% when you successfully sell this item.</p>
+              {/*<pre>{JSON.stringify(imageUrl, null, '\t')}</pre> */}
+            </div>
+          <form className="create-product" onSubmit={submitHandler}>
+            
+            <div className='create-product-container'>
+              <div className='create-product-one'>
+                <div className='create-product-items'>
+            <lable htmlFor="name">Product Name</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="name"
               placeholder="Canvass"
               onChange={(e) => setName(e.target.value)}
-                  style={{ margin: "0 2px" }}
                   required
             ></input>
-          </div>
-          <div style={{margin:"0 2px"}}>
-            <lable style={{margin:"0 2px"}} htmlFor="price">Price</lable>
-            <input
+                </div>
+                
+                <div className='create-product-items'>
+            <lable htmlFor="price">Price</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="price"
               placeholder="5000"
               onChange={(e) => setPrice(e.target.value)}
-                  style={{ margin: "0 2px" }}
+                  
                   required
             ></input>
-          </div>
-          <div style={{margin:"0 2px"}}>
+                </div>
+                
+                <div className='create-product-items'>
             
-            <lable style={{margin:"0 2px"}} htmlFor="category">Product Category</lable>
-            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
-        <Select
+            <lable htmlFor="category">Product Category</lable>
+            <FormControl variant="filled" sx={{ m: 1, minWidth: 120, maxWidth:"93%" }}>
+         <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
+         <Select
           labelId="demo-simple-select-filled-label"
           id="demo-simple-select-filled"
           value={category}
           onChange={(e) =>setCategory(e.target.value)}
-        >
+         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
@@ -202,109 +202,128 @@ useEffect(() => {
                 <MenuItem value="groceries">Groceries</MenuItem>
                 <MenuItem value="pharmacy">Pharmacy (drugs)</MenuItem>
                 <MenuItem value="others">Others</MenuItem>
-        </Select>
-      </FormControl>
-          </div>
-          <div style={{margin:"0 2px"}}>
-            <lable style={{margin:"0 2px"}} htmlFor="countInStock">Count in stock</lable>
-              <input
-              style={{margin:"0 2px"}}
+          </Select>
+          </FormControl>
+                </div>
+                
+                <div className='create-product-items'>
+            <lable htmlFor="countInStock">Count in stock</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="countInStock"
               placeholder="Only 4 left in store."
               onChange={(e) => setCountInStock(e.target.value)}
             ></input>
-          </div>
-          <div style={{margin:"0 2px"}}>
-            <lable style={{margin:"0 2px"}} htmlFor="brand">Brand</lable>
-            <input
+                </div>
+                
+                <div className='create-product-items'>
+            <lable htmlFor="brand">Brand</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="brand"
               placeholder="Nike"
               onChange={(e) => setBrand(e.target.value)}
-              style={{margin:"0 2px"}}
+              
             ></input>
-          </div>
-          <div style={{margin:"0 2px"}}>
-            <lable style={{margin:"0 2px"}} htmlFor="description">Description</lable>
-            <input
+                </div>
+                
+                <div className='create-product-items'>
+            <lable htmlFor="description">Description</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="description"
               placeholder="size: 42, weight: 0.8 kg, color: blue"
                   onChange={(e) => setDescription(e.target.value)}
-                  style={{ margin: "0 2px" }}
+                  
                   required
             ></input>
-          </div>
-
-          <div style={{margin:"0 2px"}}>
+                </div>
+                <div>
             <FileBase64
               type="file"
               multiple={false}
               onDone={({ base64 }) => setImage(base64)}
             />
               </div>
-              <div style={{margin:"0 2px"}}>
-                <h4>Your delivery fee</h4>
               </div>
-              <div style={{margin:"0 2px"}}>
-                <lable style={{margin:"0 2px"}} htmlFor="free">Free</lable>
-            <input
+              {/* div two */}
+              <div className='create-product-two'>
+                <div>
+                  <p style={{maxWidth: "100%"}}>Please, fill in the amount you will charge to send the item to the buyer.</p>
+                </div>
+                <div className='create-product-items'>
+                <lable htmlFor="free">Free</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="free"
               placeholder="00"
                   onChange={(e) => setFree(e.target.value)}
-                  style={{margin:"0 2px"}}
+                  
             ></input>
-              </div>
-              <div style={{margin:"0 2px"}}>
-                <lable style={{margin:"0 2px"}} htmlFor="sameCity">Same towm/city</lable>
-            <input
+                </div>
+                <div className='create-product-items'>
+                <lable htmlFor="sameCity">Same towm/city</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="sameCity"
               placeholder="300"
                   onChange={(e) => setSameCity(e.target.value)}
-                  style={{margin:"0 2px"}}
+                  
             ></input>
-              </div>
-              <div style={{margin:"0 2px"}}>
-                <lable style={{margin:"0 2px"}} htmlFor="sameState">Within the same State</lable>
-            <input
+                </div>
+                <div className='create-product-items'>
+                <lable  htmlFor="sameState">Within the same State</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="sameState"
               placeholder="1000"
                   onChange={(e) => setSameState(e.target.value)}
-                  style={{margin:"0 2px"}}
+                  
             ></input>
-              </div>
-              <div style={{margin:"0 2px"}}>
-                <lable style={{margin:"0 2px"}} htmlFor="nationWide">Nationwide</lable>
-            <input
+                </div>
+                
+                <div className='create-product-items'>
+                <lable htmlFor="nationWide">Nationwide</lable>
+                  <input
+                    className='create-product-input'
               type="text"
               id="nationWide"
               placeholder="1500"
                   onChange={(e) => setNationWide(e.target.value)}
-                  style={{margin:"0 2px"}}
+                  
             ></input>
+                </div>
+                
+                <div>
+            <label />
+            
+            <Button variant="contained" color="success" type="submit" size="large" sx={{mb:2}}>
+                  Create Product
+            </Button>
+            </div>
+                
+                {/* end of two */}
               </div>
-          {loading && <LoadingBox></LoadingBox>}
+
+                </div>
+                
+            {loading && <LoadingBox></LoadingBox>}
           {error && <MessageBox variant="danger">{error}</MessageBox>}
           {success && (
             <MessageBox variant="success">
               Product created successfully.
             </MessageBox>
           )}
+              </form>
+           </div>
 
-          <div>
-            <label />
-            
-            <Button variant="contained" color="success" type="submit" size="large" sx={{mb:2}}>
-                  Create Product
-            </Button>
-          </div>
-        </form>
-          </div>
-        </div>
+        
         
       </div>
     );

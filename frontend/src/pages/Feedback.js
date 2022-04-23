@@ -63,16 +63,17 @@ function Feedback() {
         fetchFeed()
     },[successFeed])
     return (
-        <div style={{backgroundColor:"#f5f5f5"}}>
+        <div style={{backgroundColor:"#f5f5f5", width:"100%"}}>
             
-            <form className="form feedback-form" onSubmit={submitHandler}>
-          <div>
-            <h1 style={{margin:"0"}}>Feedback Form</h1>
-          </div>
+            <form className="register" onSubmit={submitHandler}>
+          
+            <h3 style={{margin:"10px", textAlign:"center"}}>Feedback Form</h3>
+          
 
-          <div>
+          <div className='reister-item-option'>
             <lable htmlFor="name">Name (optional)</lable>
             <input
+              className="register-input"
               type="text"
               id="name"
               placeholder="Enter your name"
@@ -80,7 +81,19 @@ function Feedback() {
             />
           </div>
           
-                {
+                
+                <div>
+            <lable htmlFor="message">Message</lable>      
+              <input
+                className="register-input"
+              type="text"
+              id="message"
+              placeholder="Enter feedback/comment" required
+              onChange={(e) => setMessage(e.target.value)}
+                        />
+          </div>
+          <button type="submit" class="register-button">Submit</button>
+          {
                     loadingFeed && <LoadingBox></LoadingBox>
                 }
                 {
@@ -95,21 +108,16 @@ function Feedback() {
       
             </Stack>
           }
-                <div style={{ width: "100%" }}>
-            <lable htmlFor="message">Message</lable>
-                    <div className='feedback'>
-                        <input
-              type="text"
-              id="message"
-              placeholder="Enter feedback/comment" required
-              onChange={(e) => setMessage(e.target.value)}
-                        />
-                        <button type="submit">
-              Submit
-            </button>
-            </div>
-          </div>
-            </form>
+        </form>
+        
+
+
+
+
+        <div className='feedback-result'>
+          
+          <div className='feedback-content'>
+            <h3>Your feedback below</h3>
             {
                 loading && <LoadingBox></LoadingBox>
             }
@@ -119,16 +127,22 @@ function Feedback() {
       
             </Stack>
                 }
-            
-            <h2 style={{ textAlign: "center", borderBottom:"1px solid gray" }}>Your Feedback(s) Below:</h2>
-            
-                {feedback?.map((feed) => (
-                <div key={feed._id} className="feedback-content">
-                    <p><strong>{feed.name? feed.name:"User"}:</strong></p>
-                        <p style={{maxWidth:"300px"}}>{feed.message}</p>
+            {feedback?.map((feed) => (
+                <div key={feed._id} className="feedback-content-item">
+                    <p className='feedback-content-item-name'><strong>{feed.name? feed.name:"User"}:</strong></p>
+                        <p className='feedback-content-item-message'> {feed.message}</p>
                         </div>
               
-            ))}
+          ))}
+          </div>
+          
+          
+        </div>
+            
+            
+           
+            
+                
 
             </div>
                 

@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
     phone: { type: String },
     address: { type: String },
     isBanned: { type: Boolean, default: false },
-    isActive: {type: Boolean, default: true},
+    isActive: { type: Boolean, default: true },
     image: {
       type: String,
       default:

@@ -89,8 +89,8 @@ function ProfilePage(props) {
   }
     return (
         <div>
-            <form className ="form" onSubmit = { submitHandler }>
-                <div><h1>Edit Profile</h1></div>
+            <form className ="register" onSubmit = { submitHandler }>
+                <div><h2 style={{textAlign:"center"}}>Edit Profile</h2></div>
                 {
                     loading? <LoadingBox></LoadingBox>:
                     error? <MessageBox variant ="danger">{error}</MessageBox>:
@@ -110,21 +110,27 @@ function ProfilePage(props) {
                     {
                         successUpdate && <MessageBox variant ="success">Profile Updated Successfully.</MessageBox>
                     }
-                    <div>
+                    <div className='register-items'>
                         <lable htmlFor="name">Name</lable>
-                        <input type ="text" id ="name" placeholder="Enter name"
+                                    <input
+                                        className='register-input'
+                                        type="text" id="name" placeholder="Enter name"
                         value ={name} onChange = {(e) =>setName(e.target.value)} >   
                         </input>
                     </div>
-                    <div>
+                    <div className='register-items'>
                         <lable htmlFor="address">Address</lable>
-                        <input type ="text" id ="address" placeholder="House no, street, town/city,,LGA, state, country "
+                                    <input
+                                        className='register-input'
+                                        type="text" id="address" placeholder="House no, street, town/city,,LGA, state, country "
                         value ={address} onChange = {(e) =>setAddress(e.target.value)}>
                         </input>
                     </div>
-                    <div>
+                    <div className='register-items'>
                         <lable htmlFor="phone">Phone</lable>
-                        <input type ="text" id ="phone" placeholder="Enter business number"
+                                    <input
+                                        className='register-input'
+                                        type="text" id="phone" placeholder="Enter business number"
                         value = {phone}
                         onChange = {(e) =>setPhone(e.target.value)}
                         >
@@ -136,10 +142,10 @@ function ProfilePage(props) {
                         onDone = {({base64}) => setImage(base64)}
                         />
                     </div>
-                    <div>
+                    <div style={{textAlign:"center"}}>
                         <label />
                                     {/* <button className ="primary" type ="submit">Update</button> */}
-                                    <Button sx={{mb:2}} type="submit" variant="contained" color="success" size="large">Update</Button>
+                                    <Button sx={{m:5}} type="submit" variant="contained" color="success" size="large">Update</Button>
                     </div>
                     </>
                 }

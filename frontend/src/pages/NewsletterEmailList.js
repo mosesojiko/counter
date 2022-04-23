@@ -20,13 +20,6 @@ function NewsletterEmailList() {
         window.location="/"
     }
    
-    //remove duplicate emails
-    // const myNewsEmails = newsletterEmails.filter((email) => {
-    //     if (email.newsEmail === email.newsEmail) {
-    //        return newsletterEmails.splice(email, 1)
-    //     }
-        
-    // })
   
     useEffect(() => {
         const fetchEmails = async () => {
@@ -49,7 +42,7 @@ function NewsletterEmailList() {
     },[userInfo.isAdmin])
     return (
         <div style={{backgroundColor:"white"}}>
-            <h1 style={{ textAlign: "center" }}> List Of Newsletter Emails</h1>
+            <h3 style={{ textAlign: "center" }}> List Of Newsletter Emails</h3>
             {
                 loading && <LoadingBox></LoadingBox>
             }

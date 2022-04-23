@@ -43,7 +43,7 @@ function OrderList(props) {
 
     return (
         <div>
-            <h1 style={{textAlign:"center"}}>List of orders</h1>
+            <h3 style={{textAlign:"center"}}>List of orders</h3>
             {
                 loading && <LoadingBox></LoadingBox>
             }

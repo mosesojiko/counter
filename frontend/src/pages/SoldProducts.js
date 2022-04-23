@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getSoldProducts } from '../actions/productActions';
 import { createWithdraw } from '../actions/withdrawActions';
 import LoadingBox from '../components/LoadingBox';
@@ -80,18 +80,26 @@ useEffect(() =>{
   }
   
     return (
-      <div style={{maxWidth:"100%"}}>
+      <div style={{maxWidth:"100%", backgroundColor:"white"}}>
         
         <div className='withdrawal-steps'>
-          <h1 style={{ textAlign: "center" }}>Sold Items and Payouts</h1>
-            <h3>Withdrawal Steps</h3>
-              <ul>
+          <h2 style={{textAlign:"center",padding:"10px"}}>Sold Items and Payout</h2>
+          <div className='withdrawal-information'>
+            <div className='withdrawal-information-one'>
+              <p style={{maxWidth:"100%"}}>Here are your sold items and steps for withdrawal.</p>
+            </div>
+            <div className='withdrawal-information-two'>
+              <h3>Withdrawal steps</h3>
+              <ul >
                 <li>Get your product delivered to your customer.</li>
                 <li>Click on the payme button to payout the product</li>
               <li>Fill the widthdrawal form and submit.</li>
-              <li>Make sure your name corresponds with the name on your bank verification number.</li>
                 <li>Get paid within 48 hours.</li>
             </ul>
+            </div>
+          </div>
+          
+              
             <h3 style={{ textAlign: "center" }}>Sold Items</h3>
           </div>
           
@@ -111,19 +119,19 @@ useEffect(() =>{
                 You will recieve {amountToPay} - service {serviceCharge} = #{amountToPay-serviceCharge}
               </Box>
               <form>
-                <Box>
+                <Box sx={{mt: 3}}>
                   <label htmlFor='accountName'>Account Name</label>
                   <input style={{marginLeft:"3px"}} type="text" id="accountName" placeholder='Account Name' required
                     onChange ={(e) =>setAccountName(e.target.value)}
                   />
                 </Box>
-                <Box>
+                <Box sx={{mt:2}}>
                   <label htmlFor='accountNumber'>Account Number</label>
                   <input style={{marginLeft:"3px"}} type="text" id="accountNumber" placeholder='Account Number' required
                     onChange ={(e) =>setAccountNumber(e.target.value)}
                   />
                 </Box>
-                <Box>
+                <Box sx={{mt:2}}>
                   <label htmlFor='bank'>Bank</label>
                   <input style={{marginLeft:"3px"}} type="text" id="bank" placeholder='Bank Name' required
                     onChange ={(e) =>setBank(e.target.value)}
@@ -144,7 +152,79 @@ useEffect(() =>{
         </Box>
       </Modal>
         </div>
-        {
+
+        <div className='row center'>
+          {
+            soldProducts && soldProducts.length === 0 ? (<p style={{ backgroundColor: "#f5f5f5", textAlign: "center", height: "50px", padding: "20px" }}>There are no sold items at the moment.</p>)
+              : ""
+          }
+
+          {
+          loading && <LoadingBox></LoadingBox>
+          }
+          {
+          error && <MessageBox variant="danger">Error</MessageBox>
+          }
+          
+          {
+            soldProducts?.map((product) => (
+              <div className='withdraw-history' style={{padding:"1px"}} key={product._id}>
+                <div>
+                  <div>
+                    <h4>Product Information</h4>
+                    <p>Product Id: <strong>{product._id}</strong></p>
+                    <p style={{display:"flex"}}><img
+                        className="small"
+                        src={product.image}
+                        alt={product.name}
+                /><Button sx={{m:1}} variant="contained" size="small"
+                          onClick={() => { props.history.push(`/product/${product._id}`) }}>
+                          View product
+                      </Button></p>
+                    <p>
+                      <span style={{marginRight:"5px"}}>{product.name}</span>
+                      <span>#{product.price}</span>
+                      <span style={{marginLeft:"5px"}}>D-cost: #{ product.deliveryCost}</span>
+                    </p>
+                  </div>
+                  <div>
+                    <h4>Buyer Information</h4>
+                    <p>Name: <b>{product.buyerName}</b>, Phone: <b>{product.buyerPhone}</b> </p>
+                    <p>Address: { product.buyerAddress }</p>
+                  </div>
+                  <div>
+                    <h4>Product Status</h4>
+                    <p>Payment: {product.isPaid ? "Paid at" : "No"}  { product.isPaid
+                              ? product.isPaidAt.substring(0, 10)
+                      : ""}</p>
+                    <p>Delivery: {product.isDelivererd ? "Delivered at" : "No"}  { product.isDelivererd
+                              ? product.isDeliveredAt.substring(0, 10)
+                      : ""} </p>
+                    <p>Paid by Mosganda: {product.isSettled ? "Paid at" : "Pending"}  { product.isSettled
+                              ? product.isSettledAt.substring(0, 10)
+                        : ""} </p>
+                  </div>
+                  <div>
+                    {
+                !product.isSettled &&
+                 <Button sx={{ m: 2 }} variant="contained" size="large" onClick={() => {
+                setAmount(product.price)
+                setAmountToPay(product.price + product.deliveryCost)
+                setServiceCharge(product.service)
+                  setProductId(product._id)
+                  setEmail(userInfo.email)
+                  setPhone(userInfo.phone)
+                  handleOpen()
+                }}>Pay Me</Button>
+               }
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        
+        {/* {
           soldProducts && soldProducts.length === 0 ? (<p style={{ backgroundColor: "#f5f5f5", textAlign: "center",height:"50px",padding:"20px" }}>There are no sold items at the moment.</p>) : (<>
             {
           loading && <LoadingBox></LoadingBox>
@@ -225,11 +305,11 @@ useEffect(() =>{
           ))
         }
           </>)
-        }
+        } */}
         
         
         
-          {/* {loading ? (
+           {/* {loading ? (
           <LoadingBox></LoadingBox>
         ) : error ? (
           <MessageBox variant="danger"></MessageBox>
@@ -285,7 +365,7 @@ useEffect(() =>{
                 )
             )}
           </div>
-        )}   */}
+        )}    */}
       </div>
     );
 }

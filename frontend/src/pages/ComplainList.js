@@ -11,6 +11,8 @@ function ComplainList() {
     const [complains, setComplains] = useState([])
 
 
+    //https://mosganda-backend.herokuapp.com
+
     //get access to userLogin from redux store
   const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
@@ -18,7 +20,7 @@ function ComplainList() {
     if (!userInfo.isAdmin) {
         window.location="/"
     }
-   console.log(complains)
+   //console.log(complains)
     useEffect(() => {
         const fetchComplains = async () => {
             try {
@@ -42,7 +44,7 @@ function ComplainList() {
 
     return (
         <div style={{backgroundColor:"#f5f5f5"}}>
-            <h1 style={{textAlign:"center"}}>List of Complains</h1>
+            <h3 style={{textAlign:"center"}}>List of Complains</h3>
             {
                 loading && <LoadingBox></LoadingBox>
             }

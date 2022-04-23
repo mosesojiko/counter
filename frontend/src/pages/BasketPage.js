@@ -46,22 +46,15 @@ function BasketPage(props) {
        
     }
     return (
-      <div style={{backgroundColor:"#f5f5f5", padding:"10px"}} className="row top">
+      <div style={{backgroundColor:"#f8f8f8", padding:"2px"}} className="row top">
         <div className="col-2">
-          <h1 style={{textAlign:"center"}}>Shopping Basket</h1>
+          <h3 style={{textAlign:"center"}}>Shopping Basket</h3>
           <Link to="/">
               <Button variant="contained" color="success" size="small">
                 Back to homepage
               </Button>
             </Link>
-          {!proceed && (         
-            <Stack sx={{ width: '90%' }} spacing={2}>
-              <Alert sx={{fontSize:"15px"}} severity="error" onClose={() => setProceed(true)}>Sorry, we discourage buying from more than one store/seller at a
-              time. You can buy all your items from one store or order them
-              seperately. Thanks.</Alert>
-            </Stack>
-                
-          )}
+          
           {basketItems.length === 0 ? (
             <MessageBox>
               Basket is empty. <Link to="/">Go Shopping</Link>{" "}
@@ -120,6 +113,7 @@ function BasketPage(props) {
                     <div>#{item.price}</div>
                     <div>
                       <button
+                        className='delete-button'
                         type="button"
                         onClick={() => removeFromBasketHandler(item.product)}
                       >
@@ -136,10 +130,10 @@ function BasketPage(props) {
           <div className="card card-body">
             <ul>
               <li>
-                <h2>
+                <h3>
                   Subtotal ({basketItems.reduce((a, c) => a + c.qty, 0)} items)
                   : #{basketItems.reduce((a, c) => a + c.price * c.qty, 0)}
-                </h2>
+                </h3>
               </li>
               <li>
                 <button
@@ -150,6 +144,16 @@ function BasketPage(props) {
                 >
                   Proceed to checkout
                 </button>
+              </li>
+              <li>
+                {!proceed && (         
+            <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert sx={{fontSize:"15px"}} severity="error" onClose={() => setProceed(true)}>Sorry, we discourage buying from more than one store/seller at a
+              time. You can buy all your items from one store or order them
+              seperately. Thanks.</Alert>
+            </Stack>
+                
+          )}
               </li>
             </ul>
           </div>

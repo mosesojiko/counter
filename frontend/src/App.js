@@ -57,6 +57,15 @@ import ViewUser from './pages/ViewUser';
 import ForgotPassword from './pages/ForgotPassword';
 import Resetpassword from './pages/Resetpassword';
 import Privacy from './pages/Privacy';
+import Dashboard from './pages/Dashboard';
+import Head from './pages/Head';
+//import SearchIcon from '@mui/icons-material/Search';
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import CreateStoreSteps from './pages/CreateStoreSteps';
+//import StoreDetailsPageCopy from './pages/StoreDetailsPageCopy';
+
+
 
 
 
@@ -117,7 +126,7 @@ function App() {
     e.preventDefault();
     try {
             setLoadingnewsEmail(true)
-            await axios.post('/api/v1/newsletter', { newsEmail });
+            await axios.post('/api/v1/newsletter/create', { newsEmail });
             setLoadingnewsEmail(false)
       setCreateNewsEmailSuccess(true)
       setNewsEmail("")
@@ -129,49 +138,85 @@ function App() {
   }
   return (
     <BrowserRouter>
-      <div className="grid-container">
-        <header className="row">
-          <div>
-            <a className="brand" href="/">
-              Mosganda
-            </a>
-          </div>
-          
-          <div className="header-items">
-          <span>
-          <Link to="/chats">
-              <ChatIcon sx={{ fontSize: "15px", color:"yellow"}} />
-              Chat
-              {myNotifications.length > 0 && (
-                <span className="badge">{myNotifications.length}</span>
-              )}
+    
+      <div className="grid-container" style={{ marginBottom: "0px" }}>
+        <header>
+        <div className='mosganda-header'>
+          <div className='mosganda-header-left'>
+            {/*header logo*/}
+          <Link to="/">
+            <div className='mosganda-header-logo'>Mosganda</div>
+          </Link>
+           
+            <div className='mosganda-header-itemslink'>
+              <Link to="/stores">
+                Stores
+              </Link>
+
+              <Link to="/createstoresteps">
+                
+            Sell now
                 </Link>
-          </span>
+                <Link to="/createstore">
+                
+            Create-store
+          </Link>
+            </div>
             
-            <span>
-            <Link to="/basket/:id">
+          </div>
+          <div className='mosganda-header-right'>
+             {/*haeder nav */}
+          <div className='mosganda-header-option'>
+            <Link to="/chats">
+                <div className='mosganda-header-tripple-iconandtext'>
+                  <span className='mosganda-option-lineone'>
+                  <ChatIcon sx={{ fontSize: "25px", color:"white", borderRadius:"10px", padding:"2px"}} />
+                  </span>
+                  <div className='mosganda-header-double-container'>
+                  <span className='mosganda-option-linetwo'>Chat</span>
+                   {myNotifications.length > 0 && (
+                <span className="badge">{myNotifications.length}</span>
+                  )} 
+                  {/* <span className='badge'>0</span> */}
+                </div>
+                
+                </div>
+                
               
-               <ShoppingBasketOutlinedIcon  sx={{ fontSize: "15px", color:"yellow" }} />
-              Basket
-              {basketItems.length > 0 && (
+            </Link>
+          </div>
+          <div className='mosganda-header-option'>
+            <Link to="/basket/:id">
+                <div className='mosganda-header-tripple-iconandtext'>
+                  <span className='mosganda-option-lineone'>
+                  <ShoppingBasketOutlinedIcon  sx={{ fontSize: "25px", color:"white", borderRadius:"10px" }} />
+                  </span>
+                  <div className='mosganda-header-double-container'>
+                  <span className='mosganda-option-linetwo'>Basket</span>
+                  {basketItems.length > 0 && (
                 <span className="badge">{basketItems.length}</span>
               )}
+                  {/* <span className='badge'>0</span> */}
+                </div>
+                
+                </div>
+                
+              
             </Link>
-            </span>
-            
-              {
-                !userInfo && <span>
-                <Link to="/register">Register</Link>
-              </span>
-              }
-            
-            <span>
+          </div>
+          <div className='mosganda-header-option'>
             {
               /* Show name of user that logged in. Also implement logout */
               userInfo ? (
                 <div className="dropdown">
-                  <Link to="#">
-                    {userInfo.name}<span><ArrowDropDownIcon /></span> {" "}
+                      <Link to="#">
+                        <div className='mosganda-header-tripple-iconandtext'>
+                  <span className='mosganda-option-lineone'>
+                  <img style={{width:"25px", maxHeight:"25px", backgroundColor:"white"}} src={userInfo.image} alt="" />
+                  </span>
+                  <span className='mosganda-option-linetwo'>{userInfo.name.split(" ")[0]}<span><ArrowDropDownIcon sx={{fontSize:"18px"}} /></span> {" "}</span>
+                </div>
+                    {/* {userInfo.name}<span><ArrowDropDownIcon /></span> {" "} */}
                   </Link>
                   <ul className="dropdown-content">
                     <li>
@@ -212,12 +257,32 @@ function App() {
                   </ul>
                 </div>
               ) : (
-                <Link to="/login">Login</Link>
+                    <Link to="/login">
+                       <div className='mosganda-header-tripple-iconandtext'>
+                  <span className='mosganda-option-lineone'>
+                  <LoginIcon sx={{ fontSize: "25px", color:"white", borderRadius:"10px"}} />
+                  </span>
+                  <span className='mosganda-option-linetwo'>Login</span>
+                </div>
+                </Link>
               )
             }
-            </span>
-
-            <span>
+          </div>
+          <div className='mosganda-header-option'>
+            {
+                !userInfo && <span>
+                  <Link to="/register">
+                    <div className='mosganda-header-tripple-iconandtext'>
+                  <span className='mosganda-option-lineone'>
+                  <HowToRegIcon sx={{ fontSize: "25px", color:"white", borderRadius:"10px"}} />
+                  </span>
+                  <span className='mosganda-option-linetwo'>Register</span>
+                </div>
+                </Link>
+              </span>
+              }
+          </div>
+          <div className='mosganda-header-option'>
             {
               userInfo && userInfo.isAdmin && (
                 <div className='dropdown'>
@@ -251,10 +316,15 @@ function App() {
                 </div>
               )
             }
-            </span>
           </div>
-        </header>
+         </div>
+          </div>
+          </header>
+         
         <main>
+         <Route path="/createstoresteps" component={ CreateStoreSteps }></Route>
+          <Route path="/head" component={ Head }></Route>
+          <Route path="/dashboard" component={ Dashboard }></Route>
            <Route path="/privacy" component={ Privacy }></Route>
           <Route path="/resetpassword/:id" component={ Resetpassword }></Route>
           <Route path="/forgotpassword" component={ ForgotPassword }></Route>
@@ -281,6 +351,7 @@ function App() {
           <Route path="/update/:id" component={UpdateProduct}></Route>
           <Route path="/editstore" component={EditStore}></Route>
           <Route path="/userstore" component={UserStore}></Route>
+          {/* <Route path="/store/bizname/:name" component={StoreDetailsPageCopy}></Route> */}
           <Route path="/store/:id" component={StoreDetailsPage}></Route>
           <Route path="/createproduct" component={CreateProductPage}></Route>
           <Route path="/createstore" component={CreateStore}></Route>
@@ -300,33 +371,33 @@ function App() {
         <footer>
           <div className='mosganda-footer'>
             <div className='mosganda-footer-item'>
-              <p>Follow us</p>
+              <h4>Follow us</h4>
             
               <p> <Link to="#" style={{ color: "white", margin: "2px" }}><FacebookIcon sx={{fontSize:30, backgroundColor:"white", color:"blue"}}/></Link>
                   <Link to="#" style={{ color: "white", margin: "2px" }}><InstagramIcon sx={{fontSize:30, backgroundColor:"white", color:"purple"}} /></Link>
                   <Link to="#" style={{ color: "white", margin: "2px" }}><TwitterIcon sx={{fontSize:30, backgroundColor:"white", color:"#1c86ee"}} /></Link>
                   <Link to="#" style={{ color: "white", margin: "2px" }}><YouTubeIcon sx={{fontSize:30, backgroundColor:"white", color:"red"}} /></Link>
               </p>
-              <p>
-                <WhatsAppIcon sx={{fontSize:30}} />
-                <span style={{color:"yellow"}}>08166774455</span>
+              <p className='whatsapp-container'>
+                <WhatsAppIcon sx={{fontSize:30, marginRight:"2px"}} />
+                <span>08133806965</span>
               </p>
               
             </div>
             <div className='mosganda-footer-item'>
-              <p>Company</p>
-              <p> <Link to="/about" style={{ color: "yellow" }}>About us</Link></p>
-              <p> <Link to="/guide" style={{ color: "yellow" }}>How to use this site</Link></p>
-              <p> <Link to="/privacy" style={{color:"yellow"}}>Privacy</Link></p>
-              <p> <Link to="/termsandconditions" style={{ color: "yellow" }}>Terms and Conditions</Link></p>
-              <p> <Link to="/feedback" style={{color:"yellow"}}>Your feedback</Link></p>
+              <h4>Company</h4>
+              <p> <Link to="/about">About us</Link></p>
+              <p> <Link to="/guide">Guide</Link></p>
+              <p> <Link to="/privacy">Privacy</Link></p>
+              <p> <Link to="/termsandconditions">Terms and Conditions</Link></p>
+              <p> <Link to="/feedback">Your feedback</Link></p>
             </div>
             
             <div className='mosganda-footer-item'>
-              <p>Mosganda</p>
-              <p style={{color:"yellow"}}>081237453684, 080555565666</p>
-              <p style={{color:"yellow"}}>mosganda@help.com</p>
-              <p style={{paddingBottom:"0", marginBottom:"0",fontSize:"13px"}}>Subscribe to our newsletter</p>
+              <h4>Mosganda</h4>
+              <p>09028718288</p>
+              <p>contact@mosganda.com</p>
+              <p style={{paddingBottom:"0", marginBottom:"0",fontSize:"13px", color:"yellow"}}>Subscribe to our newsletter</p>
               <form className='newsletter' onSubmit={submitNewsletter}>
                 <div><input type="text" id="newsletter" placeholder='example@gmail.com'
                   onChange={(e) => setNewsEmail(e.target.value)} required
@@ -334,7 +405,7 @@ function App() {
                 />
                   <label />
                 </div>
-                <button style={{color:"#023c3f", fontWeight:"bold"}} type="submit">Subscribe</button>
+                <button type="submit">Subscribe</button>
                 {
                     loadingnewsEmail && <LoadingBox></LoadingBox>
                 }
@@ -353,8 +424,8 @@ function App() {
               </form>
             </div>
           </div>
-          <div className="row center footer-item">All rights reserved</div>
-          </footer>
+          <div className="footer-item">All rights reserved</div>
+        </footer>
       </div>
     </BrowserRouter>
   );

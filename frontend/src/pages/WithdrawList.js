@@ -48,7 +48,7 @@ function WithdrawList(props) {
         fetchWithdraws()
     },[userInfo.isAdmin])
 
-    console.log(withdraws)
+    //console.log(withdraws)
     //handle settlement
     const handlePayment = async(id) => {
         try {
@@ -81,7 +81,7 @@ function WithdrawList(props) {
 
     return (
         <div style={{backgroundColor:"#f5f5f5"}}>
-            <h1 style={{ textAlign: "center" }}> List Of Withdraw request</h1>
+            <h3 style={{ textAlign: "center" }}> List Of Withdraw request</h3>
             {
                 withdraws && withdraws.length === 0 ? (<p style={{ backgroundColor: "#f5f5f5", textAlign: "center", height: "50px", padding: "20px" }}>No seller has made request for widthdrawal.</p>) : (<>
                     <div style={{textAlign:"center"}}>

@@ -40,9 +40,10 @@ function ProductList() {
         fetchProducts()
     },[userInfo.isAdmin])
 
+    //console.log(products)
     return (
         <div style={{backgroundColor:"#f5f5f5"}}>
-            <h1 style={{textAlign:"center"}}>List of products</h1>
+            <h3 style={{textAlign:"center"}}>List of products</h3>
             <div className="row center">
           {loading && <LoadingBox></LoadingBox>}
           {error && <MessageBox variant="danger">Failed to load products</MessageBox>}

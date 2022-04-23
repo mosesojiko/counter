@@ -16,7 +16,7 @@ function ProductPage(props) {
     //read product details from redux store
     const productDetails = useSelector(state => state.productDetails);
     const { loading, error, product} = productDetails;
-    console.log(product)
+    //console.log(product)
 
     useEffect(() => {
         dispatch(getProductDetails(productId));
@@ -30,14 +30,14 @@ function ProductPage(props) {
 
   
     return (
-      <div style={{backgroundColor:"#f5f5f5", padding:"10px"}}>
+      <div className='responsive' style={{backgroundColor:"#f5f5f5", padding:"10px"}}>
         {loading ? (
           <LoadingBox></LoadingBox>
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
               <div style={{backgroundColor:"#f5f5f5", padding:"10px"}}>
-                <h1 style={{textAlign:"center"}}>Product Detail</h1>
+                <h3 style={{textAlign:"center"}}>Product Detail</h3>
             <Link to="/">
               <Button variant="contained" color="success" size="small">
                 Back to homepage
@@ -58,7 +58,7 @@ function ProductPage(props) {
               <div className="col-1">
                 <ul>
                   <li>
-                    <h1>{product.name}</h1>
+                    <h3>{product.name}</h3>
                   </li>
                   {/* <li>
                            <Rating
@@ -170,13 +170,13 @@ function ProductPage(props) {
                     !product.isPaid &&
                     <div>
                             <p>
-                      To chat with the seller, click on {" "}
+                      To chat with me, click on {" "}
                       <Link to='/chats'>
                         <Button variant="contained" color="primary" size="small">
                       Chat
                     </Button>
                       </Link>
-                      . In the chat page, click on <b>Search user</b>, type in the seller's name as follows: <b>{product.sellerName}</b> and click <b>Go</b>. In the search result, Click on the seller's name (chat handle) and send message.
+                      . Search my name <b>{product.sellerName}</b> and add me to your chat list.
                     </p>
                           </div>
                   }

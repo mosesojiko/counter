@@ -22,6 +22,9 @@ import {
     UNPOST_STORE_FAIL,
     UNPOST_STORE_REQUEST,
     UNPOST_STORE_SUCCESS,
+    //GET_BIZ_STORE_REQUEST,
+    //GET_BIZ_STORE_SUCCESS,
+    //GET_BIZ_STORE_FAIL,
 } from "../constants/storeConstants";
 
 
@@ -91,6 +94,33 @@ export const getSingleStoreReducers =  (state = {loading:true, store: {}}, actio
            return state;
     }
 }
+
+
+
+//get single store details reducers
+// export const getBizStoreReducers =  (state = {loading:true, store: {}}, action) => {
+//     switch(action.type) {
+//         case GET_BIZ_STORE_REQUEST:
+//             return {
+//                 loading: true,
+//             }
+
+//         case GET_BIZ_STORE_SUCCESS:
+//             return {
+//                 loading: false,
+//                 store: action.payload 
+//             }
+
+//         case GET_BIZ_STORE_FAIL:
+//             return {
+//                 loading: false,
+//                 error: action.payload
+//             } 
+               
+//         default: 
+//            return state;
+//     }
+// }
 
 //get user store reducer
 export const getUserStoreReducers = (state = { userStore:{} },action) =>{

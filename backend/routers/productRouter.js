@@ -190,7 +190,7 @@ productRouter.get(
 
 //get user products for non logged in user
 productRouter.get('/nonuser/:id', expressAsyncHandler(async (req, res) => {
-  const nonuserProducts = await Product.find({ productStoreId: req.params.id }).sort({ updatedAt: -1 });
+  const nonuserProducts = await Product.find({ productStoreId: req.params.id, isPaid:false }).sort({ updatedAt: -1 });
   if (nonuserProducts) {
     res.json(nonuserProducts)
   }
@@ -202,7 +202,7 @@ productRouter.get('/nonuser/:id', expressAsyncHandler(async (req, res) => {
 productRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const products = await Product.find({isPosted: true, isPaid: false}).sort({ updatedAt: -1 });
+    const products = await Product.find({isPosted: true, isPaid:false}).sort({ updatedAt: -1 });
     res.json(products);
   })
 );
@@ -362,6 +362,26 @@ productRouter.put('/issettled', expressAsyncHandler( async(req, res) => {
 }))
 
 
+//block all user's products
+productRouter.put('/banned', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+    const product = await Product.findOne({user:req.body.id});
+    if (product) {
+        product.isBanned = true
+    }
+    const bannedProduct = await product.save()
+    res.json(bannedProduct)
+}))
+
+
+//unblock all user's products
+productRouter.put('/unbanned', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+    const product = await Product.findOne({user:req.body.id});
+    if (product) {
+        product.isBanned = false
+    }
+    const bannedProduct = await product.save()
+    res.json(bannedProduct)
+}))
 
 
 

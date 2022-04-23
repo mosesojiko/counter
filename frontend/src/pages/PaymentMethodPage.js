@@ -35,35 +35,35 @@ function PaymentMethodPage(props) {
     return (
         <div>
             <CheckoutSteps step1 step2 step3></CheckoutSteps>
-            <form className ="form" onSubmit = {submitHandler}>
+            <form className ="register" onSubmit = {submitHandler}>
                 <div>
-                    <h1>Payment Method</h1>
+                    <h3>Payment Method</h3>
                 </div>
-                <div>
-                    <div>
+                
+                    <div className='payment-method'>
                         <input type = "radio" id ="Paystack"
                         value ="Paystack" name ="paymentMethod"
                         required checked onChange ={(e) => setPaymentMethod(e.target.value)} />
                         <label htmlFor ="Paystack">Paystack</label>
                     </div>
-                </div>
                 
-                <div>
-                    <div>
+                
+                
+                    <div className='payment-method'>
                         <input type = "radio" id ="payU" value = "payU" name ="paymentMethod"
                         required onChange = { (e) => setPaymentMethod(e.target.value) }>
                         </input>
                         <label htmlFor ="payU">payU</label>
                     </div>
-                </div>
-                <div>
-                    <div>
+                
+                
+                    <div className='payment-method'>
                         <input type = "radio" id ="eNaira" value = "eNaira" name ="paymentMethod"
                         required onChange = { (e) => setPaymentMethod(e.target.value) }>
                         </input>
                         <label htmlFor ="eNaira">eNaira</label>
                     </div>
-                </div>
+                
                 {
             errorPaymentMethod && <Stack sx={{ width: '90%' }} spacing={2}>
               <Alert severity="error" onClose={() => setErrorPaymentMethod(false)}>Please, use Paystack. We are yet to integrate PayU and eNaira.</Alert>

@@ -1,0 +1,93 @@
+.create-product-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.create-product {
+  padding: 10px;
+  background-color: white;
+  width: 90%; 
+  margin-bottom: 50px;
+  box-shadow: -5px 5px 2px 3px #04AA6D;
+}
+
+.create-product-one {
+    width: 50%;
+}
+
+.create-product-two {
+    width: 50%;
+}
+
+.create-product-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-product-input {
+   width: 90%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+.register-password-container {
+  display: flex;
+  align-items: center;
+}
+
+.register-input-password {
+   width: 80%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+.register-button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+.register-button:hover {
+  opacity: 1;
+  border: 1px solid black;
+}
+
+.register a {
+  color: blue;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 600px) {
+    .create-product-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+    }
+
+
+    .create-product {
+        width: 100%;
+        margin: 5px; 
+    }
+    .create-product-one {
+    width: 100%;
+}
+
+.create-product-two {
+    width: 100%;
+}
+}

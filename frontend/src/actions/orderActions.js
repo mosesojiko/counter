@@ -10,6 +10,9 @@ import {
     ORDER_MINE_LIST_FAIL,
     ORDER_MINE_LIST_REQUEST,
     ORDER_MINE_LIST_SUCCESS,
+    ORDER_NOTIFICATION_FAIL,
+    ORDER_NOTIFICATION_REQUEST,
+    ORDER_NOTIFICATION_SUCCESS,
     ORDER_PAY_FAIL,
     ORDER_PAY_REQUEST,
     ORDER_PAY_SUCCESS} from '../constants/orderConstants';
@@ -120,6 +123,33 @@ export const listOrderMine = () =>async(dispatch, getState) =>{
         const message = error.response && error.response.data.message?
         error.response.data.message : error.message;
         dispatch({type: ORDER_MINE_LIST_FAIL, payload: message})
+    }
+}
+
+
+//send notification
+export const orderNotification = (orderId) => async (dispatch, getState) => {
+    dispatch({
+        type: ORDER_NOTIFICATION_REQUEST,
+        payload: orderId
+    });
+    //get userInfo
+    const { userLogin: { userInfo } } = getState();
+    try {
+        const { data } = await Axios.post(`/api/v1/order/ordernotification/${orderId}`,{
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        });
+
+        dispatch({
+            type: ORDER_NOTIFICATION_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        const message = error.response && error.response.data.message?
+        error.response.data.message : error.message;
+        dispatch({type: ORDER_NOTIFICATION_FAIL, payload: message})
     }
 }
 

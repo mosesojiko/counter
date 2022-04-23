@@ -10,8 +10,6 @@ import Box from '@mui/material/Box';
 import GroupChatModal from './GroupChatModal';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-//import Alert from '@mui/material/Alert';
-//import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
 import { getSenderImage } from '../../chatLogics';
 import Avatar from '@mui/material/Avatar';
@@ -20,7 +18,7 @@ import Stack from '@mui/material/Stack';
 function MyChats({fetchAgain}) {
   const [loggedUser, setLoggedUser] = useState()
   const [loading, setLoading] = useState(false);
-  const [getChatError, setGetChatError] = useState(false)
+  //const [getChatError, setGetChatError] = useState(false)
   
  
   //get login user details from store
@@ -46,7 +44,7 @@ function MyChats({fetchAgain}) {
         setChats(data);
         setLoading(false)
       } catch (error) {
-        setGetChatError(true)
+       
         setLoading(false)
         return
       }
@@ -161,6 +159,10 @@ function MyChats({fetchAgain}) {
             <ChatLoading />
           ) : (
             <Box>
+              {
+                chats.length === 0 &&
+                <p style={{color:"gray"}}>You have not added any user in your chat list. To add user(s), click on <strong>search users or search icon</strong> at the top of the page, type in the name of the user and click on <strong>Go</strong>. In the search result, click on the user and send your message(s).</p>
+              }
               {chats.map((chat) => (
                 <Box
                   onClick={() => {
@@ -182,9 +184,9 @@ function MyChats({fetchAgain}) {
                     
                     {!chat.isGroupChat
                       ? getSenderImage(loggedUser, chat.users)
-                      : (<Box sx={{display:"flex", alignItems:"center"}}>
+                      : (<Box sx={{display:"flex", alignItems:"center",}}>
                         <Stack sx={{mr:1}} direction="row" spacing={2}>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 24, height: 24 }}/>
                         </Stack>
                         {chat.chatName}
                       </Box>)}

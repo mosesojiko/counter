@@ -116,11 +116,11 @@ function OrderHistoryPage(props) {
         <div>
             {
                 orders && orders.length === 0 ? (<div style={{ backgroundColor: "#f5f5f5", padding: "10px", marginBottom: "10px" }}>
-                    <h1 style={{ textAlign: "center" }}> Order Items</h1>
+                    <h3 style={{ textAlign: "center" }}> Order Items</h3>
                     <p>You have not placed any order. When you buy from someone, all your orders will be listed here.</p>
                 </div>) : (<>
                         <div style={{backgroundColor:"#f5f5f5", padding:"10px", marginBottom:"10px"}}>
-                <h1 style={{ textAlign: "center" }}> Order Items</h1>
+                <h3 style={{ textAlign: "center" }}> Order Items</h3>
                 <h4>Important</h4>
                 <p>Click on the <q>Details button</q> if you want to view your order.
                 When you recieve your item(s), let Mosganda know by clicking the <q>Confirm Delivery</q> button.</p>
@@ -142,7 +142,7 @@ function OrderHistoryPage(props) {
         <Box sx={style}>
                 <form onSubmit={submitComplain}>
           <Box sx={{textAlign:"center"}}>
-            <h1>Complain Form</h1>
+            <h3>Complain Form</h3>
           </Box>
           
           <Box sx={{display:"flex", m:1, alignItems:"center"}}>
@@ -239,7 +239,10 @@ function OrderHistoryPage(props) {
             {
                 orders?.map((order) => (
                     <div key={order._id} style={{border:"1px solid black", marginBottom:"2px",backgroundColor:"#f8f8f8"}}>
-                        <h4 style={{marginBottom:"1px",marginLeft:"5px"}}>Order Id: {order._id}</h4>
+                        <h4 style={{ marginBottom: "1px", marginLeft: "5px" }}>Order Id: {order._id} { " "} <Button variant="contained" size="small"
+                                        onClick={() => { props.history.push(`/order/${order._id}`) }}>
+                                        Details
+                                    </Button></h4>
                         <table className="table">
                             <thead>
                                 <tr>
@@ -248,7 +251,7 @@ function OrderHistoryPage(props) {
                                     <th>TOTAL</th>
                                     <th>PAID</th>
                                     <th>DELIVERED</th>
-                                    <th>DETAILS</th>
+                                    {/* <th>DETAILS</th> */}
                                     <th>RECIEVED</th>
                                 </tr>
                             </thead>
@@ -260,12 +263,7 @@ function OrderHistoryPage(props) {
                                 <td>{order.totalPrice.toFixed(2)}</td>
                                 <td>{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
                                 <td>{order.deliveredAt ? order.deliveredAt.substring(0, 10) : "No"}</td>
-                                <td>
-                                    <Button variant="contained" size="small"
-                                        onClick={() => { props.history.push(`/order/${order._id}`) }}>
-                                        Details
-                                    </Button>
-                                </td>
+                                
                                 <td>
                                         {
                                             order.isDelivered ?"Recieved":

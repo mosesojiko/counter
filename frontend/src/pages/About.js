@@ -5,12 +5,12 @@ function About() {
     return (
         <div style={{backgroundColor:"white", textAlign:"center", padding:"20px", maxWidth:"100%", margin:"20px 10px"}}>
             <h3>About Us</h3>
-            <p>Mosganda is an online platform and a marketplace for buying and selling of goods and services, located in Warri, Delta State, Nigeria. Every business today wants to have their presence online to increase their sales, and generate more income. This indicates that business owners will need a website for their business. But many small businesses cannot afford the cost of building and maintaining a website. Mosganda solves this problem by creating a platform that allows a seller to create an online store, where he can interact with his customers and sell his products. </p>
-            <p>At Mosganda, registered sellers can sell a wide range of products ranging from Electronics, Furniture, Fashion/clothes, down to even the market woman that sells Tomatoes. However, Mosganda does not accept listing of products that cannot be sold legally within the country.
+            <p>Mosganda is an online platform and a marketplace for buying and selling of goods and services, located in Warri, Delta State, Nigeria. Mosganda is a platform that allows a seller to create an online store, and sell his/her products. At Mosganda, registered sellers can sell almost a wide range of products ranging from Electronics, Furniture, Fashion/clothes, down to even the market woman that sells Tomatoes. However, Mosganda does not accept listing of products that cannot be sold legally within the country.
+                Mosganda connect buyers and sellers and give them the opportunity to communicate effectively through the Mosganda chat.
             </p>
-            <p>We connect buyers and sellers and give them the opportunity to communicate effectively through our chat.</p>
+            
             <h4>Our Vision</h4>
-            <p>To make life easy for both the buyer and seller.
+            <p>To make buying and selling simple, easy, and fun.
             </p>
             <h4>Our Mission</h4>
             <div>

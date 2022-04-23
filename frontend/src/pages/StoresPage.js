@@ -94,7 +94,88 @@ function StoresPage() {
 
   return (
     <div>
-      <div className="row around">
+
+      <div className='stores-header'>
+        <div className='stores-header-left'>
+          
+          <form className='stores-form' onSubmit={handleSearch}>
+                <input type="text" id="search" placeholder='Search by name'
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              <button  type="submit">
+                  <SearchIcon />
+                </button>
+          </form>
+          {
+              notFound && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setNotFound(false)}>Item Not Found</Alert>
+      
+            </Stack>
+              }
+              {
+              emptySearch && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="warning" onClose={() => setEmptySearch(false)}>Search cannot be empty.</Alert>
+      
+            </Stack>
+        }
+        
+        </div>
+        
+        <div className='stores-header-right'>
+          <div>
+            <Link to="/">
+              <Button variant="contained" color="success">
+                <ListAltOutlinedIcon />
+                  Products
+                </Button>
+              </Link>
+          </div>
+          <form onSubmit={handleCategory}>
+  <label htmlFor="category"></label>
+    <select className='stores-category' id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="">Category</option>
+              <option value="supermarket">Supermarket</option>
+                <option value="men">Men's fashion</option>
+              <option value="women">Women's fashion</option>
+              <option value="menandwomen">Fashion (Men and women)</option>
+                <option value="phone">Phone and Accessories</option>
+                <option value="computing">Computing</option>
+                <option value="health">Health and Beauty</option>
+                <option value="baby">Baby Products</option>
+                <option value="furniture">Furniture</option>
+                <option value="automobile">Automobile</option>
+                <option value="gaming">Gaming</option>
+                <option value="food">Food</option>
+                <option value="drinks">Drinks</option>
+                <option value="household">Household equipment</option>
+                <option value="groceries">Groceries</option>
+                <option value="pharmacy">Pharmacy (drugs)</option>
+                <option value="others">Others</option>
+  </select>
+  <button className='stores-category-button' type="submit"><SearchIcon /></button>
+          </form>
+          
+        </div>
+      </div>
+
+      <div style={{ minWidth: "50%", maxWidth:"80%" }}>
+        {
+              notFoundCategory && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setNotFoundCategory(false)}>Store(s) Not Found.</Alert>
+      
+            </Stack>
+              }
+              {
+              emptyCategory && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="warning" onClose={() => setEmptyCategory(false)}>Please, select a category.</Alert>
+      
+            </Stack>
+                }
+      </div>
+
+
+      {/* <div className="row around">
           <div>
             <h4>
               <Link to="/">
@@ -177,7 +258,7 @@ function StoresPage() {
               </Link>
             </h4>
           </div>
-        </div>
+        </div> */}
 
      
       
@@ -185,7 +266,7 @@ function StoresPage() {
           {searchLoading && <LoadingBox></LoadingBox>}
           {searchError && <MessageBox variant="danger">Failed to load search</MessageBox>}
             {searchResult?.map((store) => (
-              <Store key={store._id} store={store}></Store>
+             !store.isBanned && <Store key={store._id} store={store}></Store>
             ))}
         </div>
 
@@ -194,7 +275,7 @@ function StoresPage() {
           {loadingCategory && <LoadingBox></LoadingBox>}
           {errorCategory && <MessageBox variant="danger">Failed to load category.</MessageBox>}
             {categoryResult?.map((store) => (
-              <Store key={store._id} store={store}></Store>
+            !store.isBanned &&  <Store key={store._id} store={store}></Store>
             ))}
         </div>
 
@@ -206,7 +287,7 @@ function StoresPage() {
         {error && <MessageBox variant="danger">Failed to load stores.</MessageBox>}
           {
             stores?.map(store =>(
-                <Store key={store._id} store={store}></Store>
+              !store.isBanned &&  <Store key={store._id} store={store}></Store>
             ))
           }
       </div>

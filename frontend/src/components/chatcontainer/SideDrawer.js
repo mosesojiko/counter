@@ -10,7 +10,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Popover from '@mui/material/Popover';
-//import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { useSelector } from "react-redux";
@@ -20,6 +19,7 @@ import { ChatState } from '../../context/ChatProvider'
 //import LoadingBox from "../LoadingBox";
 //import { getSender } from "../../config/ChatLogics";
 import ProfileModal from "./ProfileModal";
+import LoadingBox from "../LoadingBox";
 
 
 function SideDrawer() {
@@ -119,8 +119,7 @@ function SideDrawer() {
     }
   }
 
-
-
+  
   return (
     <>
       <Box 
@@ -133,7 +132,7 @@ function SideDrawer() {
         padding:"5px 10px 5px 10px"
       }}>
         <Tooltip title="Search user to chat" placement="bottom-end">
-          <Button variant="outlined" aria-describedby={id} variant="contained" onClick={handlePopClick}> <i style={{color:"white"}} class="fa fa-search"></i>
+          <Button aria-describedby={id} variant="contained" onClick={handlePopClick}> <i style={{color:"white"}} class="fa fa-search"></i>
             <Box component="span" sx={{
              display: {xs:"none", sm:"flex", md:"flex"}
            }}>Search users</Box>
@@ -252,6 +251,15 @@ function SideDrawer() {
           {
             searchResultError && <Stack sx={{ width: '100%' }} spacing={2}>
       <Alert severity="error" onClose={() => setSearchResultError(false)}>Error in search</Alert>
+      
+    </Stack>
+          }
+          {
+            loadingChat && <LoadingBox></LoadingBox>
+          }
+          {
+            accessChatError && <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="error" onClose={() => setAccessChatError(false)}>Error accessing chat.</Alert>
       
     </Stack>
           }

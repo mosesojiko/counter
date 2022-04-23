@@ -20,19 +20,22 @@ import {
     POST_STORE_FAIL,
     UNPOST_STORE_REQUEST,
     UNPOST_STORE_SUCCESS,
-    UNPOST_STORE_FAIL, 
+    UNPOST_STORE_FAIL,
+    //GET_BIZ_STORE_REQUEST,
+    //GET_BIZ_STORE_SUCCESS,
+    //GET_BIZ_STORE_FAIL, 
 } from '../constants/storeConstants';
 
 //create a store 
-export const createStore = (name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage) => async (dispatch, getState) => {
+export const createStore = (name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage, businessName) => async (dispatch, getState) => {
     dispatch({
         type: CREATE_STORE_REQUEST,
-        payload: {name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone,creatorImage}
+        payload: {name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone,creatorImage, businessName}
     })
     try {
         // get userInfo from redux store
         const { userLogin: { userInfo }, } = getState() //getState returns the whole redux store
-        const { data } = await Axios.post('/api/v1/store/createstore', {name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage},{
+        const { data } = await Axios.post('/api/v1/store/createstore', {name, address, category, city, state, country, description, image, deliveryCapacity, creatorId, creatorName, creatorEmail, creatorPhone, creatorImage, businessName},{
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }
@@ -93,6 +96,31 @@ export const getSingleStore = (storeId) => async (dispatch) => {
         })
     }
 }
+
+
+//get single store, get store details
+// export const getBizNameStore = (name) => async (dispatch) => {
+//     dispatch({
+//         type: GET_BIZ_STORE_REQUEST,
+//         payload: name
+//     });
+//     try {
+//         const { data } = await Axios.get(`/api/v1/store/bizname`, {name});
+//         dispatch({
+//             type: GET_BIZ_STORE_SUCCESS,
+//             payload: data
+//         })
+//     } catch (error) {
+//         dispatch({
+//             type: GET_BIZ_STORE_FAIL,
+//             payload: error.response && error.response.data.message?
+//             error.response.data.message: error.message,
+//         })
+//     }
+// }
+
+
+
 
 //get userstore action
 export const getUserStore = () => async (dispatch, getState) => {

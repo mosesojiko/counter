@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import FileBase64 from "react-file-base64";
 import { Link } from 'react-router-dom';
 import { register } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 //import { GoogleLogin } from 'react-google-login';
 
 
@@ -15,11 +16,7 @@ function RegisterPage(props) {
     const [ name, setName ] = useState('');
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [image, setImage] = useState('')
     const [show, setShow] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [terms, setTerms] = useState('')
   const [successMessage, setSuccessMessage] = useState(false)
   
 
@@ -31,27 +28,28 @@ function RegisterPage(props) {
 
   const dispatch = useDispatch();
   //view password in input field
-  const handleClick = () => setShow(!show)
-  const ConfirmPassword = () => setShowConfirm(!showConfirm)
+  const handlePassword = () => setShow(!show);
 
     //function to submit the form
     const handleSummit = (e) => {
         e.preventDefault();
-        if(password !== confirmPassword) {
-          alert("Password and confirm password are not the same.")
+        if(!password) {
+          alert("Password cannot be empty.")
           return
         } else if (name === "Mosganda" || name === "mosganda" || name === "MOSGANDA") {
           alert("You cannot register with the company's name")
           return
         } 
         else {
-            dispatch(register(name, email, password, image, terms))
+          dispatch(register(name, email, password));
+          setName("");
+          setEmail("");
+          setPassword("");
         }
         
   }
   
   
-
     //keep track of changes to userInfo
     useEffect(() => {
       if (userInfo) {
@@ -63,135 +61,72 @@ function RegisterPage(props) {
     }, [props.history, redirect, userInfo])
   
   
-  // const clientId = "947788433833-1p9dkgdr6r3edb7qss6k8quuifiu00ih.apps.googleusercontent.com"
-
-  // const handleLogin = async googleData => {
-  // const res = await fetch("/api/v1/user/auth/google", {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //     token: googleData.tokenId
-  //   }),
-  //   headers: {
-  //     "Content-Type": "application/json"
-  //   }
-  // })
-  // const data = await res.json()
-  // // store returned user somehow
-  //   console.log(data)
-  // }
   
-
     return (
-      <div className='login'>
-        <form className="form" onSubmit={handleSummit}>
-          <div style={{margin:"0 5px"}}>
-            <h1 style={{margin:"0 5px"}}>Create Account</h1>
-          </div>
-          
-          <div style={{margin:"1 5px"}}>
-            <label style={{margin:"0 5px"}} htmlFor="name">Name</label>
-            <input style={{margin:"0 5px"}}
-              type="text"
-              id="name"
-              placeholder="Enter your full name"
-              required
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div style={{margin:"1 5px"}}>
-            <label style={{margin:"0 5px"}} htmlFor="email">Email</label>
-            <input style={{margin:"0 5px"}}
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              required
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+      <div>
+        <form onSubmit={handleSummit}>
+          <div className='register'>
+            <h1 style={{textAlign:"center"}}>Register</h1>
+            <p>Please fill in this form to create an account.</p>
+            
+            <div className='register-items'>
+              <div className='reister-item-option'>
+                <label htmlFor='name'>Name</label>
+                <input className='register-input' type="text" placeholder='Fullname' id="name" required
+                  onChange={(e) => setName(e.target.value)}
+                  value ={name}
+                />
+              </div>
 
-          <div style={{margin:"1 5px"}}>
-            <label style={{margin:"0 5px"}} htmlFor="password">Password</label>
-            <div  className="register-password">
-              <input style={{margin:"0 5px"}}
-                type={show ? "test" : "password"}
-                id="password"
-                placeholder="Enter your password"
-                required
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button type="button" onClick={handleClick}>
-                {show ? (
-                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+              <div className='reister-item-option'>
+              <label htmlFor='email'>Email</label>
+                <input className="register-input" type="text" id="email" placeholder='Enter email' required
+                  onChange={(e) => setEmail(e.target.value)}
+                  value = {email}
+                />
+              </div>
+              
+            <div className='reister-item-option'>
+              <label htmlFor='password'>Password</label>
+                <div className='register-password-container'>
+                  <input className="register-input-password" placeholder="Enter Password" id="password" required
+                    type={show ? "test" : "password"}
+                    onChange={(e) => setPassword(e.target.value)}
+                    value = {password}
+                  />
+                  <button type="button" className='password-view-button' onClick={handlePassword}>
+                {show? (
+                  <VisibilityOffIcon />
                 ) : (
-                  <i class="fa fa-eye"></i>
+                  <VisibilityIcon />
                 )}
               </button>
             </div>
-          </div>
-          <div style={{margin:"1 5px"}}>
-            <label style={{margin:"0 5px"}} htmlFor="confirmPassword">Confirm Password</label>
-            <div className="register-password">
-              <input style={{margin:"0 5px"}}
-                type={showConfirm ? "test" : "password"}
-                id="confrimPassword"
-                placeholder="Confirm password"
-                required
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <button type="button" onClick={ConfirmPassword}>
-                {showConfirm ? (
-                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
-                ) : (
-                  <i class="fa fa-eye"></i>
-                )}
-              </button>
+              </div>
+              
             </div>
-          </div>
-          <div style={{margin:"0 5px"}}>
-            <p style={{margin:"0 5px"}}>Add your photo (optional)</p>
-            <FileBase64
-              type="file"
-              multiple={false}
-              onDone={({ base64 }) => setImage(base64)}
-            />
-          </div>
-          {loading && <LoadingBox></LoadingBox>}
-          {error && <MessageBox variant="danger">Failed to register, try again later.</MessageBox>}
-          
-          <div style={{display:"flex", alignItems:"center", flexDirection:"row", margin:"0 5px"}}>
-                        <input type = "radio" id ="terms" 
-                        value ="agreed" name ="terms"
-                        required onChange ={(e) => setTerms(e.target.value)} />
-                        <label style={{marginTop:"0", marginBottom:"0"}} htmlFor ="terms"><Link to="/termsandconditions" style={{fontSize:"12px"}}> I agree to the terms and conditions</Link></label>
-                    </div>
-          <div style={{margin:"0 5px"}}>
-            <label />
-            <button style={{margin:"0 5px"}} type="submit" className="primary">
-              Register
-            </button>
-          </div>
-          <div>
-            <label />
-            <div>
-              Already have an account?{" "}
-              <Link to={`/login?redirect=${redirect}`}>Login</Link>
+            <p>By creating an account you agree to our <Link to="/termsandconditions">Terms and Privacy</Link>.</p>
+            <button type="submit" class="register-button">Register</button>
+            <div class="signin">
+            <p>Already have an account? <Link to="/login">Login</Link>.</p>
             </div>
-          </div>
-        </form>
-        {/* <GoogleLogin
-    clientId={clientId}
-    buttonText="Log in with Google"
-    onSuccess={handleLogin}
-    onFailure={handleLogin}
-            cookiePolicy={'http://localhost:3000'}
-            isSignedIn={true}
-/> */}
-        {
+            {
               successMessage && <Stack sx={{ width: '90%' }} spacing={2}>
               <Alert severity="success" onClose={() => setSuccessMessage(false)}>Successful. A verification link has been sent to your email.</Alert>
       
             </Stack>
-              }
+            }
+            {
+              loading && <LoadingBox></LoadingBox>
+            }
+            {
+              error && <MessageBox className="danger">Failed to register.</MessageBox>
+            }
+
+          </div>
+          
+        </form>
+
       </div>
     );
 }

@@ -59,23 +59,22 @@ const history = useHistory()
     //service charge for seller
     //const service = basket.itemsPrice <= 2000? 50: basket.itemsPrice > 2000 && basket.itemsPrice <= 5000? 100: basket.itemsPrice > 5000 && basket.itemsPrice <= 10000? 200: basket.itemsPrice > 10000? (0.015 * basket.itemsPrice) + 100:0
     const service = basket.basketItems.map((ser) => {
-        if (ser.price <= 2000) {
-            ser.service = 50
-            return 50
-        } else if (ser.price > 2000 && ser.price <= 5000) {
-            ser.service = 100
-            return 100
-        } else if ((ser.price > 5000 && ser.price <= 10000)) {
-            ser.service = 200
-            return 200
-        } else if (ser.price > 10000) {
-            ser.service = (0.015 * basket.itemsPrice) + 100
-            return (0.015 * basket.itemsPrice) + 100
-        }
+        const serviceCharge = ser.price * 0.03;
+        ser.service = serviceCharge;
+        return serviceCharge;
+        // if (ser.price <= 10000) {
+        //     ser.service = 50
+        //     return 50
+        // } 
+         
+        //  else if (ser.price > 10000) {
+        //     ser.service = 100
+        //     return 100
+        // }
     })
 
     //service for buyer
-    const buyerService = basket.itemsPrice <= 3000? 50: basket.itemsPrice > 3000 && basket.itemsPrice <= 10000? 100: basket.itemsPrice > 10000 && basket.itemsPrice <= 20000? 150: basket.itemsPrice > 20000 && basket.itemsPrice <= 40000? 200 : basket.itemsPrice > 40000? 300 : 0
+    const buyerService = basket.itemsPrice <= 10000 ? 50 : basket.itemsPrice <= 50000 ? 100 : 200;
     //const totalService = service.reduce((a, b) => a + b, 0)
     
 
@@ -90,7 +89,7 @@ useEffect(() =>{
     if(basket) {
         setBuyerName(basket.shippingAddress.fullName);
         setBuyerPhone(basket.shippingAddress.phone);
-        setBuyerAddress(`${basket.shippingAddress.address},${basket.shippingAddress.city},${basket.shippingAddress.LGA},${basket.shippingAddress.state},${basket.shippingAddress.country}.`)
+        setBuyerAddress(`${basket.shippingAddress.address},${basket.shippingAddress.city},${basket.shippingAddress.state},${basket.shippingAddress.country}.`)
     }
 },[basket])
 
@@ -133,7 +132,7 @@ useEffect(() =>{
                                 <h2>Shipping/Buyer Information</h2>
                                 <p> <strong>Name:</strong> { basket.shippingAddress.fullName }, <strong>Phone:</strong> { basket.shippingAddress.phone } <br />
                                 <strong>Address:</strong> { basket.shippingAddress.address },
-                                { basket.shippingAddress.city }, { basket.shippingAddress.LGA }, 
+                                { basket.shippingAddress.city }, 
                                  { basket.shippingAddress.state }, { basket.shippingAddress.country }
                                 </p>
                             </div>
@@ -168,7 +167,7 @@ useEffect(() =>{
                                                 <p>Name: {item.storeName}, {item.storeId}</p>
                                                 <p>Address: {item.storeAddress}, {item.storeCity}, {item.storeCountry}.</p>
                                                 <h4>Store-Owner/seller</h4>
-                                                <p>Name: <strong>{item.sellerName}</strong>, Email: {item.sellerEmail} Phone: {item.sellerPhone}</p>
+                                                <p>Name: <strong>{item.sellerName}</strong>,  Phone: {item.sellerPhone}</p>
                                             </div>
                                             
                                             <div>
@@ -208,7 +207,7 @@ useEffect(() =>{
                             </li>
                             <li>
                                 <div className = "row">
-                                    <div>Service</div>
+                                    <div>Transfer</div>
                                     <div>#{buyerService}</div>
                                      {/* <div>#{basket.shippingPrice.toFixed(2)}</div>  */}
                                 </div>

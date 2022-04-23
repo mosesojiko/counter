@@ -49,7 +49,7 @@ userRouter.post('/register', expressAsyncHandler( async(req, res) => {
     });
 
     let mailOptions = {
-      from: "mosesojiko999@gmail.com",
+      from: "contact@mosganda.com",
       to: req.body.email,
         subject: 'Account Activation Link',
        html: `  <h1 style="color:#fff; color:green; text-align:center;padding:10px;">Account Verification</h1>
@@ -77,6 +77,7 @@ userRouter.post('/register', expressAsyncHandler( async(req, res) => {
         isActive: createdUser.isActive,
         image: createdUser.image,
         terms: createdUser.terms,
+        status: createdUser.status,
         token: generateToken(createdUser)
     })
 }))
@@ -90,6 +91,8 @@ userRouter.get('/search', isAuth, isAdmin, expressAsyncHandler(async (req, res) 
     res.json(searchUser)
   }
 }))
+
+
 
 //get all users for admin
 userRouter.get('/find', isAuth, isAdmin, expressAsyncHandler( async(req, res)=> {
@@ -216,6 +219,16 @@ userRouter.put('/banned', isAuth, isAdmin, expressAsyncHandler(async (req, res) 
     res.json(bannedUser)
 }))
 
+//unblock a user
+userRouter.put('/unbanned', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.body.id);
+    if (user) {
+        user.isBanned = false
+    }
+    const bannedUser = await user.save()
+    res.json(bannedUser)
+}))
+
 
 //login with google
 
@@ -260,7 +273,7 @@ userRouter.post('/forgotpassword', expressAsyncHandler(async (req, res) => {
     });
 
     let mailOptions = {
-      from: "mosesojiko999@gmail.com",
+      from: "contact@mosganda.com",
       to: req.body.email,
         subject: 'Password Reset',
        html: `  <h2 style="color:#fff; color:green; text-align:center;padding:10px;">Mosganda -- Forgot password</h2>

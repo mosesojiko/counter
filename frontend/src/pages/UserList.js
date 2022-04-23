@@ -78,8 +78,8 @@ function UserList(props) {
         }
     }
 
-    console.log(resultUser)
-    console.log(users)
+    //console.log(resultUser)
+    //console.log(users)
     
 
     
@@ -87,7 +87,7 @@ function UserList(props) {
     
     return (
         <div style={{backgroundColor:"#f5f5f5"}}>
-            <h1 style={{ textAlign: "center" }}>List of users</h1>
+            <h3 style={{ textAlign: "center" }}>List of users</h3>
             <form style={{textAlign:"center"}} onSubmit={handleSearch}>
                 <input type="text" id="search" placeholder='Search by name'
                   value={search}

@@ -114,16 +114,22 @@ function UpdateProduct(props) {
             dispatch({ type: UPDATE_PRODUCT_RESET });
         },2000)
     }
+
+
     return (
         <div>
-            <form className = "form" onSubmit = {submitHandler} >
-                <div>
-                    <h1>Edit Product</h1>
-                </div>
+            <div style={{padding:"5px", backgroundColor:"white", padding:'10px', width:"100%"}}>
+              <h2 style={{textAlign:"center"}}>Edit Product</h2>
+              <p style={{ maxWidth: "90%" }}>Do not fake the price of your item/product in other to avoid rejection. </p>
+                {/*<pre>{JSON.stringify(imageUrl, null, '\t')}</pre> */}
                 {
-                    loading? <LoadingBox></LoadingBox>:
-                    error? <MessageBox variant="danger">Error</MessageBox>:
-                    <>
+                    loading && <LoadingBox></LoadingBox>
+                }
+                {
+                    error && <MessageBox variant="danger">Error</MessageBox>
+                }
+                    
+                
                     {
                         loadingProduct && <LoadingBox></LoadingBox>
                     }
@@ -131,28 +137,49 @@ function UpdateProduct(props) {
                         errorProduct && <MessageBox variant="danger">Could not load product.</MessageBox>
                     }
                     
-                <div>
-                    <label htmlFor="name">Product Name</label>
-                    <input type="text" id="name" placeholder="Product name"
-                    value ={name} onChange ={(e) => setName(e.target.value)}
-                    />
+            </div>
+            <form className="create-product" onSubmit={submitHandler}>
+            
+            <div className='create-product-container'>
+              <div className='create-product-one'>
+                <div className='create-product-items'>
+            <lable htmlFor="name">Product Name</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="name"
+              placeholder="Canvass"
+               value={name}                 
+              onChange={(e) => setName(e.target.value)}
+                  required
+            ></input>
                 </div>
-                <div>
-                    <label htmlFor="price">Price</label>
-                    <input type="text" id="price" placeholder="10000"
-                    value ={price} onChange ={(e) => setPrice(e.target.value)}
-                    />
+                
+                <div className='create-product-items'>
+            <lable htmlFor="price">Price</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="price"
+              placeholder="5000"
+                value={price}                
+              onChange={(e) => setPrice(e.target.value)}
+                  
+                  required
+            ></input>
                 </div>
-                <div>
-                    <lable style={{margin:"0 2px"}} htmlFor="category">Product Category</lable>
-            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
-        <Select
+                
+                <div className='create-product-items'>
+            
+            <lable htmlFor="category">Product Category</lable>
+            <FormControl variant="filled" sx={{ m: 1, minWidth: 120, maxWidth:"93%" }}>
+         <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
+         <Select
           labelId="demo-simple-select-filled-label"
           id="demo-simple-select-filled"
           value={category}
           onChange={(e) =>setCategory(e.target.value)}
-        >
+         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
@@ -171,62 +198,126 @@ function UpdateProduct(props) {
                 <MenuItem value="groceries">Groceries</MenuItem>
                 <MenuItem value="pharmacy">Pharmacy (drugs)</MenuItem>
                 <MenuItem value="others">Others</MenuItem>
-        </Select>
-      </FormControl>
+          </Select>
+          </FormControl>
+                </div>
+                
+                <div className='create-product-items'>
+            <lable htmlFor="countInStock">Count in stock</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="countInStock"
+              placeholder="Only 4 left in store."
+                value={countInStock}            
+              onChange={(e) => setCountInStock(e.target.value)}
+            ></input>
+                </div>
+                
+                <div className='create-product-items'>
+            <lable htmlFor="brand">Brand</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="brand"
+              placeholder="Nike"
+              value={brand}                  
+              onChange={(e) => setBrand(e.target.value)}
+              
+            ></input>
+                </div>
+                
+                <div className='create-product-items'>
+            <lable htmlFor="description">Description</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="description"
+              placeholder="size: 42, weight: 0.8 kg, color: blue"
+                 value={description}               
+                  onChange={(e) => setDescription(e.target.value)}
+                  
+                  required
+            ></input>
+                </div>
+                <div>
+                <p>Change Image?</p>
+            <FileBase64
+              type="file"
+              multiple={false}
+              onDone={({ base64 }) => setImage(base64)}
+            />
+              </div>
+              </div>
+              {/* div two */}
+              <div className='create-product-two'>
+                <div>
+                  <p style={{maxWidth: "100%"}}>Please, fill in the amount you will charge to send the item to the buyer.</p>
+                </div>
+                <div className='create-product-items'>
+                <lable htmlFor="free">Free</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="free"
+              placeholder="00"
+               value={free}                 
+                  onChange={(e) => setFree(e.target.value)}
+                  
+            ></input>
+                </div>
+                <div className='create-product-items'>
+                <lable htmlFor="sameCity">Same towm/city</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="sameCity"
+              placeholder="300"
+               value={sameCity}                 
+                  onChange={(e) => setSameCity(e.target.value)}
+                  
+            ></input>
+                </div>
+                <div className='create-product-items'>
+                <lable  htmlFor="sameState">Within the same State</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="sameState"
+              placeholder="1000"
+               value={sameState}     
+                  onChange={(e) => setSameState(e.target.value)}
+                  
+            ></input>
+                </div>
+                
+                <div className='create-product-items'>
+                <lable htmlFor="nationWide">Nationwide</lable>
+                  <input
+                    className='create-product-input'
+              type="text"
+              id="nationWide"
+              placeholder="1500"
+               value={nationWide}                 
+                  onChange={(e) => setNationWide(e.target.value)}
+                  
+            ></input>
                 </div>
                 
                 <div>
-                    <label htmlFor="countInStock">How many in store?</label>
-                    <input type="text" id="countInStock" placeholder="5"
-                    value ={countInStock} onChange ={(e) => setCountInStock(e.target.value)}
-                    />
+            <label />
+            
+            <Button variant="contained" color="success" type="submit" size="large" sx={{mb:2}}>
+                  Edit Product
+            </Button>
+            </div>
+                
+                {/* end of two */}
+              </div>
+
                 </div>
-                <div>
-                    <label htmlFor="brand">Brand</label>
-                    <input type="text" id="brand" placeholder="LG"
-                    value ={brand} onChange ={(e) => setBrand(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="description">Description</label>
-                    <input type="text" id="description" placeholder="Description"
-                    value ={description} onChange ={(e) => setDescription(e.target.value)}
-                    />
-                                </div>
-                                <div>
-                                    <h4>Delivery Fee</h4>
-                                </div>
-                                <div>
-                    <label htmlFor="free">Free</label>
-                    <input type="text" id="free" placeholder="00"
-                    value ={free} onChange ={(e) => setFree(e.target.value)}
-                    />
-                                </div>
-                                <div>
-                    <label htmlFor="sameCity">Same towm/city</label>
-                    <input type="text" id="sameCity" placeholder="300"
-                    value ={sameCity} onChange ={(e) => setSameCity(e.target.value)}
-                    />
-                                </div>
-                                <div>
-                    <label htmlFor="sameState">Same State</label>
-                    <input type="text" id="sameState" placeholder="1000"
-                    value ={sameState} onChange ={(e) => setSameState(e.target.value)}
-                    />
-                                </div>
-                                <div>
-                    <label htmlFor="nationWide">Nation Wide</label>
-                    <input type="text" id="nationWide" placeholder="1500"
-                    value ={nationWide} onChange ={(e) => setNationWide(e.target.value)}
-                    />
-                </div>
-                <div>
-                        <p>{product.image?"Change image?": "Image of the product"}</p>
-                        <FileBase64 type ="file" multiple={false}  
-                        onDone = {({base64}) => setImage(base64)}
-                        />
-                                </div>
-                                {
+                
+             {
                         loadingUpdate && <LoadingBox></LoadingBox>
                     }
                     {
@@ -235,17 +326,8 @@ function UpdateProduct(props) {
                     {
                         success && <MessageBox variant ="success">Product Updated Successfully.</MessageBox>
                     } 
-                    <div>
-                        <label />
-                         {/* <button className ="primary" type ="submit">Update</button> */}
-                         <Button type="submit" sx={{mb:2}} variant="contained" color="success" size="large">
-                        Update
-                      </Button>
-                    </div>
-                    </>
-                  }
-                   
-            </form>
+              </form>
+
         </div>
     )
 }

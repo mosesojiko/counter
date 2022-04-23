@@ -15,7 +15,7 @@ function Chats() {
   const { userInfo } = userLogin;
 
   if (!userInfo) {
-    window.location="/login"
+    window.location = "/login";
   }
   //more of a parent state
   //whenever this fetchAgain changes, it is going to fetch all the chats again

@@ -20,7 +20,8 @@ import Stack from '@mui/material/Stack';
 import io from "socket.io-client";
 
 //for socket io connection
-const ENDPOINT = "http://localhost:5000";
+//const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://mosganda-backend.herokuapp.com"
 let socket, selectedChatCompare;
 
 function SingleChat({ fetchAgain, setFetchAgain }) {
@@ -41,7 +42,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   const { userInfo } = userLogin;
 
   //import state from context
-  const { selectedChat, setSelectedChat, notification, setNotification } =
+  const { selectedChat, setSelectedChat } =
     ChatState();
 
   //useEffect to connect socket io
@@ -157,28 +158,28 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
 
   //remove the depency array for this useEffect because we want to update this useEffect everytime our state changes
   //if it received any message, it should put it in the chat
-  useEffect(() => {
-    socket.on("message recieved", (newMessageRecieved) => {
-      //monitor the socket for new messages
-      //if non of the chat is selected or the one selected does not match the one that received the message, give notification
-      if (
-        !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageRecieved.chat._id
-      ) {
-        //give notification
-        //add the new message to notification if it is not in the notification array
-        if (!notification.includes(newMessageRecieved)) {
-          setNotification([newMessageRecieved, ...notification])
+  // useEffect(() => {
+  //   socket.on("message recieved", (newMessageRecieved) => {
+  //     //monitor the socket for new messages
+  //     //if non of the chat is selected or the one selected does not match the one that received the message, give notification
+  //     if (
+  //       !selectedChatCompare ||
+  //       selectedChatCompare._id !== newMessageRecieved.chat._id
+  //     ) {
+  //       //give notification
+  //       //add the new message to notification if it is not in the notification array
+  //       if (!notification.includes(newMessageRecieved)) {
+  //         setNotification([newMessageRecieved, ...notification])
           
-          //update our messages again to add the new message
-          setFetchAgain(!fetchAgain)
-        }
-      } else {
-        //add the new message to the existing list of messages
-        setMessages([...messages, newMessageRecieved]);
-      }
-    });
-  });
+  //         //update our messages again to add the new message
+  //         setFetchAgain(!fetchAgain)
+  //       }
+  //     } else {
+  //       //add the new message to the existing list of messages
+  //       setMessages([...messages, newMessageRecieved]);
+  //     }
+  //   });
+  // });
   
 
   //edit chat and set notification true when there is a notification
@@ -190,14 +191,14 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
           },
         };
 
-      const { data } = await axios.put("/api/v1/chat/notification", { id }, config);
+       await axios.put("/api/v1/chat/notification", { id }, config);
       
     } catch (error) {
       console.log(error)
     }
   }
 
-  // //typing handler function
+  //typing handler function
    const typingHandler = (e) => {
      setNewMessage(e.target.value);
     //typing indicator logic
@@ -300,10 +301,10 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
       
     </Stack>
               }
-              {isTyping && <p style={{ color:"#023c3f"}}>Typing...</p>}
+              {/* {isTyping && <p style={{ color:"#023c3f"}}>Typing...</p>} */}
               <div className="messageSender">
                 <input type="text" placeholder="Enter your message"
-                  onChange={typingHandler}
+                   onChange={typingHandler}
                   value={newMessage}
                   onKeyDown={sendMessage}
                 />

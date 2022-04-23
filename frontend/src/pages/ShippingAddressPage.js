@@ -37,51 +37,53 @@ function ShippingAddressPage(props) {
         props.history.push('/payment');
     }
     return (
-        <div style={{maxwidth:"100%"}}>
+        <div style={{width:"100%"}}>
             <CheckoutSteps step1 step2></CheckoutSteps>
-            <form className = "form" onSubmit = { handleSummit }>
-            <div>
+            <form style={{maxWidth:"100%"}} className = "register" onSubmit = { handleSummit }>
+                <div className='register-item'>
+                    <div>
                 <h1>Shipping Address</h1>
             </div>
-            <div>
+            <div className='shipping-container'>
                     <label htmlFor = "fullName">Fullname</label>
-                    <input type="text" id="fullName" placeholder="Enter your fullname" 
+                    <input className='register-input' type="text" id="fullName" placeholder="Enter your fullname" 
                     value = {fullName} onChange = { (e) =>setFullName(e.target.value)} required></input>
                 </div>
-                <div>
+                <div className='shipping-container'>
                     <label htmlFor = "address">Address (point of collection)</label>
-                    <input type="text" id="address" placeholder="Enter address" 
+                    <input className='register-input' type="text" id="address" placeholder="Enter address" 
                     value = {address} onChange = { (e) =>setAddress(e.target.value)} required></input>
                 </div>
-                <div>
+                <div className='shipping-container'>
                     <label htmlFor = "city">City</label>
-                    <input type="text" id="city" placeholder="Enter city" 
+                    <input className='register-input' type="text" id="city" placeholder="Enter city" 
                     value = {city} onChange = { (e) =>setCity(e.target.value)} required></input>
                 </div>
-                <div>
+                <div className='shipping-container'>
                     <label htmlFor = "landmark">Nearest landmark</label>
-                    <input type="text" id="landmark" placeholder="Agofure park" 
+                    <input className='register-input' type="text" id="landmark" placeholder="Agofure park" 
                     value = {landmark} onChange = { (e) =>setLandmark(e.target.value)} required></input>
                 </div>
-                <div>
+                <div className='shipping-container'>
                     <label htmlFor = "state">State</label>
-                    <input type="text" id="state" placeholder="State of residence" 
+                    <input className='register-input' type="text" id="state" placeholder="State of residence" 
                     value = {state} onChange = { (e) =>setState(e.target.value)} required></input>
                 </div>
-                <div>
+                <div className='shipping-container'>
                     <label htmlFor = "country">Country</label>
-                    <input type="text" id="country" placeholder="Enter country" 
+                    <input className='register-input' type="text" id="country" placeholder="Enter country" 
                     value = {country} onChange = { (e) =>setCountry(e.target.value)} required></input>
                 </div>
-                <div>
+                <div className='shipping-container'>
                     <label htmlFor = "phone">Phone</label>
-                    <input type="text" id="phone" placeholder="Enter contact number" 
+                    <input className='register-input' type="text" id="phone" placeholder="Enter contact number" 
                     value = {phone} onChange = { (e) =>setPhone(e.target.value)} required></input>
                 </div>
                
             <div>
                 <label />
                 <button type = "submit" className = "primary">Continue</button>
+            </div>
             </div>
             </form>
             

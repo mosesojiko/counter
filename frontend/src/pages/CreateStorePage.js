@@ -18,6 +18,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import './CreateProductPage.css';
 
 
 function CreateStore(props) {
@@ -36,6 +37,8 @@ function CreateStore(props) {
   const [creatorImage, setCreatorImage] = useState("");
   const [storeOwner, setStoreOwner] = useState(false)
   const [deliveryCapacity, setDeliveryCapacity] = useState('')
+  const [businessName, setBusinessName] = useState("")
+
   
  //Only login user should be able to create a store
  const userLogin = useSelector((state) => state.userLogin);
@@ -55,13 +58,7 @@ function CreateStore(props) {
   }
 
  const dispatch = useDispatch();
-//get user details
-// const userDetails = useSelector(state => state.userDetails);
-//     const { user } = userDetails;
-//    console.log(user)
 
-// const userCreateStore = useSelector(state => state.userCreateStore);
-// const { success } = userCreateStore
  
 useEffect(() => {
   if (userInfo) {
@@ -74,7 +71,9 @@ useEffect(() => {
 }, [dispatch, userInfo]);
  
   
-
+  useEffect(() => {
+    setBusinessName(name.split(' ').join("-").toLowerCase())
+},[name])
     //const redirect = props.location.search? props.location.search.split('=')[1] : '/createstore';
     //get access to createStore from redux store
     const createdStore = useSelector((state) => state.createdStore)
@@ -94,6 +93,7 @@ useEffect(() => {
   // const { loading, error, stores } = storeInfo;
  
 
+ 
   
 
   const submitHandler = (e) =>{
@@ -102,6 +102,7 @@ useEffect(() => {
       setStoreOwner(true);
       return
     } else {
+     
        dispatch(
          createStore(
            name,
@@ -118,6 +119,7 @@ useEffect(() => {
            creatorEmail,
            creatorPhone,
            creatorImage,
+           businessName
          )
        );
     }
@@ -138,7 +140,10 @@ dispatch(getUserStore());
     props.history.push('/userstore')
     }, 5000)
   }
-  console.log(deliveryCapacity)
+  //console.log(deliveryCapacity)
+
+//console.log(name)
+//console.log(businessName)
     return (
       <div>
         <Link to="/stores">
@@ -150,25 +155,28 @@ dispatch(getUserStore());
             Yuo have created a store already.
           </MessageBox>
         )}
-        <form className="form" onSubmit={submitHandler}>
+        <form className="register" onSubmit={submitHandler}>
+          <div>
           <div>
             {/*<pre>{JSON.stringify(imageUrl, null, '\t')}</pre> */}
-            <h1>Create Store</h1>
+            <h2 style={{textAlign:"center"}}>Create Store</h2>
           </div>
 
-          <div>
+          <div className='register-items'>
             <lable htmlFor="name">Store Name</lable>
-            <input
+              <input
+                className='register-input'
               type="text"
               id="name"
               placeholder="Enter store name"
-              onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
               required
             ></input>
           </div>
-          <div>
+          <div className='register-items'>
             <lable htmlFor="address">Address</lable>
-            <input
+              <input
+                className='register-input'
               type="text"
               id="address"
               placeholder="Enter address"
@@ -176,7 +184,7 @@ dispatch(getUserStore());
               required
             ></input>
           </div>
-          <div>
+          <div className='register-items'>
             <lable htmlFor="category">Store Category</lable>
             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
         <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
@@ -209,9 +217,10 @@ dispatch(getUserStore());
         </Select>
       </FormControl>
           </div>
-          <div>
+          <div className='register-items'>
             <lable htmlFor="city">City/Towm</lable>
-            <input
+              <input
+                className='register-input'
               type="text"
               id="city"
               placeholder="Enter city/towm"
@@ -219,9 +228,10 @@ dispatch(getUserStore());
               required
             ></input>
           </div>
-          <div>
+          <div className='register-items'>
             <lable htmlFor="state">State</lable>
-            <input
+              <input
+                className='register-input'
               type="text"
               id="state"
               placeholder="Delta State"
@@ -229,18 +239,20 @@ dispatch(getUserStore());
               required
             ></input>
           </div>
-          <div>
+          <div className='register-items'>
             <lable htmlFor="city">Country</lable>
-            <input
+              <input
+                className='register-input'
               type="text"
               id="country"
               placeholder="Nigeria"
               onChange={(e) => setCountry(e.target.value)}
             ></input>
           </div>
-          <div>
+          <div className='register-items'>
             <lable htmlFor="description">Description</lable>
-            <input
+              <input
+                className='register-input'
               type="text"
               id="description"
               placeholder="Enter store description"
@@ -264,9 +276,9 @@ dispatch(getUserStore());
               Store created successfully.
             </MessageBox>
           )}
-          <div>
-            <label htmlFor="deliveryCapacity">Delivery of goods</label>
-    <select id="deliveryCapacity" value={deliveryCapacity} onChange={(e) => setDeliveryCapacity(e.target.value)}>
+          <div className='register-items' style={{marginTop:"5px"}}>
+            <label htmlFor="deliveryCapacity">Delivery capacity</label>
+    <select className='register-input' id="deliveryCapacity" value={deliveryCapacity} onChange={(e) => setDeliveryCapacity(e.target.value)}>
               <option value="">Select</option>
               <option value="Within-the-same-city">Same town/city only</option>
     <option value="Within-the-same-state">Same State</option>
@@ -276,10 +288,11 @@ dispatch(getUserStore());
           </div>
           <div>
             <label />
-            <button style={{marginBottom:"5px"}} className="primary" type="submit">
+            <button  className="register-button" type="submit">
               Create
             </button>
-          </div>
+            </div>
+            </div>
         </form>
       </div>
     );

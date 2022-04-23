@@ -10,6 +10,9 @@ const storeSchema = new mongoose.Schema(
     state: { type: String, required: true },
     country: { type: String },
     description: { type: String },
+    isBanned: { type: Boolean, default: false },
+    isClosed: { type: Boolean, default: false },
+    toBeOpened: { type: String },
     image: {
       type: String,
       default:
@@ -23,6 +26,7 @@ const storeSchema = new mongoose.Schema(
     creatorEmail: {type: String},
     creatorPhone: { type: String },
     creatorImage: { type: String },
+    businessName: {type: String},
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

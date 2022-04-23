@@ -13,9 +13,33 @@ function ViewUser(props) {
     const [user, setUser] = useState()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
+
+    //block variables
      const [loadBlockUser, setLoadBlockUser] = useState(false)
     const [errorBlockUser, setErrorBlockUser] = useState(false)
     const [successBlockUser, setSuccessBlockUser] = useState(false)
+
+    const [loadBlockStore, setLoadBlockStore] = useState(false)
+    const [errorBlockStore, setErrorBlockStore] = useState(false)
+    const [successBlockStore, setSuccessBlockStore] = useState(false)
+
+    const [loadBlockProduct, setLoadBlockProduct] = useState(false)
+    const [errorBlockProduct, setErrorBlockProduct] = useState(false)
+    const [successBlockProduct, setSuccessBlockProduct] = useState(false)
+
+
+    //unblock variables
+     const [unloadBlockUser, setLoadunBlockUser] = useState(false)
+    const [unerrorBlockUser, setErrorunBlockUser] = useState(false)
+    const [unsuccessBlockUser, setSuccessunBlockUser] = useState(false)
+
+    const [unloadBlockStore, setLoadunBlockStore] = useState(false)
+    const [unerrorBlockStore, setErrorunBlockStore] = useState(false)
+    const [unsuccessBlockStore, setSuccessunBlockStore] = useState(false)
+
+    const [unloadBlockProduct, setLoadunBlockProduct] = useState(false)
+    const [unerrorBlockProduct, setErrorunBlockProduct] = useState(false)
+    const [unsuccessBlockProduct, setSuccessunBlockProduct] = useState(false)
 
     //get access to userLogin from redux store
   const userLogin = useSelector((state) => state.userLogin);
@@ -58,9 +82,69 @@ function ViewUser(props) {
             })
             setLoadBlockUser(false)
             setSuccessBlockUser(true)
+
+            setLoadBlockStore(true)
+             await axios.put(`/api/v1/store/banned`, {id}, {
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+             })
+            setLoadBlockStore(false)
+            setSuccessBlockStore(true)
+
+            setLoadBlockProduct(true)
+            await axios.put(`/api/v1/product/banned`, {id}, {
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            })
+            setLoadBlockProduct(false)
+            setSuccessBlockProduct(true)
         } catch (error) {
             setErrorBlockUser(true)
             setLoadBlockUser(false)
+            setErrorBlockStore(true)
+            setLoadBlockStore(false)
+            setErrorBlockProduct(true)
+            setLoadBlockProduct(false)
+        }
+    }
+
+    const unBlockUser = async(id) => {
+        try {
+             setLoadunBlockUser(true)
+            const { data } = await axios.put(`/api/v1/user/unbanned`, {id}, {
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            })
+            setLoadunBlockUser(false)
+            setSuccessunBlockUser(true)
+
+            setLoadunBlockStore(true)
+             await axios.put(`/api/v1/store/unbanned`, {id}, {
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+             })
+            setLoadunBlockStore(false)
+            setSuccessunBlockStore(true)
+
+            setLoadunBlockProduct(true)
+            await axios.put(`/api/v1/product/unbanned`, {id}, {
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            })
+            setLoadunBlockProduct(false)
+            setSuccessunBlockProduct(true)
+        } catch (error) {
+            setErrorunBlockUser(true)
+            setLoadunBlockUser(false)
+            setErrorunBlockStore(true)
+            setLoadunBlockStore(false)
+            setErrorunBlockProduct(true)
+            setLoadunBlockProduct(false)
         }
     }
     return (
@@ -80,10 +164,30 @@ function ViewUser(props) {
                 }
                 {
                             loadBlockUser && <LoadingBox></LoadingBox>
-                        }
+                }
+                {
+                            loadBlockStore && <LoadingBox></LoadingBox>
+                }
+                {
+                            loadBlockProduct && <LoadingBox></LoadingBox>
+                }
+                
+                
                         {
                errorBlockUser && <Stack sx={{ width: '90%' }} spacing={2}>
                   <Alert severity="error" onClose={() => setErrorBlockUser(false)}>Failed to block user.</Alert>
+      
+                </Stack>
+                }
+                {
+               user && user.isSeller && errorBlockStore && <Stack sx={{ width: '90%' }} spacing={2}>
+                  <Alert severity="error" onClose={() => setErrorBlockStore(false)}>Failed to block user's store.</Alert>
+      
+                </Stack>
+                }
+                {
+               user && user.isSeller && errorBlockProduct && <Stack sx={{ width: '90%' }} spacing={2}>
+                  <Alert severity="error" onClose={() => setErrorBlockProduct(false)}>Failed to block user products.</Alert>
       
                 </Stack>
                 }
@@ -93,6 +197,72 @@ function ViewUser(props) {
       
             </Stack>
                 }
+                {
+               user && user.isSeller && successBlockStore && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setSuccessBlockStore(false)}>Store is blocked.</Alert>
+      
+            </Stack>
+                }
+                {
+               user && user.isSeller && successBlockProduct && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setSuccessBlockProduct(false)}>Product is blocked.</Alert>
+      
+            </Stack>
+                }
+
+
+                
+                {
+                            unloadBlockUser && <LoadingBox></LoadingBox>
+                }
+                {
+                            unloadBlockStore && <LoadingBox></LoadingBox>
+                }
+                {
+                            unloadBlockProduct && <LoadingBox></LoadingBox>
+                }
+                {
+               unerrorBlockUser && <Stack sx={{ width: '90%' }} spacing={2}>
+                  <Alert severity="error" onClose={() => setErrorunBlockUser(false)}>Failed to unblock user.</Alert>
+      
+                </Stack>
+                }
+                {
+                user && user.isSeller && unerrorBlockStore && <Stack sx={{ width: '90%' }} spacing={2}>
+                  <Alert severity="error" onClose={() => setErrorunBlockStore(false)}>Failed to unblock user's store.</Alert>
+      
+                </Stack>
+                }
+                {
+                user && user.isSeller && unerrorBlockProduct && <Stack sx={{ width: '90%' }} spacing={2}>
+                  <Alert severity="error" onClose={() => setErrorunBlockProduct(false)}>Failed to unblock user products.</Alert>
+      
+                </Stack>
+                }
+
+                {
+              unsuccessBlockUser && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setSuccessunBlockUser(false)}>User is unblocked.</Alert>
+      
+            </Stack>
+                }
+                {
+               user && user.isSeller && unsuccessBlockStore && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setSuccessunBlockStore(false)}>Store is unblocked.</Alert>
+      
+            </Stack>
+                }
+                {
+             user && user.isSeller && unsuccessBlockProduct && <Stack sx={{ width: '90%' }} spacing={2}>
+              <Alert severity="success" onClose={() => setSuccessunBlockProduct(false)}>Product is unblocked.</Alert>
+      
+            </Stack>
+                }
+
+
+
+
+
                 <div className='card' style={{padding:"10px"}}>
                     <div>
                         {
@@ -109,11 +279,19 @@ function ViewUser(props) {
                         <p style={{ maxWidth: "100%" }}>Address: {user && user.address}</p>
                         <h4 style={{ textAlign: "center" }}>Actions</h4>
                         {
-                         user && !user.isAdmin &&  <p style={{ margin: "0", padding: "0" }}><Button variant="contained" color="error" type="submit" size="small" sx={{ mb: 2 }} onClick={() => {
+                            user && !user.isAdmin &&  
+                            <div style={{display:"flex", justifyContent:"space-around"}}>
+                                    <p style={{ margin: "0", padding: "0" }}><Button variant="contained" color="error" type="submit" size="small" sx={{ mb: 2 }} onClick={() => {
                             blockUser(user && user._id)
                         }}>
                             Block
+                                    </Button></p>
+                                    <p style={{ margin: "0", padding: "0" }}><Button variant="contained" color="secondary" type="submit" size="small" sx={{ mb: 2 }} onClick={() => {
+                            unBlockUser(user && user._id)
+                        }}>
+                            unBlock
                        </Button></p>
+                            </div>
                         }
                     </div>
                 </div>
